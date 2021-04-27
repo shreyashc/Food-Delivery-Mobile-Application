@@ -7,7 +7,7 @@ Food Delivery Mobile Application - React Navtive
 install dependencies
 cd to ...../backend or ..../foodzy
 
-- yarn
+- yarn install
 
 ---
 
