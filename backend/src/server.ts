@@ -2,10 +2,10 @@ import express from "express";
 import { createConnection } from "typeorm";
 import { env } from "./env";
 import { User, Customer, Restaurant } from "./models/entities/";
-
+import AuthRoutes from "./routes/auth";
 const main = async () => {
   const app = express();
-
+  app.use(express.json());
   const conn = await createConnection({
     type: "postgres",
     host: env.db.host,
@@ -22,6 +22,8 @@ const main = async () => {
   });
 
   console.log("db connection = " + conn.isConnected);
+
+  app.use("/auth", AuthRoutes);
 
   /**
    * create httpServer
