@@ -1,11 +1,21 @@
 import express from "express";
+import * as path from "path";
 import { createConnection } from "typeorm";
 import { env } from "./env";
 import { User, Customer, Restaurant } from "./models/entities/";
 import AuthRoutes from "./routes/auth";
+import HomeRoutes from "./routes/home";
 const main = async () => {
   const app = express();
+
   app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
+
+  app.set("views", path.join(__dirname, "../views"));
+  app.set("view engine", "pug");
+
+  app.use(express.static(path.join(__dirname, "../public")));
+
   const conn = await createConnection({
     type: "postgres",
     host: env.db.host,
@@ -23,6 +33,7 @@ const main = async () => {
 
   console.log("db connection = " + conn.isConnected);
 
+  app.use("/", HomeRoutes);
   app.use("/auth", AuthRoutes);
 
   /**

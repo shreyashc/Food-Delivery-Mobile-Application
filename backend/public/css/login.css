@@ -1,0 +1,92 @@
+@import url("https://fonts.googleapis.com/css?family=Lobster|Mako");
+
+body {
+  font-family: "Mako", sans-serif;
+  letter-spacing: 0.1em;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #fdfafa;
+  color: #0f0f0f;
+}
+h1 {
+  font-family: "Lobster", cursive;
+  padding: 5% 0 7% 0;
+  text-align: center;
+}
+
+.btn-default {
+  border-color: transparent;
+}
+.btn.active.focus,
+.btn.active:focus,
+.btn.focus,
+.btn:active.focus,
+.btn:active:focus,
+.btn:focus {
+  outline: 0 auto -webkit-focus-ring-color;
+  outline-offset: 0;
+}
+.form-group {
+  position: relative;
+  height: 50px;
+  margin-bottom: 15px;
+}
+.form-control {
+  font-size: 100%;
+  letter-spacing: 0.07em;
+  border: 1px solid transparent;
+  box-shadow: inset 0 1px 1px transparent;
+}
+:focus {
+  outline: -webkit-focus-ring-color auto 0;
+}
+.form-control:focus {
+  -webkit-box-shadow: inset 0 1px 1px transparent, 0 0 8px transparent;
+  box-shadow: inset 0 1px 1px transparent, 0 0 8px transparent;
+}
+.form-label {
+  position: absolute;
+  pointer-events: none;
+  top: 3px;
+  font-size: 110%;
+  transition: 0.2s ease all;
+  -moz-transition: 0.2s ease all;
+  -webkit-transition: 0.2s ease all;
+}
+.form-input:focus ~ .form-label,
+.form-input:valid ~ .form-label {
+  top: -17px;
+  font-size: 95%;
+}
+
+.loginForm {
+  max-width: 300px;
+  margin: 10% auto 0;
+}
+.loginForm .form-control {
+  background-color: transparent;
+  border-bottom: 2px solid #9c9e9f;
+  border-radius: 0;
+  padding-left: 0;
+}
+.loginForm .form-control:focus {
+  border-color: transparent;
+  border-bottom: 2px solid #ff361c;
+}
+.submit {
+  margin-top: 4%;
+  margin-bottom: 1%;
+  width: 100%;
+  font-size: 100%;
+  letter-spacing: 0.1em;
+  color: #fff;
+  background-color: #ff8f80;
+}
+.btn-default.focus,
+.btn-default.submit:focus,
+.btn-default.submit:hover {
+  color: #fff;
+  background-color: #f52b2b;
+  border-color: transparent;
+}

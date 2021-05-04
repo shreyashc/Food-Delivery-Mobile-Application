@@ -3,12 +3,10 @@ import { env } from "../env";
 import { generateToken, loginUser, MAX_AGE, signUpUser } from "./utils";
 
 const signup_web = (_req: Request, res: Response) => {
-  //render signup page
-  res.sendStatus(204);
+  res.render("signup.pug");
 };
 const login_web = (_req: Request, res: Response) => {
-  //render login page
-  res.sendStatus(204);
+  res.render("login.pug", { title: "Login" });
 };
 
 const logout_web = (_req: Request, res: Response) => {
