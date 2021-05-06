@@ -7,16 +7,15 @@
 	color: #ffffff;
 	box-sizing: border-box;
 }
-a{
+a, a:hover, a:focus, a:active {
     text-decoration: none;
-    color: #ffffff;
+    color: inherit;
 }
 .navbar-logo{
     font-size:30px;
     font-family: "Lobster", cursive;
     color: #ffffff;
-    text-decoration: none;
-    
+    cursor: pointer;
 }
 .navbar-logo span{
     font-size:30px;
@@ -24,17 +23,16 @@ a{
     color: orange;
 
 }
-.navbar-items a{
-    font-size:20px;
-    margin: 5px 5px;
-    padding:5px 5px;
-    font-family: 'Lato', sans-serif;
-
-}
-.navbar-items a :hover{
-    color: #ffffff;
-    text-decoration: none;
-    cursor: pointer;
+.navbar-logo:link,
+.navbar-logo:visited {
+  color: #fff;
+ }
+.navbar-button:link,
+.navbar-button:visited {
+  font-size: 20px;
+  color: #fff;
+  text-transform: uppercase;
+  
 }
 
 
