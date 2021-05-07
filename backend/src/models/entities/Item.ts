@@ -15,8 +15,17 @@ import {
     @Column()
     foodTitle: string;
     
-    // @Column()
-    // foodImg: string;
+    @Column()
+    foodDescription: string;
+
+    @Column()
+    isVeg: boolean;
+    
+    @Column()
+    foodImg: string;
+
+    @Column()
+    foodPrice: number;
   
     @Column()
     foodCategory: string;
