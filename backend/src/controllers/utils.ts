@@ -1,11 +1,11 @@
 import { env } from "../env";
 import jwt from "jsonwebtoken";
 import argon2 from "argon2";
-import { User } from "../models/entities";
+import { Restaurant, User } from "../models/entities";
 
 const MAX_AGE = 21 * 12 * 30 * 24 * 60 * 60;
-const generateToken = (id: number, role: string) => {
-  return jwt.sign({ id, role }, env.app.accessTokenSecret, {
+const generateToken = (id: number, role: string, email: string) => {
+  return jwt.sign({ id, role, email }, env.app.accessTokenSecret, {
     expiresIn: MAX_AGE,
   });
 };
@@ -24,6 +24,9 @@ const signUpUser = async (
       email: user.email,
       role: user.role,
     };
+    if (role === "restaurant") {
+      await Restaurant.create({ userId: user.id }).save();
+    }
     return { savedUser: res, error: null };
   } catch (err) {
     return { savedUser: null, error: err };

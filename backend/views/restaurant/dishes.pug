@@ -1,0 +1,26 @@
+doctype html
+html
+    head
+        include ../includes/head.pug
+        title All Dishes
+
+    body
+        include ../includes/navbar.pug
+        .all-dishes
+       
+        for item in items
+            .dish
+                .dish-name
+                    h2 #{item.title}
+                .dish-des
+                    div Des: #{item.description}
+                .dish-price
+                    h4 Price #{item.price}
+                .dish-price
+                    h3 Category #{item.category}
+                .dish-is-veg
+                    h3 veg #{item.isVeg}
+                .dish-is-veg
+                    div image src(convet to img tag) #{item.imgUrl}
+                hr 
+        

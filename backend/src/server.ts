@@ -1,15 +1,19 @@
 import express from "express";
 import * as path from "path";
+import cookieParser from "cookie-parser";
 import { createConnection } from "typeorm";
 import { env } from "./env";
-import { User, Customer, Restaurant, Item} from "./models/entities/";
+import { User, Customer, Restaurant, Item } from "./models/entities/";
 import AuthRoutes from "./routes/auth";
 import HomeRoutes from "./routes/home";
+import RestaurantRoutes from "./routes/restaurant";
+
 const main = async () => {
   const app = express();
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+  app.use(cookieParser());
 
   app.set("views", path.join(__dirname, "../views"));
   app.set("view engine", "pug");
@@ -35,6 +39,7 @@ const main = async () => {
 
   app.use("/", HomeRoutes);
   app.use("/auth", AuthRoutes);
+  app.use("/restaurant", RestaurantRoutes);
 
   /**
    * create httpServer

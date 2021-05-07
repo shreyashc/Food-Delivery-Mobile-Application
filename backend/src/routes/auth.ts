@@ -10,4 +10,6 @@ router.post("/signup", AuthController.signup_post);
 router.get("/login", AuthController.login_web);
 router.post("/login", AuthController.login_post);
 
+router.get("/logout", AuthController.logout_web);
+
 export default router;

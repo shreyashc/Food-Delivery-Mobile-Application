@@ -1,0 +1,31 @@
+doctype html
+html
+    head
+        include ../includes/head.pug
+        title Add Dish
+
+    body
+        include ../includes/navbar.pug
+        form(action="/restaurant/add_dish", method="post")
+            div
+                label Title 
+                input(type="text" name="title")
+            div
+                label Description 
+                input(type="text" name="description")
+            div
+                label Veg 
+                input(type="radio" name="isVeg" value="true")
+                label Nonveg 
+                input(type="radio" name="isVeg" value="false")
+            div
+                label Image URL 
+                input(type="text" name="imgUrl")
+            div
+                label Price 
+                input(type="text" name="price")
+            div
+                label Category 
+                input(type="text" name="category")
+            div
+                button Submit
