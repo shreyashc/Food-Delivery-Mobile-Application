@@ -6,8 +6,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   JoinColumn,
+  OneToMany,
 } from "typeorm";
 import { User } from ".";
+import { Item } from "./Item";
 
 @Entity()
 export class Restaurant {
@@ -26,6 +28,9 @@ export class Restaurant {
   @OneToOne(() => User, (user) => user.restaurant)
   @JoinColumn()
   user: User;
+
+  @OneToMany(()=>Item, (item) => item.restaurant)
+  items: Item[];
 
   @Column()
   userId!: number;

@@ -2,7 +2,7 @@ import express from "express";
 import * as path from "path";
 import { createConnection } from "typeorm";
 import { env } from "./env";
-import { User, Customer, Restaurant } from "./models/entities/";
+import { User, Customer, Restaurant, Item} from "./models/entities/";
 import AuthRoutes from "./routes/auth";
 import HomeRoutes from "./routes/home";
 const main = async () => {
@@ -25,7 +25,7 @@ const main = async () => {
     password: env.db.password,
     logging: env.db.logging,
     synchronize: env.db.synchronize,
-    entities: [User, Customer, Restaurant],
+    entities: [User, Customer, Restaurant, Item],
     ssl: {
       rejectUnauthorized: false,
     },
