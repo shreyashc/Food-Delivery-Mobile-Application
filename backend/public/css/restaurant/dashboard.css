@@ -1,0 +1,30 @@
+h1{
+    text-transform: uppercase;
+    text-align: center;
+}
+a, a:hover, a:focus, a:active {
+    text-decoration: none;
+    color: inherit;
+}
+.container{
+    display:flex;
+    width:100%;
+    align-items: center;
+    margin:1rem auto;
+    justify-content: center;
+}
+.container div{
+    margin: 2rem;
+    padding:2rem;
+    align-items: center;
+    font-size:2rem;
+    width: 18rem;
+    color: #ffffff;
+    background-color: #FBDA61;
+    background-image: linear-gradient(45deg, #FBDA61 0%, #FF5ACD 100%);
+    border-radius:15px;
+}
+/* .container :hover{
+    background-color: #FBDA61;
+    background-image: linear-gradient(45deg, #FF5ACD 0%,#FBDA61 100%);
+} */

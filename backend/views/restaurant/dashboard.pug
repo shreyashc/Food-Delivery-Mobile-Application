@@ -3,12 +3,16 @@ html
     head
         include ../includes/head.pug
         title Dashboard
+        link(rel="stylesheet" type="text/css" href='/css/restaurant/dashboard.css')
+
 
     body
         include ../includes/navbar.pug
         h1 restaurant dashboard
-        a(href="add_dish") add New Dish
-        br 
-        a(href="dishes") all Dishes
+        div(class="container")
+            div
+                a(href="add_dish") Add New Dish 
+            div
+                a(href="dishes") All Dishes 
 
 
