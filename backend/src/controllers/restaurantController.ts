@@ -15,7 +15,6 @@ const allDishes = async (_req: Request, res: Response, _next: NextFunction) => {
   if (!restaurant) {
     return res.send("Not Found");
   }
-  console.log(restaurant);
   return res.render("restaurant/dishes.pug", {
     nav: { navbutton: "Logout", link: "/auth/logout" },
     items: restaurant.items,
@@ -39,10 +38,19 @@ const addDish_post = async (
 ) => {
   try {
     const userId = res.locals.user.id;
-    const { title, description, isVeg, imgUrl, price, category } = req.body;
+    const {
+      title,
+      description,
+      isVeg: isVegStr,
+      imgUrl,
+      price,
+      category,
+    } = req.body;
     const restaurant = await Restaurant.findOne({ userId });
 
     if (!restaurant) return res.send("Something Went Wrong");
+
+    const isVeg = isVegStr === "true" ? true : false;
 
     await Item.create({
       title,
