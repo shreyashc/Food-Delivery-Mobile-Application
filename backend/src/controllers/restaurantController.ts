@@ -31,6 +31,30 @@ const addDish_get = async (
   });
 };
 
+const editDish_get = async (
+  req: Request,
+  res: Response,
+  _next: NextFunction
+) => {
+  const itemId = parseInt(req.params.id);
+  const userId = res.locals.user.id;
+
+  if (!itemId) {
+    return res.status(400).send("Not Found");
+  }
+
+  const restaurant = await Restaurant.findOne({ userId });
+
+  if (!restaurant) return res.send("Something Went Wrong");
+
+  const item = await Item.findOne({ id: itemId, restaurantId: restaurant.id });
+
+  return res.render("restaurant/edit_dish.pug", {
+    nav: { navbutton: "Logout", link: "/auth/logout" },
+    item,
+  });
+};
+
 const addDish_post = async (
   req: Request,
   res: Response,
@@ -67,4 +91,73 @@ const addDish_post = async (
   }
 };
 
-export { dashboard, addDish_get, allDishes, addDish_post };
+const editDish_post = async (
+  req: Request,
+  res: Response,
+  _next: NextFunction
+) => {
+  try {
+    const userId = res.locals.user.id;
+    const {
+      title,
+      description,
+      isVeg: isVegStr,
+      imgUrl,
+      price,
+      category,
+    } = req.body;
+    const restaurant = await Restaurant.findOne({ userId });
+    const itemId = parseInt(req.params.id);
+
+    if (!restaurant) return res.send("Something Went Wrong");
+
+    const isVeg = isVegStr === "true" ? true : false;
+
+    await Item.update(
+      {
+        id: itemId,
+        restaurantId: restaurant.id,
+      },
+      {
+        title,
+        description,
+        isVeg,
+        imgUrl,
+        price,
+        category,
+        restaurantId: restaurant.id,
+      }
+    );
+    return res.redirect("/restaurant/dishes");
+  } catch (error) {
+    res.send(error);
+  }
+};
+
+const deleteDish = async (req: Request, res: Response, _next: NextFunction) => {
+  try {
+    const userId = res.locals.user.id;
+
+    const restaurant = await Restaurant.findOne({ userId });
+    const itemId = parseInt(req.params.id);
+
+    if (!restaurant) return res.send("Something Went Wrong");
+
+    await Item.delete({
+      id: itemId,
+      restaurantId: restaurant.id,
+    });
+    return res.redirect("/restaurant/dishes");
+  } catch (error) {
+    res.send(error);
+  }
+};
+export {
+  dashboard,
+  addDish_get,
+  allDishes,
+  addDish_post,
+  editDish_get,
+  editDish_post,
+  deleteDish,
+};

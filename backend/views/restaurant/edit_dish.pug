@@ -1,0 +1,34 @@
+doctype html
+html
+    head
+        include ../includes/head.pug
+        title Edit Dish
+
+    body
+        include ../includes/navbar.pug
+        if !item
+            div Not Found
+        else
+            form(action=`/restaurant/edit_dish/${item.id}`, method="post")
+                div
+                    label Title 
+                    input(type="text" name="title" value=item.title)
+                div
+                    label Description 
+                    input(type="text" name="description" value=item.description)
+                div
+                    label Veg
+                    input(type="radio" name="isVeg" value="true" checked= item.isVeg)
+                    label Nonveg 
+                    input(type="radio" name="isVeg" value="false" checked= !item.isVeg)
+                div
+                    label Image URL
+                    input(type="text" name="imgUrl" value=item.imgUrl)
+                div
+                    label Price 
+                    input(type="text" name="price" value=item.price)
+                div
+                    label Category 
+                    input(type="text" name="category" value=item.category)
+                div
+                    button Submit

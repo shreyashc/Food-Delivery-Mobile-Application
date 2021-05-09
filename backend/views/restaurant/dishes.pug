@@ -22,5 +22,11 @@ html
                     h3 veg #{item.isVeg}
                 .dish-is-veg
                     img(src=item.imgUrl)
+                .edit
+                    h3 
+                        a(href=`edit_dish/${item.id}`) Edit
+                .delete
+                    h3 
+                        a(href= `delete_dish/${item.id}`) Delete
                 hr 
         

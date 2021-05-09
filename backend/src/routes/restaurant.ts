@@ -23,6 +23,7 @@ router.get(
   addUserToSession,
   RestaurantController.addDish_get
 );
+
 router.post(
   "/add_dish",
   requireAuth,
@@ -30,4 +31,24 @@ router.post(
   RestaurantController.addDish_post
 );
 
+router.get(
+  "/edit_dish/:id",
+  requireAuth,
+  addUserToSession,
+  RestaurantController.editDish_get
+);
+
+router.post(
+  "/edit_dish/:id",
+  requireAuth,
+  addUserToSession,
+  RestaurantController.editDish_post
+);
+
+router.get(
+  "/delete_dish/:id",
+  requireAuth,
+  addUserToSession,
+  RestaurantController.deleteDish
+);
 export default router;
