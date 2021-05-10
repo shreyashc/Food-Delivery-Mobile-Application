@@ -9,10 +9,17 @@ html
     body
         include ../includes/navbar.pug
         h1 restaurant dashboard
+
+        div 
+            - const res = JSON.stringify(restaurant)
+            p= res
+
         div(class="container")
             div
                 a(href="add_dish") Add New Dish 
             div
                 a(href="dishes") All Dishes 
+            div
+                a(href="edit_details") Edit Restaurant details
 
 

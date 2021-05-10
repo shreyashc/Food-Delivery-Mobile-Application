@@ -20,6 +20,8 @@ const main = async () => {
 
   app.use(express.static(path.join(__dirname, "../public")));
 
+  console.log(env.db.synchronize);
+
   const conn = await createConnection({
     type: "postgres",
     host: env.db.host,

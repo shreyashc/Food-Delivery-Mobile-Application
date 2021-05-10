@@ -2,8 +2,13 @@ import { NextFunction, Request, Response } from "express";
 import { Item, Restaurant } from "../models/entities";
 
 const dashboard = async (_req: Request, res: Response, _next: NextFunction) => {
+  const restaurant = await Restaurant.findOne({
+    userId: res.locals.user.id,
+  });
+
   res.render("restaurant/dashboard.pug", {
     nav: { navbutton: "Logout", link: "/auth/logout" },
+    restaurant,
   });
 };
 const allDishes = async (_req: Request, res: Response, _next: NextFunction) => {
@@ -152,6 +157,45 @@ const deleteDish = async (req: Request, res: Response, _next: NextFunction) => {
     res.send(error);
   }
 };
+
+const editDetails_get = async (
+  _req: Request,
+  res: Response,
+  _next: NextFunction
+) => {
+  const restaurant = await Restaurant.findOne({
+    userId: res.locals.user.id,
+  });
+
+  res.render("restaurant/update_details.pug", {
+    nav: { navbutton: "Logout", link: "/auth/logout" },
+    restaurant,
+  });
+};
+
+const editDetails_post = async (
+  req: Request,
+  res: Response,
+  _next: NextFunction
+) => {
+  const { displayName, phone, imgUrl, address, city } = req.body;
+
+  await Restaurant.update(
+    {
+      userId: res.locals.user.id,
+    },
+    {
+      displayName,
+      phone,
+      imgUrl,
+      address,
+      city,
+    }
+  );
+
+  res.redirect("/restaurant/dashboard");
+};
+
 export {
   dashboard,
   addDish_get,
@@ -160,4 +204,6 @@ export {
   editDish_get,
   editDish_post,
   deleteDish,
+  editDetails_get,
+  editDetails_post,
 };

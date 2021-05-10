@@ -51,4 +51,18 @@ router.get(
   addUserToSession,
   RestaurantController.deleteDish
 );
+
+router.get(
+  "/edit_details/",
+  requireAuth,
+  addUserToSession,
+  RestaurantController.editDetails_get
+);
+
+router.post(
+  "/edit_details/",
+  requireAuth,
+  addUserToSession,
+  RestaurantController.editDetails_post
+);
 export default router;

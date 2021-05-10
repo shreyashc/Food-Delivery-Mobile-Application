@@ -1,0 +1,31 @@
+doctype html
+html
+    head
+        include ../includes/head.pug
+        title Update Details
+
+    body
+        include ../includes/navbar.pug
+        if !restaurant
+            div Not Found
+        else
+            form(action=`/restaurant/edit_details/`, method="post")
+                div
+                    label Restaurant Name 
+                    input(type="text" name="displayName" value=restaurant.displayName)
+                div
+                    label Phone 
+                    input(type="text" name="phone" value=restaurant.phone)
+                    
+                div
+                    label Image URL
+                    input(type="text" name="imgUrl" value=restaurant.imgUrl)
+                div
+                    label Address 
+                    input(type="text" name="address" value=restaurant.address)
+                div
+                    label City 
+                    input(type="text" name="city" value=restaurant.city)
+
+                div
+                    button Submit
