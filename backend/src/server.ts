@@ -7,6 +7,7 @@ import { User, Customer, Restaurant, Item } from "./models/entities/";
 import AuthRoutes from "./routes/auth";
 import HomeRoutes from "./routes/home";
 import RestaurantRoutes from "./routes/restaurant";
+import ApiRoutes from "./routes/api";
 
 const main = async () => {
   const app = express();
@@ -42,6 +43,7 @@ const main = async () => {
   app.use("/", HomeRoutes);
   app.use("/auth", AuthRoutes);
   app.use("/restaurant", RestaurantRoutes);
+  app.use("/api", ApiRoutes);
 
   /**
    * create httpServer
