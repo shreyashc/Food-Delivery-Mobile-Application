@@ -12,7 +12,7 @@ import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import OrderScreen from "../screens/OrderScreen";
 import TabTwoScreen from "../screens/TabTwoScreen";
-import { BottomTabParamList, OrderParamList, TabTwoParamList } from "../types";
+import { BottomTabParamList, OrderParamList, TabTwoParamList} from "../types";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -58,6 +58,8 @@ function TabBarIcon(props: {
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
 const OrderStack = createStackNavigator<OrderParamList>();
+
+
 
 function OrderNavigator() {
   return (

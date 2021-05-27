@@ -15,6 +15,7 @@ import LinkingConfiguration from './LinkingConfiguration';
 import LoginScreen from '../screens/LoginScreen';
 import { useContext } from 'react';
 import { AppContext } from '../Providers/contexts';
+import SignupScreen from '../screens/SignupScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -43,6 +44,7 @@ function RootNavigator() {
       } */}
       <Stack.Screen name="Root" component={BottomTabNavigator} />
       <Stack.Screen name="Login" component={LoginScreen}/>
+      <Stack.Screen name="Signup" component={SignupScreen}/>
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
     </Stack.Navigator>
   );

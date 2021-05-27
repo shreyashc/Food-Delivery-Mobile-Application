@@ -14,7 +14,9 @@ export default function LoginScreen({ }) {
     const {appState,setAppState} = useContext(AppContext);
     const [email,setEmail] = useState("")
     const [password,setPassword] = useState("")
-    
+    const [name,setName] = useState("")
+    const [pinCode, setPinCode] = useState("") 
+
     const navigation = useNavigation()
     const auth = ()=>setAppState({isAuth:true})
   return (
@@ -27,12 +29,36 @@ export default function LoginScreen({ }) {
         <Text style={styles.heroText}>Foodzy</Text>
         <Input
             style={styles.inputText}
+            placeholder="Name"
+            onChangeText = {setName}
+            placeholderTextColor="#fff"
+            leftIcon={ 
+                <Icon style={styles.inputIcon}
+                name='person'
+                color='#fff'
+            />
+            }
+        /> 
+        <Input
+            style={styles.inputText}
             placeholder="Email"
             onChangeText = {setEmail}
             placeholderTextColor="#fff"
             leftIcon={ 
                 <Icon style={styles.inputIcon}
                 name='email'
+                color='#fff'
+            />
+            }
+        /> 
+        <Input
+            style={styles.inputText}
+            placeholder="Pincode"
+            onChangeText = {setPinCode}
+            placeholderTextColor="#fff"
+            leftIcon={ 
+                <Icon style={styles.inputIcon}
+                name='room'
                 color='#fff'
             />
             }
@@ -53,13 +79,13 @@ export default function LoginScreen({ }) {
             <TouchableOpacity activeOpacity={0.7}  
               style = {styles.button}
               onPress={auth}>
-                <Text style={styles.btnText}>Login</Text>
+                <Text style={styles.btnText}>Signup</Text>
               </TouchableOpacity>
               <TouchableOpacity 
                 activeOpacity={0.5}
-                onPress={() => navigation.navigate('Signup')}>
+                onPress={() => navigation.navigate('Login')}>
                   <Text style = {styles.linkText}>
-                      Don't have an account yet? Register now!
+                      Already have an account? Login!
                   </Text>
               </TouchableOpacity>
         </ImageBackground>

@@ -4,10 +4,12 @@
  */
 
 export type RootStackParamList = {
-  Login: undefined;
   Root: undefined;
   NotFound: undefined;
+  Login: undefined;
+  Signup: undefined;
 };
+ 
 
 export type BottomTabParamList = {
   Order: undefined;
