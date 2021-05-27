@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import * as React from "react";
 import { FlatList, StyleSheet, Image } from "react-native";
-import { SearchBar } from "react-native-elements";
+import { SearchBar, Avatar } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -19,6 +19,14 @@ export default function OrderScreen() {
           name="location-outline"
         />
         <Text style={styles.location}>Hassan, Karnataka, India</Text>
+        <Avatar
+            rounded
+            icon={{name: 'user', type: 'font-awesome'}}
+            onPress={() => console.log("Works!")}
+            activeOpacity={0.7}
+            containerStyle={{marginLeft: 20, marginTop: 11}}
+
+          />
       </View>
       <SearchBar
         platform="ios"
