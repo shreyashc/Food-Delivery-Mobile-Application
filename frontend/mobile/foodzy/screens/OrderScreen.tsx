@@ -1,4 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import * as React from "react";
 import { FlatList, StyleSheet, Image } from "react-native";
 import { SearchBar, Avatar } from "react-native-elements";
@@ -6,9 +8,14 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Text, View } from "../components/Themed";
+import { OrderParamList } from "../types";
 
 export default function OrderScreen() {
   const [searchQuery, setSearchQuery] = React.useState("");
+
+  const navigation = useNavigation<
+    StackNavigationProp<OrderParamList, "OrderScreen">
+  >();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -20,13 +27,12 @@ export default function OrderScreen() {
         />
         <Text style={styles.location}>Hassan, Karnataka, India</Text>
         <Avatar
-            rounded
-            icon={{name: 'user', type: 'font-awesome'}}
-            onPress={() => console.log("Works!")}
-            activeOpacity={0.7}
-            containerStyle={{marginLeft: 20, marginTop: 11}}
-
-          />
+          rounded
+          icon={{ name: "user", type: "font-awesome" }}
+          onPress={() => console.log("Works!")}
+          activeOpacity={0.7}
+          containerStyle={{ marginLeft: 20, marginTop: 11 }}
+        />
       </View>
       <SearchBar
         platform="ios"
@@ -41,28 +47,28 @@ export default function OrderScreen() {
       <FlatList
         data={[
           {
-            key: "id1",
+            id: "id1",
             title: "Parijatha Restaurant",
             category: "South Indian, North Indian, Andhra",
             rating: 4.1,
             isVeg: true,
           },
           {
-            key: "id2",
+            id: "id2",
             title: "Parijatha Restaurant",
             category: "South Indian, North Indian, Andhra",
             rating: 4.1,
             isVeg: false,
           },
           {
-            key: "id3",
+            id: "id3",
             title: "Parijatha Restaurant",
             category: "South Indian, North Indian, Andhra",
             rating: 4.1,
             isVeg: true,
           },
           {
-            key: "id4",
+            id: "id4",
             title: "Parijatha Restaurant",
             category: "South Indian, North Indian, Andhra",
             rating: 4.1,
@@ -71,7 +77,14 @@ export default function OrderScreen() {
         ]}
         style={{ padding: 10, marginTop: 5 }}
         renderItem={({ item }) => (
-          <TouchableOpacity key={item.key} onPress={() => {}}>
+          <TouchableOpacity
+            key={item.id}
+            onPress={() => {
+              navigation.navigate("RestaurantDetailsScreen", {
+                reastaurantId: item.id,
+              });
+            }}
+          >
             <View style={styles.restaurantContainer}>
               <Image
                 style={styles.restaurantImage}

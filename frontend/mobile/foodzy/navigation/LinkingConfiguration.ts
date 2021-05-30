@@ -15,6 +15,7 @@ export default {
           Order: {
             screens: {
               OrderScreen: "order",
+              RestaurantDetailsScreen: "restaurant_details",
             },
           },
           TabTwo: {
@@ -22,6 +23,16 @@ export default {
               TabTwoScreen: "two",
             },
           },
+        },
+      },
+      Login: {
+        screens: {
+          LoginScreen: "Login",
+        },
+      },
+      Signup: {
+        screens: {
+          SignupScreen: "Signup",
         },
       },
       NotFound: "*",

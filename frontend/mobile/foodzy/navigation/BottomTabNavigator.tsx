@@ -12,7 +12,8 @@ import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import OrderScreen from "../screens/OrderScreen";
 import TabTwoScreen from "../screens/TabTwoScreen";
-import { BottomTabParamList, OrderParamList, TabTwoParamList} from "../types";
+import RestaurantDetailsScreen from "../screens/RestaurantDetailsScreen";
+import { BottomTabParamList, OrderParamList, TabTwoParamList } from "../types";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -59,14 +60,18 @@ function TabBarIcon(props: {
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
 const OrderStack = createStackNavigator<OrderParamList>();
 
-
-
 function OrderNavigator() {
   return (
     <OrderStack.Navigator>
       <OrderStack.Screen
         name="OrderScreen"
         component={OrderScreen}
+        options={{ headerShown: false }}
+      />
+      <OrderStack.Screen
+        name="RestaurantDetailsScreen"
+        component={RestaurantDetailsScreen}
+        initialParams={{ reastaurantId: 0 }}
         options={{ headerShown: false }}
       />
     </OrderStack.Navigator>
