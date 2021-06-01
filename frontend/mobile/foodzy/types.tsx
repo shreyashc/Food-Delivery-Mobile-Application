@@ -12,7 +12,7 @@ export type RootStackParamList = {
 
 export type BottomTabParamList = {
   Order: undefined;
-  TabTwo: undefined;
+  Profile: undefined;
 };
 
 export type OrderParamList = {
@@ -21,5 +21,5 @@ export type OrderParamList = {
 };
 
 export type TabTwoParamList = {
-  TabTwoScreen: undefined;
+  ProfileScreen: undefined;
 };
