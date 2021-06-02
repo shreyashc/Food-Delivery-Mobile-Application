@@ -19,13 +19,30 @@ const logout_web = (_req: Request, res: Response) => {
 };
 
 const signup_post = async (req: Request, res: Response) => {
-  const { email, password: plainPassword } = req.body;
+  const {
+    email,
+    password: plainPassword,
+    displayName,
+    phone,
+    address,
+    imgUrl,
+    city,
+  } = req.body;
+
+  const restaurantDet = {
+    displayName,
+    phone,
+    address,
+    imgUrl,
+    city,
+  };
 
   try {
     const { savedUser, error } = await signUpUser(
       email,
       plainPassword,
-      "restaurant"
+      "restaurant",
+      restaurantDet
     );
     if (error || !savedUser) {
       throw error;

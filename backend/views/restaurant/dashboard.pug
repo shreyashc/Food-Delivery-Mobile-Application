@@ -8,18 +8,21 @@ html
 
     body
         include ../includes/navbar.pug
-        h1 restaurant dashboard
+        
 
-        div 
-            - const res = JSON.stringify(restaurant)
-            p= res
+        .info-container
+            .det
+                h2= restaurant.displayName
+                p= restaurant.address
+                p= restaurant.city
+            .img
+                img(src=restaurant.imgUrl, alt="restaurant image", class="r-img")
 
         div(class="container")
-            div
+            div.item
                 a(href="add_dish") Add New Dish 
-            div
+            div.item
                 a(href="dishes") All Dishes 
-            div
+            div.item
                 a(href="edit_details") Edit Restaurant details
-
 

@@ -18,5 +18,32 @@ html
                     div(class="form-group has-feedback")
                         input(type="password" name="password" class="form-control form-input"  placeholder="" required)
                         label(class="form-label" for="") Password
+
+                    div(class="form-group has-feedback")
+                        input(name="displayName" class="form-control form-input"  placeholder="" required)
+                        label(class="form-label" for="") Display Name
+                    
+                    div(class="form-group has-feedback")
+                        input(name="phone" type="tel" class="form-control form-input"  placeholder="" required)
+                        label(class="form-label" for="") Phone
             
+                    div(class="form-group has-feedback")
+                        input(name="address" class="form-control form-input"  placeholder="" required)
+                        label(class="form-label" for="") Address
+
+                    div(class="form-group has-feedback")
+                        label(class="" for="") City
+                        br
+                        select(name="city"  required)
+                            option(value="hassan") Hassan, Karnataka, India
+                            option(value="hassan") Hassan, Karnataka, India
+                            option(value="hassan") Hassan, Karnataka, India
+                            option(value="hassan") Hassan, Karnataka, India
+                    
+                    .spacer
+
+                    div(class="form-group has-feedback")
+                        input(name="imgUrl" class="form-control form-input"  placeholder="" required)
+                        label(class="form-label" for="") Image URI/URL
+
                     button(id="submit" type="submit" class="btn btn-default submit" value="Signup") Sign Up

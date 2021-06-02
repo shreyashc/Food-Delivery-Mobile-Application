@@ -13,7 +13,8 @@ const generateToken = (id: number, role: string, email: string) => {
 const signUpUser = async (
   email: string,
   plainPassword: string,
-  role: "customer" | "restaurant"
+  role: "customer" | "restaurant",
+  restaurantDet?: restaurantDetIntf
 ) => {
   const password = await argon2.hash(plainPassword);
   try {
@@ -24,8 +25,8 @@ const signUpUser = async (
       email: user.email,
       role: user.role,
     };
-    if (role === "restaurant") {
-      await Restaurant.create({ userId: user.id }).save();
+    if (role === "restaurant" && restaurantDet) {
+      await Restaurant.create({ userId: user.id, ...restaurantDet }).save();
     }
     return { savedUser: res, error: null };
   } catch (err) {
@@ -65,5 +66,13 @@ const loginUser = async (email: string, plainPassword: string) => {
     return { loggedInUser: null, error };
   }
 };
+
+interface restaurantDetIntf {
+  displayName?: string;
+  phone?: string;
+  address?: string;
+  imgUrl?: string;
+  city?: string;
+}
 
 export { generateToken, MAX_AGE, signUpUser, loginUser };

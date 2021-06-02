@@ -1,4 +1,4 @@
-@import './index.css';
+@import "./index.css";
 
 body {
   font-family: "Mako", sans-serif;
@@ -61,8 +61,8 @@ h1 {
 }
 
 .loginForm {
-  max-width: 300px;
-  margin: 10% auto 0;
+  max-width: 400px;
+  margin: 5vh auto 0;
 }
 .loginForm .form-control {
   background-color: transparent;
@@ -89,4 +89,21 @@ h1 {
   color: #fff;
   background-color: #f52b2b;
   border-color: transparent;
+}
+
+select,
+option {
+  width: 100%;
+  background: #fdfafa;
+  padding: 7px;
+}
+
+select {
+  margin-top: 15px;
+  margin-bottom: 3px;
+  font-size: 95%;
+}
+
+.spacer {
+  margin: 50px 0;
 }
