@@ -45,7 +45,7 @@ const main = async () => {
   app.use("/", HomeRoutes);
   app.use("/auth", AuthRoutes);
   app.use("/restaurant", RestaurantRoutes);
-  app.use("/api", ApiRoutes);
+  app.use("/api/v1", ApiRoutes);
 
   /**
    * create httpServer
