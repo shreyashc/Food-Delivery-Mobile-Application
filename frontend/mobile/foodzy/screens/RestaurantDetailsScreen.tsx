@@ -6,11 +6,14 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { BottomSheet, Button } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 import { Text, View } from "../components/Themed";
 import { OrderParamList } from "../types";
+
+import apiClient from "../api/client";
 
 export default function RestaurantDetailsScreen() {
   //route
@@ -18,9 +21,35 @@ export default function RestaurantDetailsScreen() {
     RouteProp<OrderParamList, "RestaurantDetailsScreen">
   >();
 
+  const reastaurantId = route.params.reastaurantId;
+
   //state
   const [cart, setCart] = React.useState<Item[]>([]);
   const [isCartOpen, setIsCartOpen] = React.useState(false);
+  const [resDet, setResDet] = React.useState<RestaurantDetailsResponse>();
+  const [items, setItems] = React.useState<Item[]>([]);
+
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+
+  React.useEffect(() => {
+    setLoading(true);
+    apiClient
+      .get<RestaurantDetailsResponse>(
+        "/restautant_details_and_dishes/" + reastaurantId
+      )
+      .then((res) => {
+        setLoading(false);
+        setError(false);
+        setResDet(res.data);
+        setItems(res.data.items);
+      })
+      .catch((err) => {
+        setLoading(false);
+        setError(true);
+        console.log(err);
+      });
+  }, []);
 
   /**
    * close cart if no items present
@@ -37,102 +66,140 @@ export default function RestaurantDetailsScreen() {
 
   //total in cart
   const getTotal = () => {
-    return cart.reduce((prev, curr) => prev + parseFloat(curr.price), 0);
+    return cart.reduce((prev, curr) => prev + curr.price, 0);
   };
 
   //to fetch
-  const _reastaurantId = route.params.reastaurantId;
 
   return (
     <>
       <SafeAreaView style={styles.container}>
         {/* restaurant details  */}
-        <View style={styles.wrapper}>
-          <View style={styles.resDetails}>
-            <Text style={styles.title}>Twist Restaurant</Text>
-            <Text style={styles.description}>
-              North Indian, South Indian, Fast Food
+
+        {!loading && error && (
+          <View style={styles.info}>
+            <Text
+              style={{ textAlign: "center", fontSize: 16, color: "#fb3877" }}
+            >
+              Oops Something Went Wrong!
             </Text>
-            <Text style={styles.address}>Hassan Locality, Hassan</Text>
-            <Text style={styles.rating}>Rating: 4.4</Text>
+          </View>
+        )}
 
-            {/* saftey Images */}
-            <View style={styles.safWrap}>
-              <Image
-                source={require("../assets/images/saf.jpg")}
-                resizeMode="contain"
-                style={styles.safImg}
-              />
-              <Image
-                source={require("../assets/images/saf2.jpg")}
-                resizeMode="contain"
-                style={styles.safImg}
-              />
+        {loading && !error && (
+          <View style={styles.info}>
+            <ActivityIndicator
+              style={{ marginTop: 20, marginBottom: 8 }}
+              size="large"
+              color="#fd3d3d"
+            />
+            <Text
+              style={{ textAlign: "center", fontSize: 16, color: "#fb3877" }}
+            >
+              {"Web developers do it with <style>"}
+            </Text>
+          </View>
+        )}
+
+        {!loading && !error && (
+          <View style={styles.wrapper}>
+            <View style={styles.resDetails}>
+              <Text style={styles.title}>{resDet?.displayName}</Text>
+              <Text style={styles.description}>{resDet?.category}</Text>
+              <Text style={styles.address}>{resDet?.address}</Text>
+              <Text style={styles.rating}>Rating: {resDet?.rating}</Text>
+
+              {/* saftey Images */}
+              <View style={styles.safWrap}>
+                <Image
+                  source={require("../assets/images/saf.jpg")}
+                  resizeMode="contain"
+                  style={styles.safImg}
+                />
+                <Image
+                  source={require("../assets/images/saf2.jpg")}
+                  resizeMode="contain"
+                  style={styles.safImg}
+                />
+              </View>
             </View>
-          </View>
-          <View style={styles.line}></View>
 
-          {/* restaurant details end  */}
+            {/* restaurant details end  */}
 
-          <View style={styles.menu}>
-            <Text style={styles.menuHead}>Menu</Text>
-          </View>
+            <View style={styles.menu}>
+              <Ionicons name="fast-food-outline" size={24} />
+              <Text style={styles.menuHead}>Menu</Text>
+            </View>
 
-          {/* menu list  */}
-          <View style={{ flex: 1 }}>
-            <FlatList
-              data={dummyData}
-              style={{ padding: 5, marginTop: 8 }}
-              ListFooterComponent={<View style={{ height: 50 }} />}
-              renderItem={({ item }) => (
-                <View style={{ flex: 1 }}>
-                  <View style={styles.itemContainer}>
-                    <View style={styles.itemDet}>
-                      <Text style={styles.itemTitle}>{item.title}</Text>
-                      <Text style={styles.itemCat}>
-                        {"In " + item.category}
-                      </Text>
-                      <Text style={styles.itemPrice}>{"₹ " + item.price}</Text>
-                      <Text style={styles.itemDes}>{item.description}</Text>
-                    </View>
-                    <View>
-                      <Image
-                        style={styles.itemImage}
-                        source={require("../assets/images/restaurant-wall.jpg")}
-                      />
-                      <View style={styles.addBtnCont}>
-                        <Button
-                          icon={
-                            <Ionicons
-                              name="add-sharp"
-                              color="#ea2635"
-                              size={15}
-                              style={{ position: "absolute", right: 0, top: 0 }}
-                            />
-                          }
-                          title="ADD"
-                          titleStyle={{
-                            color: "#ea2635",
-                          }}
-                          buttonStyle={styles.plusBtn}
-                          onPress={() => {
-                            setCart((items) => {
-                              if (item && !cart.includes(item)) {
-                                return [...items, item];
+            {/* menu list  */}
+            <View style={{ flex: 1 }}>
+              <FlatList
+                data={items}
+                keyExtractor={(item) => item.id.toString()}
+                style={{ padding: 5, marginTop: 8 }}
+                ListFooterComponent={<View style={{ height: 50 }} />}
+                renderItem={({ item }) => (
+                  <View style={{ flex: 1 }}>
+                    <View style={styles.itemContainer}>
+                      <View style={styles.itemDet}>
+                        <Text style={styles.itemTitle}>{item.title}</Text>
+                        <Text style={styles.itemCat}>
+                          {"In " + item.category}
+                        </Text>
+                        <Text style={styles.itemPrice}>
+                          {"₹ " + item.price}
+                        </Text>
+                        <Text style={styles.itemDes}>{item.description}</Text>
+                      </View>
+                      <View>
+                        <View style={styles.imgWrap}>
+                          <Image
+                            style={styles.itemImage}
+                            defaultSource={require("../assets/images/load.png")}
+                            source={
+                              item.imgUrl
+                                ? { uri: item.imgUrl }
+                                : require("../assets/images/restaurant-wall.jpg")
+                            }
+                          />
+                          <View style={styles.addBtnCont}>
+                            <Button
+                              icon={
+                                <Ionicons
+                                  name="add-sharp"
+                                  color="#ea2635"
+                                  size={15}
+                                  style={{
+                                    position: "absolute",
+                                    right: 0,
+                                    top: 0,
+                                  }}
+                                />
                               }
-                              return items;
-                            });
-                          }}
-                        />
+                              title="ADD"
+                              titleStyle={{
+                                color: "#ea2635",
+                              }}
+                              buttonStyle={styles.plusBtn}
+                              onPress={() => {
+                                setCart((items) => {
+                                  if (item && !cart.includes(item)) {
+                                    return [...items, item];
+                                  }
+                                  return items;
+                                });
+                              }}
+                            />
+                          </View>
+                        </View>
                       </View>
                     </View>
                   </View>
-                </View>
-              )}
-            />
+                )}
+              />
+            </View>
           </View>
-        </View>
-
+        )}
         {/* cart 
           .
           . 
@@ -146,7 +213,7 @@ export default function RestaurantDetailsScreen() {
         >
           <View style={{ padding: 15 }}>
             {cart.map((item) => (
-              <View key={item.id} style={styles.cartItem}>
+              <View key={item.id.toString()} style={styles.cartItem}>
                 <View>
                   <Text style={{ fontSize: 19, fontWeight: "bold" }}>
                     {item.title}
@@ -245,6 +312,12 @@ export default function RestaurantDetailsScreen() {
 //styles
 
 const styles = StyleSheet.create({
+  info: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#00000000",
+  },
   container: {
     height: "100%",
     backgroundColor: "#fff",
@@ -277,17 +350,20 @@ const styles = StyleSheet.create({
     fontSize: 17,
   },
   menu: {
-    marginTop: 18,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
   },
   menuHead: {
     fontSize: 24,
-    fontWeight: "300",
-    padding: 5,
+    fontWeight: "600",
+    paddingLeft: 5,
   },
   itemContainer: {
     display: "flex",
     flexDirection: "row",
     marginBottom: 60,
+    paddingTop: 7,
   },
   itemDet: {
     flex: 3,
@@ -295,6 +371,13 @@ const styles = StyleSheet.create({
   itemImage: {
     width: 100,
     height: 100,
+    borderRadius: 12,
+  },
+  imgWrap: {
+    shadowColor: "#ccc",
+    shadowOffset: { width: 2, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 5,
     borderRadius: 12,
   },
   itemTitle: {
@@ -318,7 +401,7 @@ const styles = StyleSheet.create({
   },
   addBtnCont: {
     position: "absolute",
-    bottom: -5,
+    bottom: -10,
     width: "100%",
     paddingLeft: "10%",
     paddingRight: "10%",
@@ -366,77 +449,28 @@ const styles = StyleSheet.create({
 });
 
 interface Item {
-  id: string;
-  title: string;
-  price: string;
   category: string;
   description: string;
+  id: number;
   imgUrl: string;
   isVeg: boolean;
+  price: number;
+  restaurantId: number;
+  title: string;
 }
 
-const dummyData: Item[] = [
-  {
-    id: "id1",
-    title: "Chicken Biriyani Combo",
-    price: "200",
-    category: "Non Veg Meal Combo",
-    description: "Chicken Biriyani + 2 peice Kebab + Egg",
-    imgUrl: "",
-    isVeg: false,
-  },
-  {
-    id: "id2",
-    title: "Chicken Kebab",
-    price: "150",
-    category: "Starters",
-    description: "8 Large Piece",
-    imgUrl: "",
-    isVeg: false,
-  },
-  {
-    id: "id3",
-    title: "Chicken Noodels Combo",
-    price: "100",
-    category: "Non Veg Meal Combo",
-    description: "Chicken Noodels + 2 peice Kebab",
-    imgUrl: "",
-    isVeg: false,
-  },
-  {
-    id: "id4",
-    title: "Egg Fried Rice",
-    price: "200",
-    category: "Non Veg Meal Combo",
-    description: "Egg Fried Rice + 2 peice Kebab",
-    imgUrl: "",
-    isVeg: false,
-  },
-  {
-    id: "id5",
-    title: "Egg Fried Rice",
-    price: "200",
-    category: "Non Veg Meal Combo",
-    description: "Egg Fried Rice + 2 peice Kebab",
-    imgUrl: "",
-    isVeg: false,
-  },
-  {
-    id: "id6",
-    title: "Egg Fried Rice",
-    price: "200",
-    category: "Non Veg Meal Combo",
-    description: "Egg Fried Rice + 2 peice Kebab",
-    imgUrl: "",
-    isVeg: false,
-  },
-  {
-    id: "id7",
-    title: "Egg Fried Rice",
-    price: "200",
-    category: "Non Veg Meal Combo",
-    description: "Egg Fried Rice + 2 peice Kebab",
-    imgUrl: "",
-    isVeg: false,
-  },
-];
+interface RestaurantDetailsResponse {
+  address: string;
+  category: string;
+  city: string;
+  createdAt: string;
+  displayName: string;
+  id: string | number;
+  imgUrl: string;
+  isVeg: boolean;
+  items: Item[];
+  phone: string;
+  rating: string | number;
+  updatedAt: string;
+  userId: number;
+}

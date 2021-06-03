@@ -81,7 +81,7 @@ export default function OrderScreen() {
         value={searchQuery}
       />
 
-      {error && (
+      {!loading && error && (
         <View style={styles.info}>
           <Text style={{ textAlign: "center", fontSize: 16, color: "#fb3877" }}>
             Oops Something Went Wrong!
@@ -89,7 +89,7 @@ export default function OrderScreen() {
         </View>
       )}
 
-      {loading && (
+      {loading && !error && (
         <View style={styles.info}>
           <ActivityIndicator
             style={{ marginTop: 20, marginBottom: 8 }}
@@ -117,6 +117,7 @@ export default function OrderScreen() {
               <View style={styles.restaurantContainer}>
                 <Image
                   style={styles.restaurantImage}
+                  defaultSource={require("../assets/images/load.png")}
                   source={
                     item.imgUrl
                       ? { uri: item.imgUrl }
