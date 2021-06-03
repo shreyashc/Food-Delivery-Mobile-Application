@@ -12,27 +12,34 @@ html
                 h1 Sign Up
                 form(action="/auth/signup" method="POST")
                     div(class="form-group has-feedback")
-                        input(type="email" name="email" class="form-control form-input"  placeholder="" required)
-                        label(class="form-label" for="") Email
+                        input(type="email" name="email" class="form-control form-input"  required)
+                        label(class="form-label") Email
 
                     div(class="form-group has-feedback")
-                        input(type="password" name="password" class="form-control form-input"  placeholder="" required)
-                        label(class="form-label" for="") Password
+                        input(type="password" name="password" class="form-control form-input"  required)
+                        label(class="form-label") Password
 
                     div(class="form-group has-feedback")
-                        input(name="displayName" class="form-control form-input"  placeholder="" required)
-                        label(class="form-label" for="") Display Name
+                        input(name="displayName" class="form-control form-input"  required)
+                        label(class="form-label") Display Name
+
+                    div(class="form-group has-feedback")
+                        input(name="category" class="form-control form-input"
+                            onfocus="this.placeholder='Ex. North Indian,Chinese'" 
+                            onblur="this.placeholder=''" required)
+                        label(class="form-label") Category
                     
                     div(class="form-group has-feedback")
-                        input(name="phone" type="tel" class="form-control form-input"  placeholder="" required)
-                        label(class="form-label" for="") Phone
+                        input(name="phone" type="tel" class="form-control form-input"  required)
+                        label(class="form-label") Phone
             
                     div(class="form-group has-feedback")
-                        input(name="address" class="form-control form-input"  placeholder="" required)
-                        label(class="form-label" for="") Address
+                        input(name="address" class="form-control form-input" required)
+                        label(class="form-label") Address
+
 
                     div(class="form-group has-feedback")
-                        label(class="" for="") City
+                        label(class="") City
                         br
                         select(name="city"  required)
                             option(value="hassan") Hassan, Karnataka, India
@@ -43,7 +50,7 @@ html
                     .spacer
 
                     div(class="form-group has-feedback")
-                        input(name="imgUrl" class="form-control form-input"  placeholder="" required)
-                        label(class="form-label" for="") Image URI/URL
+                        input(name="imgUrl" class="form-control form-input"  required)
+                        label(class="form-label") Image URI/URL
 
                     button(id="submit" type="submit" class="btn btn-default submit" value="Signup") Sign Up

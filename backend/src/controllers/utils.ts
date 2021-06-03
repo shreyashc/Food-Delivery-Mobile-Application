@@ -26,7 +26,13 @@ const signUpUser = async (
       role: user.role,
     };
     if (role === "restaurant" && restaurantDet) {
-      await Restaurant.create({ userId: user.id, ...restaurantDet }).save();
+      const rating = parseFloat((Math.random() * (5.0 - 3.7) + 3.7).toFixed(1));
+
+      await Restaurant.create({
+        userId: user.id,
+        rating,
+        ...restaurantDet,
+      }).save();
     }
     return { savedUser: res, error: null };
   } catch (err) {
@@ -73,6 +79,7 @@ interface restaurantDetIntf {
   address?: string;
   imgUrl?: string;
   city?: string;
+  category?: string;
 }
 
 export { generateToken, MAX_AGE, signUpUser, loginUser };

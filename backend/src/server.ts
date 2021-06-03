@@ -24,6 +24,7 @@ const main = async () => {
     cors({
       origin: function (origin, callback) {
         const allowedOrigins = [
+          "http://localhost:4000",
           "http://localhost:19002",
           "http://localhost:19003",
           "http://localhost:19004",

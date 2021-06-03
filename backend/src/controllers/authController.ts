@@ -27,6 +27,7 @@ const signup_post = async (req: Request, res: Response) => {
     address,
     imgUrl,
     city,
+    category,
   } = req.body;
 
   const restaurantDet = {
@@ -35,6 +36,7 @@ const signup_post = async (req: Request, res: Response) => {
     address,
     imgUrl,
     city,
+    category,
   };
 
   try {

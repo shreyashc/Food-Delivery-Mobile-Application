@@ -42,7 +42,7 @@ export const env = {
     username: getOsEnvOptional("DB_USERNAME"),
     password: getOsEnvOptional("DB_PASSWORD"),
     databaseName: getOsEnv("DB_NAME"),
-    synchronize: toBool(getOsEnvOptional("TYPEORM_SYNCHRONIZE")!),
+    synchronize: toBool(getOsEnv("TYPEORM_SYNCHRONIZE")),
     logging: toBool(getOsEnv("TYPEORM_LOGGING")),
   },
 };
