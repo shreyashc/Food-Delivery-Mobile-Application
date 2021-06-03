@@ -40,13 +40,6 @@ export default function OrderScreen() {
           name="location-outline"
         />
         <Text style={styles.location}>Hassan, Karnataka, India</Text>
-        <Avatar
-          rounded
-          icon={{ name: "user", type: "font-awesome" }}
-          onPress={() => console.log("Works!")}
-          activeOpacity={0.7}
-          containerStyle={{ marginLeft: 20, marginTop: 11 }}
-        />
       </View>
       <SearchBar
         platform="ios"
@@ -75,7 +68,7 @@ export default function OrderScreen() {
                 style={styles.restaurantImage}
                 source={
                   item.imgUrl
-                    ? item.imgUrl
+                    ? { uri: item.imgUrl }
                     : require("../assets/images/restaurant-wall.jpg")
                 }
               />
@@ -83,7 +76,9 @@ export default function OrderScreen() {
                 <Text style={styles.restaurantTitle}>{item.displayName}</Text>
                 <View style={styles.detWrap}>
                   <View style={styles.restaurantRating}>
-                    <Text style={styles.samllBoldTxt}>4.5 ⭐ </Text>
+                    <Text style={styles.samllBoldTxt}>
+                      {item.rating + " ⭐"}
+                    </Text>
                   </View>
                   <View style={true ? styles.veg : styles.nonveg}>
                     <Text style={styles.samllBoldTxt}>
@@ -91,9 +86,7 @@ export default function OrderScreen() {
                     </Text>
                   </View>
                 </View>
-                <Text style={styles.restaurantCat}>
-                  "South Indian, North Indian, Andhra"
-                </Text>
+                <Text style={styles.restaurantCat}>{item.category}</Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -197,4 +190,6 @@ interface RestaurnatResponse {
   phone: string;
   updatedAt: string;
   userId: number;
+  rating: number | string;
+  category: string;
 }
