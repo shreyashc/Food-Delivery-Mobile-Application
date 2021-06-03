@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import { createConnection } from "typeorm";
 import { env } from "./env";
 import { User, Customer, Restaurant, Item } from "./models/entities/";
+import cors from "cors";
 import AuthRoutes from "./routes/auth";
 import HomeRoutes from "./routes/home";
 import RestaurantRoutes from "./routes/restaurant";
@@ -18,6 +19,29 @@ const main = async () => {
 
   app.set("views", path.join(__dirname, "../views"));
   app.set("view engine", "pug");
+
+  app.use(
+    cors({
+      origin: function (origin, callback) {
+        const allowedOrigins = [
+          "http://localhost:19002",
+          "http://localhost:19003",
+          "http://localhost:19004",
+          "http://localhost:19005",
+          "http://localhost:19006",
+        ];
+        if (!origin) return callback(null, true);
+        console.log(allowedOrigins.indexOf(origin) === -1);
+        if (allowedOrigins.indexOf(origin) === -1) {
+          var err = new Error("Origin not allowed");
+          return callback(err, false);
+        }
+        return callback(null, true);
+      },
+      credentials: true,
+      methods: ["POST", "PATCH", "GET", "OPTIONS", "HEAD", "DELETE"],
+    })
+  );
 
   app.set("trust proxy", true);
 
