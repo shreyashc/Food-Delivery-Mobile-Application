@@ -24,6 +24,8 @@ const main = async () => {
     cors({
       origin: function (origin, callback) {
         const allowedOrigins = [
+          "https://foodzy-backend.herokuapp.com",
+          "http://foodzy-backend.herokuapp.com",
           "http://localhost:4000",
           "http://localhost:19002",
           "http://localhost:19003",
