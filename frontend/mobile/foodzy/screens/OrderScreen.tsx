@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import * as React from "react";
-import { FlatList, Image, StyleSheet } from "react-native";
+import { ActivityIndicator, FlatList, Image, StyleSheet } from "react-native";
 import { SearchBar } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -17,14 +17,43 @@ export default function OrderScreen() {
     []
   );
 
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+
+  const [filteredRestaurants, setfilteredRestaurants] = React.useState<
+    RestaurnatResponse[]
+  >([]);
+
+  const filterRestaurants = (txt: string) => {
+    setSearchQuery(txt);
+    txt = txt.toLocaleLowerCase().trim();
+
+    if (txt === "") {
+      setfilteredRestaurants(restaurants);
+      return;
+    }
+    setfilteredRestaurants(() =>
+      restaurants.filter((restu) =>
+        restu.displayName.toLowerCase().includes(txt)
+      )
+    );
+  };
+
   React.useEffect(() => {
+    setLoading(true);
     apiClient
       .get<RestaurnatResponse[]>("/nearest_restautants")
       .then((res) => {
-        console.log(res);
+        setLoading(false);
+        setError(false);
         setRestaurants(res.data);
+        setfilteredRestaurants(res.data);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setLoading(false);
+        setError(true);
+        console.log(err);
+      });
   }, []);
 
   const navigation = useNavigation<
@@ -47,51 +76,74 @@ export default function OrderScreen() {
         inputStyle={{ fontSize: 14 }}
         inputContainerStyle={styles.searchInput}
         containerStyle={styles.searchContainer}
-        onChangeText={setSearchQuery}
+        onChangeText={filterRestaurants}
         searchIcon={{ color: "red" }}
         value={searchQuery}
       />
-      <FlatList
-        data={restaurants}
-        style={{ padding: 10, marginTop: 5 }}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate("RestaurantDetailsScreen", {
-                reastaurantId: item.id,
-              });
-            }}
-          >
-            <View style={styles.restaurantContainer}>
-              <Image
-                style={styles.restaurantImage}
-                source={
-                  item.imgUrl
-                    ? { uri: item.imgUrl }
-                    : require("../assets/images/restaurant-wall.jpg")
-                }
-              />
-              <View style={styles.restaurantDetails}>
-                <Text style={styles.restaurantTitle}>{item.displayName}</Text>
-                <View style={styles.detWrap}>
-                  <View style={styles.restaurantRating}>
-                    <Text style={styles.samllBoldTxt}>
-                      {item.rating + " ⭐"}
-                    </Text>
+
+      {error && (
+        <View style={styles.info}>
+          <Text style={{ textAlign: "center", fontSize: 16, color: "#fb3877" }}>
+            Oops Something Went Wrong!
+          </Text>
+        </View>
+      )}
+
+      {loading && (
+        <View style={styles.info}>
+          <ActivityIndicator
+            style={{ marginTop: 20, marginBottom: 8 }}
+            size="large"
+            color="#fd3d3d"
+          />
+          <Text style={{ textAlign: "center", fontSize: 16, color: "#fb3877" }}>
+            Spinning the wheel of fortune...
+          </Text>
+        </View>
+      )}
+      {!error && !loading && (
+        <FlatList
+          data={filteredRestaurants}
+          style={{ padding: 10, marginTop: 5 }}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("RestaurantDetailsScreen", {
+                  reastaurantId: item.id,
+                });
+              }}
+            >
+              <View style={styles.restaurantContainer}>
+                <Image
+                  style={styles.restaurantImage}
+                  source={
+                    item.imgUrl
+                      ? { uri: item.imgUrl }
+                      : require("../assets/images/restaurant-wall.jpg")
+                  }
+                />
+                <View style={styles.restaurantDetails}>
+                  <Text style={styles.restaurantTitle}>{item.displayName}</Text>
+                  <View style={styles.detWrap}>
+                    <View style={styles.restaurantRating}>
+                      <Text style={styles.samllBoldTxt}>
+                        {item.rating + " ⭐"}
+                      </Text>
+                    </View>
+                    <View style={item.isVeg ? styles.veg : styles.nonveg}>
+                      <Text style={styles.samllBoldTxt}>
+                        {item.isVeg ? "veg" : "non-veg"}
+                      </Text>
+                    </View>
                   </View>
-                  <View style={item.isVeg ? styles.veg : styles.nonveg}>
-                    <Text style={styles.samllBoldTxt}>
-                      {item.isVeg ? "veg" : "non-veg"}
-                    </Text>
-                  </View>
+                  <Text style={styles.restaurantCat}>{item.category}</Text>
                 </View>
-                <Text style={styles.restaurantCat}>{item.category}</Text>
               </View>
-            </View>
-          </TouchableOpacity>
-        )}
-      />
+            </TouchableOpacity>
+          )}
+        />
+      )}
     </SafeAreaView>
   );
 }
@@ -177,6 +229,13 @@ const styles = StyleSheet.create({
   samllBoldTxt: {
     fontWeight: "bold",
     color: "white",
+  },
+
+  info: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#00000000",
   },
 });
 
