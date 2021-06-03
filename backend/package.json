@@ -12,7 +12,6 @@
     "deploy": "git subtree push --prefix=backend heroku master"
   },
   "dependencies": {
-    "@types/cors": "^2.8.10",
     "argon2": "^0.27.2",
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.5",
@@ -28,6 +27,7 @@
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.2",
+    "@types/cors": "^2.8.10",
     "@types/express": "^4.17.11",
     "@types/http-errors": "^1.8.0",
     "@types/jsonwebtoken": "^8.5.1",
