@@ -3,8 +3,6 @@ import { Request, Response } from "express";
 
 const router = Router();
 
-router.get("", (_req: Request, res: Response) =>
-  res.render("index.pug", { name: "foodzy" })
-);
+router.get("", (_req: Request, res: Response) => res.redirect("/auth/login"));
 
 export default router;

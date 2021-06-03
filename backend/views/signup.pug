@@ -37,9 +37,16 @@ html
                         input(name="address" class="form-control form-input" required)
                         label(class="form-label") Address
 
-
+                    div
+                        label(style="font-size:20px;margin-right:8px;") Veg
+                        input(type="radio" name="isVeg" value="true" style="margin-right:12px;" checked)
+                        label(style="font-size:20px;margin-right:8px;") Nonveg 
+                        input(type="radio" name="isVeg" value="false")
+                        
+                    .spacer2(style="margin:12px 0 !important;")
+    
                     div(class="form-group has-feedback")
-                        label(class="") City
+                        label(style="font-size:20px;") City
                         br
                         select(name="city"  required)
                             option(value="hassan") Hassan, Karnataka, India

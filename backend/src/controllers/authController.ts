@@ -28,7 +28,10 @@ const signup_post = async (req: Request, res: Response) => {
     imgUrl,
     city,
     category,
+    isVeg: isVegStr,
   } = req.body;
+
+  const isVeg = isVegStr === "true" ? true : false;
 
   const restaurantDet = {
     displayName,
@@ -37,6 +40,7 @@ const signup_post = async (req: Request, res: Response) => {
     imgUrl,
     city,
     category,
+    isVeg,
   };
 
   try {

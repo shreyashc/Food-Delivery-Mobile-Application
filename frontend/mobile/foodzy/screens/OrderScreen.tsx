@@ -3,7 +3,7 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import * as React from "react";
 import { FlatList, Image, StyleSheet } from "react-native";
-import { Avatar, SearchBar } from "react-native-elements";
+import { SearchBar } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Text, View } from "../components/Themed";
@@ -80,9 +80,9 @@ export default function OrderScreen() {
                       {item.rating + " ⭐"}
                     </Text>
                   </View>
-                  <View style={true ? styles.veg : styles.nonveg}>
+                  <View style={item.isVeg ? styles.veg : styles.nonveg}>
                     <Text style={styles.samllBoldTxt}>
-                      {true ? "veg" : "non-veg"}
+                      {item.isVeg ? "veg" : "non-veg"}
                     </Text>
                   </View>
                 </View>
@@ -192,4 +192,5 @@ interface RestaurnatResponse {
   userId: number;
   rating: number | string;
   category: string;
+  isVeg: boolean;
 }

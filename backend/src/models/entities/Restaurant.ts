@@ -38,6 +38,9 @@ export class Restaurant extends BaseEntity {
   @Column({ nullable: true })
   category!: string;
 
+  @Column({ nullable: true })
+  isVeg!: boolean;
+
   @OneToOne(() => User, (user) => user.restaurant)
   @JoinColumn()
   user: User;

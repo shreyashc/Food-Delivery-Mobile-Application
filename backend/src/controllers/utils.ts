@@ -80,6 +80,7 @@ interface restaurantDetIntf {
   imgUrl?: string;
   city?: string;
   category?: string;
+  isVeg?: boolean;
 }
 
 export { generateToken, MAX_AGE, signUpUser, loginUser };
