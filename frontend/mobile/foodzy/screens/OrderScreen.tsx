@@ -2,16 +2,30 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import * as React from "react";
-import { FlatList, StyleSheet, Image } from "react-native";
-import { SearchBar, Avatar } from "react-native-elements";
+import { FlatList, Image, StyleSheet } from "react-native";
+import { Avatar, SearchBar } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import { Text, View } from "../components/Themed";
 import { OrderParamList } from "../types";
 
+import apiClient from "../api/client";
+
 export default function OrderScreen() {
   const [searchQuery, setSearchQuery] = React.useState("");
+  const [restaurants, setRestaurants] = React.useState<RestaurnatResponse[]>(
+    []
+  );
+
+  React.useEffect(() => {
+    apiClient
+      .get<RestaurnatResponse[]>("/nearest_restautants")
+      .then((res) => {
+        console.log(res);
+        setRestaurants(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   const navigation = useNavigation<
     StackNavigationProp<OrderParamList, "OrderScreen">
@@ -45,40 +59,11 @@ export default function OrderScreen() {
         value={searchQuery}
       />
       <FlatList
-        data={[
-          {
-            id: "id1",
-            title: "Parijatha Restaurant",
-            category: "South Indian, North Indian, Andhra",
-            rating: 4.1,
-            isVeg: true,
-          },
-          {
-            id: "id2",
-            title: "Parijatha Restaurant",
-            category: "South Indian, North Indian, Andhra",
-            rating: 4.1,
-            isVeg: false,
-          },
-          {
-            id: "id3",
-            title: "Parijatha Restaurant",
-            category: "South Indian, North Indian, Andhra",
-            rating: 4.1,
-            isVeg: true,
-          },
-          {
-            id: "id4",
-            title: "Parijatha Restaurant",
-            category: "South Indian, North Indian, Andhra",
-            rating: 4.1,
-            isVeg: true,
-          },
-        ]}
+        data={restaurants}
         style={{ padding: 10, marginTop: 5 }}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity
-            key={item.id}
             onPress={() => {
               navigation.navigate("RestaurantDetailsScreen", {
                 reastaurantId: item.id,
@@ -88,21 +73,27 @@ export default function OrderScreen() {
             <View style={styles.restaurantContainer}>
               <Image
                 style={styles.restaurantImage}
-                source={require("../assets/images/restaurant-wall.jpg")}
+                source={
+                  item.imgUrl
+                    ? item.imgUrl
+                    : require("../assets/images/restaurant-wall.jpg")
+                }
               />
               <View style={styles.restaurantDetails}>
-                <Text style={styles.restaurantTitle}>{item.title}</Text>
+                <Text style={styles.restaurantTitle}>{item.displayName}</Text>
                 <View style={styles.detWrap}>
                   <View style={styles.restaurantRating}>
-                    <Text style={styles.samllBoldTxt}>{item.rating} ⭐ </Text>
+                    <Text style={styles.samllBoldTxt}>4.5 ⭐ </Text>
                   </View>
-                  <View style={item.isVeg ? styles.veg : styles.nonveg}>
+                  <View style={true ? styles.veg : styles.nonveg}>
                     <Text style={styles.samllBoldTxt}>
-                      {item.isVeg ? "veg" : "non-veg"}
+                      {true ? "veg" : "non-veg"}
                     </Text>
                   </View>
                 </View>
-                <Text style={styles.restaurantCat}>{item.category}</Text>
+                <Text style={styles.restaurantCat}>
+                  "South Indian, North Indian, Andhra"
+                </Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -195,3 +186,15 @@ const styles = StyleSheet.create({
     color: "white",
   },
 });
+
+interface RestaurnatResponse {
+  address: string;
+  city: string;
+  createdAt: string;
+  displayName: string;
+  id: number;
+  imgUrl: string;
+  phone: string;
+  updatedAt: string;
+  userId: number;
+}
