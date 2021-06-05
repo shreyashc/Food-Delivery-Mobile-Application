@@ -1,7 +1,7 @@
 import { env } from "../env";
 import jwt from "jsonwebtoken";
 import argon2 from "argon2";
-import { Restaurant, User } from "../models/entities";
+import { Customer, Restaurant, User } from "../models/entities";
 
 const MAX_AGE = 21 * 12 * 30 * 24 * 60 * 60;
 const generateToken = (id: number, role: string, email: string) => {
@@ -14,7 +14,10 @@ const signUpUser = async (
   email: string,
   plainPassword: string,
   role: "customer" | "restaurant",
-  restaurantDet?: restaurantDetIntf
+  options: {
+    restaurantDet?: restaurantDetIntf;
+    customerDet?: customerDetInt;
+  }
 ) => {
   const password = await argon2.hash(plainPassword);
   try {
@@ -25,14 +28,20 @@ const signUpUser = async (
       email: user.email,
       role: user.role,
     };
-    if (role === "restaurant" && restaurantDet) {
+    if (role === "restaurant" && options.restaurantDet) {
       const rating = parseFloat((Math.random() * (5.0 - 3.7) + 3.7).toFixed(1));
 
       await Restaurant.create({
         userId: user.id,
         rating,
-        ...restaurantDet,
+        ...options.restaurantDet,
       }).save();
+    } else if (role === "customer" && options.customerDet) {
+      //customer
+      await Customer.create({
+        userId: user.id,
+        ...options.customerDet,
+      });
     }
     return { savedUser: res, error: null };
   } catch (err) {
@@ -81,6 +90,12 @@ interface restaurantDetIntf {
   city?: string;
   category?: string;
   isVeg?: boolean;
+}
+
+interface customerDetInt {
+  displayName?: string;
+  phone?: string;
+  address?: string;
 }
 
 export { generateToken, MAX_AGE, signUpUser, loginUser };

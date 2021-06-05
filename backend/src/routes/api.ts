@@ -11,4 +11,8 @@ router.get(
   ApiController.getRestaurantsDetailsAndDishes
 );
 
+router.post("/signup", ApiController.signUp);
+
+router.post("/login", ApiController.login);
+
 export default router;

@@ -48,7 +48,7 @@ const signup_post = async (req: Request, res: Response) => {
       email,
       plainPassword,
       "restaurant",
-      restaurantDet
+      { restaurantDet }
     );
     if (error || !savedUser) {
       throw error;
