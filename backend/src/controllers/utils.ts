@@ -41,7 +41,7 @@ const signUpUser = async (
       await Customer.create({
         userId: user.id,
         ...options.customerDet,
-      });
+      }).save();
     }
     return { savedUser: res, error: null };
   } catch (err) {
