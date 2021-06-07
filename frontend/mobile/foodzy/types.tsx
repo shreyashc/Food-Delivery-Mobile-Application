@@ -5,9 +5,9 @@
 
 export type RootStackParamList = {
   Root: undefined;
-  NotFound: undefined;
   Login: undefined;
   Signup: undefined;
+  NotFound: undefined;
 };
 
 export type BottomTabParamList = {
@@ -20,6 +20,6 @@ export type OrderParamList = {
   RestaurantDetailsScreen: { reastaurantId: number | string };
 };
 
-export type TabTwoParamList = {
+export type ProfileParamList = {
   ProfileScreen: undefined;
 };

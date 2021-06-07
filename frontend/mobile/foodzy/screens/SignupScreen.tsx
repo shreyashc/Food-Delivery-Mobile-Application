@@ -1,141 +1,171 @@
 import * as React from "react";
-import { useContext, useState } from "react";
-import { StyleSheet, ImageBackground, Pressable,TouchableOpacity, Dimensions} from "react-native";
-import { Input,Icon,Button,Text  } from 'react-native-elements';
-import { SafeAreaView } from "react-native-safe-area-context";
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  ScrollView,
+} from "react-native";
+import { Input, Icon, Text } from "react-native-elements";
+import { useNavigation } from "@react-navigation/native";
 
-
-import { View } from "../components/Themed";
 import { AppContext } from "../Providers/contexts";
-import { StatusBar } from "expo-status-bar";
+import apiClient from "../api/client";
 
-export default function LoginScreen({ }) {
-    const {appState,setAppState} = useContext(AppContext);
-    const [email,setEmail] = useState("")
-    const [password,setPassword] = useState("")
-    const [name,setName] = useState("")
-    const [pinCode, setPinCode] = useState("") 
+export default function LoginScreen({}) {
+  const { appState, setAppState } = React.useContext(AppContext);
 
-    const navigation = useNavigation()
-    const auth = ()=>setAppState({isAuth:true})
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [name, setName] = React.useState("");
+  const [phone, setPhone] = React.useState("");
+  const [address, setAddress] = React.useState("");
+
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+
+  const navigation = useNavigation();
+  const auth = () => setAppState({ isAuth: true });
+
+  const signupUser = () => {
+    if (!email || !password || !name || !phone || !address) return;
+
+    apiClient
+      .post("/signup", {
+        email,
+        password,
+        displayName: name,
+        phone,
+        address,
+      })
+      .then((res) => {
+        setLoading(false);
+        setError(false);
+        console.log("Success");
+        navigation.navigate("Login");
+      })
+      .catch((err) => {
+        setLoading(false);
+        setError(true);
+        console.log(err);
+      });
+  };
   return (
-    <View style={[styles.container]}>
-      <StatusBar style={'light'} />
-      <ImageBackground 
-        blurRadius = {3}
-        style = {[styles.img]}
-        source={require('../assets/images/heroimg.jpg')}>
-        <Text style={styles.heroText}>Foodzy</Text>
-        <Input
-            style={styles.inputText}
-            placeholder="Name"
-            onChangeText = {setName}
-            placeholderTextColor="#fff"
-            leftIcon={ 
-                <Icon style={styles.inputIcon}
-                name='person'
-                color='#fff'
+    <TouchableWithoutFeedback
+      onPress={() => {
+        if (Platform.OS != "web") {
+          Keyboard.dismiss();
+        }
+      }}
+    >
+      <KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}
+        >
+          <>
+            <Input
+              style={styles.inputText}
+              placeholder="Name"
+              autoCompleteType="name"
+              onChangeText={setName}
+              value={name}
+              leftIcon={<Icon style={styles.inputIcon} name="person" />}
             />
-            }
-        /> 
-        <Input
-            style={styles.inputText}
-            placeholder="Email"
-            onChangeText = {setEmail}
-            placeholderTextColor="#fff"
-            leftIcon={ 
-                <Icon style={styles.inputIcon}
-                name='email'
-                color='#fff'
+            <Input
+              style={styles.inputText}
+              placeholder="Email"
+              autoCompleteType="email"
+              onChangeText={setEmail}
+              value={email}
+              keyboardType="email-address"
+              leftIcon={<Icon style={styles.inputIcon} name="email" />}
             />
-            }
-        /> 
-        <Input
-            style={styles.inputText}
-            placeholder="Pincode"
-            onChangeText = {setPinCode}
-            placeholderTextColor="#fff"
-            leftIcon={ 
-                <Icon style={styles.inputIcon}
-                name='room'
-                color='#fff'
+            <Input
+              style={styles.inputText}
+              placeholder="Password"
+              value={password}
+              keyboardType="visible-password"
+              onChangeText={setPassword}
+              secureTextEntry={true}
+              leftIcon={<Icon style={styles.inputIcon} name="lock" />}
             />
-            }
-        /> 
-        <Input
-            style={styles.inputText}
-            placeholder="Password"
-            onChangeText = {setPassword}
-            placeholderTextColor="#fff"
-            secureTextEntry={true}
-            leftIcon={ 
-                <Icon style={styles.inputIcon}
-                name='lock'
-                color='#fff'
+            <Input
+              style={styles.inputText}
+              placeholder="Phone"
+              autoCompleteType="tel"
+              onChangeText={setPhone}
+              value={phone}
+              keyboardType="phone-pad"
+              leftIcon={<Icon style={styles.inputIcon} name="phone" />}
             />
-            }
-        /> 
-            <TouchableOpacity activeOpacity={0.7}  
-              style = {styles.button}
-              onPress={auth}>
-                <Text style={styles.btnText}>Signup</Text>
-              </TouchableOpacity>
-              <TouchableOpacity 
-                activeOpacity={0.5}
-                onPress={() => navigation.navigate('Login')}>
-                  <Text style = {styles.linkText}>
-                      Already have an account? Login!
-                  </Text>
-              </TouchableOpacity>
-        </ImageBackground>
-    
-    </View>
+            <Input
+              style={styles.inputText}
+              placeholder="Address"
+              autoCompleteType="street-address"
+              onChangeText={setAddress}
+              value={address}
+              leftIcon={<Icon style={styles.inputIcon} name="home" />}
+            />
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={styles.button}
+              disabled={loading}
+              onPress={signupUser}
+            >
+              <Text style={styles.btnText}>Signup</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.5}
+              onPress={() => {
+                navigation.navigate("Login");
+              }}
+            >
+              <Text style={styles.linkText}>
+                Already have an account? Login!
+              </Text>
+            </TouchableOpacity>
+          </>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
+    justifyContent: "center",
+    backgroundColor: "#fff",
+    padding: 20,
   },
   inputText: {
-    color:"#fff",
-    marginLeft:6,
+    // color: "#fff",
+    marginLeft: 6,
   },
   inputIcon: {
-
-  },
-  btnText:{
     color: "#fff",
-    fontSize:20,
-    fontWeight:"700",
   },
-  button :{
-    color:"#fff",
+  btnText: {
+    color: "#fff",
+    fontSize: 20,
+    fontWeight: "700",
+  },
+  button: {
+    color: "#fff",
     alignItems: "center",
-    padding : 10,
-    margin:10,
-    borderRadius:5,
-    backgroundColor: "#FFA500"
-  },
-  img: {
-    resizeMode: "cover",
-    height:Dimensions.get("screen").height,
-  },
-  heroText: {
-    fontSize:80,
-    color: "#fff",
-    fontWeight: "900",
-    textAlign: "center", 
-    marginTop:100,
-    marginBottom:50,
-    textShadowColor: 'rgba(0, 0, 0, 0.7)',
-    textShadowOffset: {width: -2, height: 3},
-    textShadowRadius: 20
-  },
-  linkText:{
-    textAlign: "center",
-    color:"#fff"
+    padding: 10,
+    margin: 10,
+    borderRadius: 5,
+    backgroundColor: "#ff1200",
   },
 
+  linkText: {
+    textAlign: "center",
+    color: "#000",
+  },
 });

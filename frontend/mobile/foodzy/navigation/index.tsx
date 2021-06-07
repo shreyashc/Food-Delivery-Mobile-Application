@@ -45,20 +45,25 @@ function RootNavigator() {
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false }}
-      initialRouteName={true || appState.isAuth ? "Root" : "Login"}
+      initialRouteName={appState.isAuth ? "Root" : "Login"}
     >
-      {/* {
-      <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={appState.isAuth? "Root" : "Login"}>
-        appState.isAuth 
-        ?
-          <Stack.Screen name="Root" component={BottomTabNavigator} />
-        :
-          <Stack.Screen name="Login" component={LoginScreen}/>
-      } */}
-
-      <Stack.Screen name="Root" component={BottomTabNavigator} />
       <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="Signup" component={SignupScreen} />
+      <Stack.Screen
+        name="Signup"
+        component={SignupScreen}
+        options={{
+          headerShown: true,
+          title: "SIGN UP",
+          headerStyle: {
+            backgroundColor: "#ff1200",
+          },
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+        }}
+      />
+      <Stack.Screen name="Root" component={BottomTabNavigator} />
       <Stack.Screen
         name="NotFound"
         component={NotFoundScreen}

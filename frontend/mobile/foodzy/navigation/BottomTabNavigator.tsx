@@ -13,7 +13,7 @@ import useColorScheme from "../hooks/useColorScheme";
 import OrderScreen from "../screens/OrderScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import RestaurantDetailsScreen from "../screens/RestaurantDetailsScreen";
-import { BottomTabParamList, OrderParamList, TabTwoParamList } from "../types";
+import { BottomTabParamList, OrderParamList, ProfileParamList } from "../types";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -38,9 +38,7 @@ export default function BottomTabNavigator() {
         name="Profile"
         component={ProfileNavigator}
         options={{
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="person" color={color} />
-          ),
+          tabBarIcon: ({ color }) => <TabBarIcon name="person" color={color} />,
         }}
       />
     </BottomTab.Navigator>
@@ -78,7 +76,7 @@ function OrderNavigator() {
   );
 }
 
-const ProfileStack = createStackNavigator<TabTwoParamList>();
+const ProfileStack = createStackNavigator<ProfileParamList>();
 
 function ProfileNavigator() {
   return (

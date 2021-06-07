@@ -18,23 +18,17 @@ export default {
               RestaurantDetailsScreen: "restaurant_details",
             },
           },
-          TabTwo: {
+          Profile: {
             screens: {
-              TabTwoScreen: "two",
+              ProfileScreen: "profile",
             },
           },
         },
       },
-      Login: {
-        screens: {
-          LoginScreen: "Login",
-        },
-      },
-      Signup: {
-        screens: {
-          SignupScreen: "Signup",
-        },
-      },
+
+      Login: "Login",
+      Signup: "Signup",
+
       NotFound: "*",
     },
   },
