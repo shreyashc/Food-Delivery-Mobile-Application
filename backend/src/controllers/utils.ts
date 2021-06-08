@@ -23,7 +23,7 @@ const signUpUser = async (
   try {
     const user = await User.create({ email, password, role });
     await user.save();
-    let returningUser: ReturningUser = {
+    let returningUser = {
       id: user.id,
       email: user.email,
       role: user.role,
@@ -38,12 +38,10 @@ const signUpUser = async (
       }).save();
     } else if (role === "customer" && options.customerDet) {
       //customer
-      const customer = await Customer.create({
+      await Customer.create({
         userId: user.id,
         ...options.customerDet,
-      });
-      customer.save();
-      returningUser["customer"] = customer;
+      }).save();
     }
     return { savedUser: returningUser, error: null };
   } catch (err) {
@@ -53,7 +51,10 @@ const signUpUser = async (
 
 const loginUser = async (email: string, plainPassword: string) => {
   try {
-    const user = await User.findOne({ email: email });
+    const user = await User.findOne({
+      where: { email: email },
+      relations: ["customer"],
+    });
     if (!user) {
       const error = [
         {
@@ -76,7 +77,12 @@ const loginUser = async (email: string, plainPassword: string) => {
       return { loggedInUser: null, error };
     }
     return {
-      loggedInUser: { id: user.id, email: user.email, role: user.role },
+      loggedInUser: {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        customer: user.customer,
+      },
       error: null,
     };
   } catch (error) {
