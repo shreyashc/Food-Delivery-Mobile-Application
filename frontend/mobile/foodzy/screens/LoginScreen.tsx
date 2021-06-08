@@ -1,82 +1,135 @@
+import { useNavigation } from "@react-navigation/native";
 import * as React from "react";
-import { useContext, useState } from "react";
+import { useState } from "react";
+import { StackNavigationProp } from "@react-navigation/stack";
 import {
-  StyleSheet,
-  ImageBackground,
-  Pressable,
-  TouchableOpacity,
+  ActivityIndicator,
   Dimensions,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
 } from "react-native";
-import { Input, Icon, Button, Text } from "react-native-elements";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
-
-import { View } from "../components/Themed";
-import { AppContext } from "../Providers/contexts";
-import { StatusBar } from "expo-status-bar";
+import { Icon, Input, Text } from "react-native-elements";
+import apiClient from "../api/client";
+import { AppContext } from "../contexts/contexts";
 
 export default function LoginScreen({}) {
-  const { appState, setAppState } = useContext(AppContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const navigation = useNavigation();
-  const auth = () => setAppState({ isAuth: true });
+  const { _, dispatch } = React.useContext(AppContext);
+
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState(null);
+
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const loginUser = () => {
+    if (!email || !password) return;
+    setLoading(true);
+    setError(null);
+    apiClient
+      .post("/login", {
+        email,
+        password,
+      })
+      .then((res) => {
+        setLoading(false);
+        setError(null);
+        console.log("Success", res.data);
+        dispatch({ type: "LOGIN", payload: res.data });
+        navigation.replace("Root");
+      })
+      .catch((err) => {
+        setLoading(false);
+        setError(err.response.data.message);
+        console.log(err.response.data.message);
+      });
+  };
+
   return (
-    <View style={[styles.container]}>
-      <StatusBar style={"light"} />
-      <ImageBackground
-        blurRadius={3}
-        style={[styles.img]}
-        source={require("../assets/images/heroimg.jpg")}
+    <TouchableWithoutFeedback
+      onPress={() => {
+        if (Platform.OS != "web") {
+          Keyboard.dismiss();
+        }
+      }}
+    >
+      <KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+        style={styles.container}
       >
-        <Text style={styles.heroText}>Foodzy</Text>
-        <Input
-          style={styles.inputText}
-          placeholder="Email"
-          onChangeText={setEmail}
-          value={email}
-          placeholderTextColor="#fff"
-          leftIcon={<Icon style={styles.inputIcon} name="email" color="#fff" />}
-        />
-        <Input
-          style={styles.inputText}
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          placeholderTextColor="#fff"
-          secureTextEntry={true}
-          leftIcon={<Icon style={styles.inputIcon} name="lock" color="#fff" />}
-        />
-        <TouchableOpacity
-          activeOpacity={0.7}
-          style={styles.button}
-          onPress={auth}
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}
         >
-          <Text style={styles.btnText}>Login</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={0.5}
-          onPress={() => navigation.navigate("Signup")}
-        >
-          <Text style={styles.linkText}>
-            Don't have an account yet? Register now!
-          </Text>
-        </TouchableOpacity>
-      </ImageBackground>
-    </View>
+          <>
+            <Input
+              style={styles.inputText}
+              placeholder="Email"
+              onChangeText={setEmail}
+              value={email}
+              leftIcon={<Icon style={styles.inputIcon} name="email" />}
+            />
+            <Input
+              style={styles.inputText}
+              placeholder="Password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry={true}
+              leftIcon={<Icon style={styles.inputIcon} name="lock" />}
+            />
+            {error && (
+              <Text
+                style={{ margin: 5, textAlign: "center", color: "#777777" }}
+              >
+                Invalid Username password
+              </Text>
+            )}
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={styles.button}
+              onPress={loginUser}
+            >
+              {loading ? (
+                <ActivityIndicator size="small" color="#fff" />
+              ) : (
+                <Text style={styles.btnText}>Login</Text>
+              )}
+            </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.5}
+              disabled={loading}
+              onPress={() => navigation.navigate("Signup")}
+            >
+              <Text style={styles.linkText}>
+                Don't have an account yet? Register now!
+              </Text>
+            </TouchableOpacity>
+          </>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: "center",
+    backgroundColor: "#fff",
+    padding: 20,
   },
   inputText: {
-    color: "#fff",
+    // color: "#fff",
     marginLeft: 6,
   },
-  inputIcon: {},
+  inputIcon: {
+    color: "#fff",
+  },
   btnText: {
     color: "#fff",
     fontSize: 20,
@@ -88,7 +141,7 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 10,
     borderRadius: 5,
-    backgroundColor: "#FFA500",
+    backgroundColor: "#ff1200",
   },
   img: {
     resizeMode: "cover",
@@ -107,6 +160,6 @@ const styles = StyleSheet.create({
   },
   linkText: {
     textAlign: "center",
-    color: "#fff",
+    color: "#000",
   },
 });

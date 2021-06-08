@@ -11,7 +11,7 @@ import {
 import { Input, Icon, Text } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 
-import { AppContext } from "../Providers/contexts";
+import { AppContext } from "../contexts/contexts";
 import apiClient from "../api/client";
 
 export default function LoginScreen({}) {
@@ -27,7 +27,6 @@ export default function LoginScreen({}) {
   const [error, setError] = React.useState(false);
 
   const navigation = useNavigation();
-  const auth = () => setAppState({ isAuth: true });
 
   const signupUser = () => {
     if (!email || !password || !name || !phone || !address) return;

@@ -3,35 +3,61 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
-  NavigationContainer,
-  DefaultTheme,
   DarkTheme,
+  DefaultTheme,
+  NavigationContainer,
 } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import * as React from "react";
 import { ColorSchemeName } from "react-native";
-
+import LoginScreen from "../screens/LoginScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
+import SignupScreen from "../screens/SignupScreen";
 import { RootStackParamList } from "../types";
 import BottomTabNavigator from "./BottomTabNavigator";
 import LinkingConfiguration from "./LinkingConfiguration";
-import LoginScreen from "../screens/LoginScreen";
-import { useContext } from "react";
-import { AppContext } from "../Providers/contexts";
-import SignupScreen from "../screens/SignupScreen";
 
 export default function Navigation({
   colorScheme,
 }: {
   colorScheme: ColorSchemeName;
 }) {
+  type stateTypes = "Login" | "Root" | undefined;
+  const [isReady, setIsReady] = React.useState(false);
+  const [initialState, setInitialState] = React.useState<stateTypes>("Login");
+  React.useEffect(() => {
+    const restoreState = async () => {
+      try {
+        const jsonValue = await AsyncStorage.getItem("@app_state");
+        if (jsonValue) {
+          const savedAppState = JSON.parse(jsonValue);
+
+          if (savedAppState?.isAuth) {
+            setInitialState("Root");
+          }
+        }
+      } finally {
+        setIsReady(true);
+      }
+    };
+
+    if (!isReady) {
+      restoreState();
+    }
+  }, [isReady]);
+
+  if (!isReady) {
+    return null;
+  }
+
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
       theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
     >
-      <RootNavigator />
+      <RootNavigator savedRoute={initialState} />
     </NavigationContainer>
   );
 }
@@ -40,14 +66,27 @@ export default function Navigation({
 // Read more here: https://reactnavigation.org/docs/modal
 const Stack = createStackNavigator<RootStackParamList>();
 
-function RootNavigator() {
-  const { appState } = useContext(AppContext);
+const RootNavigator: React.FC<Props> = ({ savedRoute }) => {
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false }}
-      initialRouteName={appState.isAuth ? "Root" : "Login"}
+      initialRouteName={savedRoute}
     >
-      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{
+          headerShown: true,
+          title: "Login",
+          headerStyle: {
+            backgroundColor: "#ff1200",
+          },
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+        }}
+      />
       <Stack.Screen
         name="Signup"
         component={SignupScreen}
@@ -71,4 +110,8 @@ function RootNavigator() {
       />
     </Stack.Navigator>
   );
+};
+
+interface Props {
+  savedRoute: "Login" | "Root" | undefined;
 }
