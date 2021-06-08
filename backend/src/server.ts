@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import * as path from "path";
 import cookieParser from "cookie-parser";
 import { createConnection } from "typeorm";
@@ -9,6 +9,7 @@ import AuthRoutes from "./routes/auth";
 import HomeRoutes from "./routes/home";
 import RestaurantRoutes from "./routes/restaurant";
 import ApiRoutes from "./routes/api";
+import httpErrors, { HttpError } from "http-errors";
 
 const main = async () => {
   const app = express();
@@ -73,6 +74,21 @@ const main = async () => {
   app.use("/auth", AuthRoutes);
   app.use("/restaurant", RestaurantRoutes);
   app.use("/api/v1", ApiRoutes);
+
+  app.use((_req: Request, _res: Response, next: NextFunction) => {
+    next(httpErrors(404, "Not Found"));
+  });
+
+  app.use(
+    (err: HttpError, req: Request, res: Response, _next: NextFunction) => {
+      res.status(err.status || 500);
+      res.send({
+        status: err.status || 500,
+        message: err.message,
+      });
+      console.log(err.message);
+    }
+  );
 
   /**
    * create httpServer

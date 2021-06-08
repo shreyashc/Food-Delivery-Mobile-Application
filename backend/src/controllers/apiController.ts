@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { Restaurant } from "../models/entities";
 import { generateToken, loginUser, signUpUser } from "./utils";
+import httpErrors from "http-errors";
 
 const getNearestRestaurants = async (
   req: Request,
@@ -69,21 +70,21 @@ const signUp = async (req: Request, res: Response) => {
   }
 };
 
-const login = async (req: Request, res: Response) => {
+const login = async (req: Request, res: Response, next: NextFunction) => {
   const { email, password } = req.body;
 
   try {
     const { loggedInUser: user, error } = await loginUser(email, password);
 
     if (error || !user) {
-      throw error;
+      throw new httpErrors.BadRequest(error);
     }
 
     const token = generateToken(user.id, user.role, user.email);
 
     res.status(200).json({ user, token });
   } catch (error) {
-    res.status(400).json(error);
+    next(error);
   }
 };
 export { getNearestRestaurants, getRestaurantsDetailsAndDishes, signUp, login };
