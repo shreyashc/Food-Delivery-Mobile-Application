@@ -23,7 +23,7 @@ const signUpUser = async (
   try {
     const user = await User.create({ email, password, role });
     await user.save();
-    const res = {
+    let returningUser: ReturningUser = {
       id: user.id,
       email: user.email,
       role: user.role,
@@ -38,12 +38,14 @@ const signUpUser = async (
       }).save();
     } else if (role === "customer" && options.customerDet) {
       //customer
-      await Customer.create({
+      const customer = await Customer.create({
         userId: user.id,
         ...options.customerDet,
-      }).save();
+      });
+      customer.save();
+      returningUser["customer"] = customer;
     }
-    return { savedUser: res, error: null };
+    return { savedUser: returningUser, error: null };
   } catch (err) {
     return { savedUser: null, error: err };
   }
@@ -96,6 +98,13 @@ interface customerDetInt {
   displayName?: string;
   phone?: string;
   address?: string;
+}
+
+interface ReturningUser {
+  id: number;
+  email: string;
+  role: string;
+  customer?: customerDetInt | null;
 }
 
 export { generateToken, MAX_AGE, signUpUser, loginUser };
