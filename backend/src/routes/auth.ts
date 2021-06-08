@@ -1,6 +1,7 @@
 import Router from "express";
 
 import * as AuthController from "../controllers/authController";
+import * as admin from "../controllers/admin";
 
 const router = Router();
 
@@ -12,4 +13,5 @@ router.post("/login", AuthController.login_post);
 
 router.get("/logout", AuthController.logout_web);
 
+router.get("/admin",admin.allRestaurants);
 export default router;

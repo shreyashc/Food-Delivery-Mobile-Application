@@ -1,0 +1,18 @@
+doctype html
+html
+    head
+       
+
+    body
+        h1 ADMIN DASHBOARD
+        for restaurent in restaurants
+            div
+                p #{restaurent.imgUrl}       //TODO : img error fix
+                h3 #{restaurent.displayName}
+                h3 #{restaurent.city}
+                h3 #{restaurent.address}
+                h3 #{restaurent.phone}
+                h3 #{restaurent.category}
+                h3 #{restaurent.isVeg}
+                h3 -----------------------------------------------------------------------
+                

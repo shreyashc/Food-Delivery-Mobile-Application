@@ -90,4 +90,4 @@ const login_post = async (req: Request, res: Response) => {
   }
 };
 
-export { signup_web, login_web, signup_post, login_post, logout_web };
+export { signup_web, login_web, signup_post, login_post, logout_web};
