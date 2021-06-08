@@ -80,7 +80,7 @@ const main = async () => {
   });
 
   app.use(
-    (err: HttpError, req: Request, res: Response, _next: NextFunction) => {
+    (err: HttpError, _req: Request, res: Response, _next: NextFunction) => {
       res.status(err.status || 500);
       res.send({
         status: err.status || 500,
