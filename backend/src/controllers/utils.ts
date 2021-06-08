@@ -106,11 +106,4 @@ interface customerDetInt {
   address?: string;
 }
 
-interface ReturningUser {
-  id: number;
-  email: string;
-  role: string;
-  customer?: customerDetInt | null;
-}
-
 export { generateToken, MAX_AGE, signUpUser, loginUser };
