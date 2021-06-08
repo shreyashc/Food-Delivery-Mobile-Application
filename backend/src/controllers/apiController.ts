@@ -36,7 +36,7 @@ const getRestaurantsDetailsAndDishes = async (
 
 // TODO: api login signup
 
-const signUp = async (req: Request, res: Response) => {
+const signUp = async (req: Request, res: Response, next: NextFunction) => {
   const {
     email,
     password: plainPassword,
@@ -60,13 +60,13 @@ const signUp = async (req: Request, res: Response) => {
     );
 
     if (error || !savedUser) {
-      throw error;
+      throw new httpErrors.BadRequest(error);
     }
 
     res.status(201).json({ user: savedUser });
   } catch (err) {
     console.log(err);
-    res.status(400).json({ err });
+    next(err);
   }
 };
 
