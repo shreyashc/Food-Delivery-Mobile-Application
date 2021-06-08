@@ -10,6 +10,7 @@ import { Text, View } from "../components/Themed";
 import { OrderParamList } from "../types";
 
 import apiClient from "../api/client";
+import { VegNonVeg } from "../components/VegNonVeg";
 
 export default function OrderScreen() {
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -117,7 +118,6 @@ export default function OrderScreen() {
               <View style={styles.restaurantContainer}>
                 <Image
                   style={styles.restaurantImage}
-                  defaultSource={require("../assets/images/load.png")}
                   source={
                     item.imgUrl
                       ? { uri: item.imgUrl }
@@ -127,15 +127,10 @@ export default function OrderScreen() {
                 <View style={styles.restaurantDetails}>
                   <Text style={styles.restaurantTitle}>{item.displayName}</Text>
                   <View style={styles.detWrap}>
+                    <VegNonVeg isVeg={item.isVeg} />
                     <View style={styles.restaurantRating}>
-                      <Text style={styles.samllBoldTxt}>
-                        {item.rating + " ⭐"}
-                      </Text>
-                    </View>
-                    <View style={item.isVeg ? styles.veg : styles.nonveg}>
-                      <Text style={styles.samllBoldTxt}>
-                        {item.isVeg ? "veg" : "non-veg"}
-                      </Text>
+                      <Text style={styles.samllBoldTxt}>{item.rating}</Text>
+                      <Ionicons name="ios-star" />
                     </View>
                   </View>
                   <Text style={styles.restaurantCat}>{item.category}</Text>
@@ -211,7 +206,10 @@ const styles = StyleSheet.create({
     padding: 5,
     borderRadius: 4,
     marginRight: 14,
-    backgroundColor: "#4e90ff",
+
+    flexDirection: "row",
+    alignItems: "center",
+    // backgroundColor: "#4e90ff",
   },
   detWrap: {
     display: "flex",
@@ -229,7 +227,7 @@ const styles = StyleSheet.create({
   },
   samllBoldTxt: {
     fontWeight: "bold",
-    color: "white",
+    marginRight: 4,
   },
 
   info: {

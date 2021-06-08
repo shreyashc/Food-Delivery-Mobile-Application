@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
   ActivityIndicator,
+  Platform,
 } from "react-native";
 import { BottomSheet, Button } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
@@ -14,6 +15,7 @@ import { Text, View } from "../components/Themed";
 import { OrderParamList } from "../types";
 
 import apiClient from "../api/client";
+import { VegNonVeg } from "../components/VegNonVeg";
 
 export default function RestaurantDetailsScreen() {
   //route
@@ -96,7 +98,7 @@ export default function RestaurantDetailsScreen() {
             <Text
               style={{ textAlign: "center", fontSize: 16, color: "#fb3877" }}
             >
-              {"Web developers do it with <style>"}
+              {"Spinning the wheel of fortune..."}
             </Text>
           </View>
         )}
@@ -149,13 +151,13 @@ export default function RestaurantDetailsScreen() {
                         <Text style={styles.itemPrice}>
                           {"₹ " + item.price}
                         </Text>
+                        <VegNonVeg isVeg={item.isVeg} />
                         <Text style={styles.itemDes}>{item.description}</Text>
                       </View>
                       <View>
                         <View style={styles.imgWrap}>
                           <Image
                             style={styles.itemImage}
-                            defaultSource={require("../assets/images/load.png")}
                             source={
                               item.imgUrl
                                 ? { uri: item.imgUrl }
@@ -206,77 +208,110 @@ export default function RestaurantDetailsScreen() {
         
         */}
 
-        <BottomSheet
-          modalProps={{}}
-          isVisible={cart.length > 0 && isCartOpen}
-          containerStyle={{ backgroundColor: "rgba(0.5, 0.25, 0, 0.2)" }}
-        >
-          <View style={{ padding: 15 }}>
-            {cart.map((item) => (
-              <View key={item.id.toString()} style={styles.cartItem}>
-                <View>
-                  <Text style={{ fontSize: 19, fontWeight: "bold" }}>
-                    {item.title}
-                  </Text>
-                  <Text>{item.description}</Text>
-                </View>
-                <View
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <Text style={{ fontSize: 20, fontWeight: "300" }}>
-                    {"+ ₹" + item.price}
-                  </Text>
-                  <TouchableOpacity
-                    style={{ padding: 5 }}
-                    onPress={() => {
-                      removeFromCart(item.id);
+        {Platform.OS !== "web" && (
+          <BottomSheet
+            modalProps={{}}
+            isVisible={cart.length > 0 && isCartOpen}
+            containerStyle={{ backgroundColor: "rgba(0.5, 0.25, 0, 0.2)" }}
+          >
+            <View
+              style={{
+                padding: 10,
+                borderTopLeftRadius: 15,
+                borderTopRightRadius: 15,
+              }}
+            >
+              <Text
+                style={{
+                  ...styles.itemTitle,
+                  textAlign: "center",
+                  margin: 10,
+                  fontWeight: "300",
+                  fontSize: 26,
+                }}
+              >
+                Cart
+              </Text>
+              {cart.map((item) => (
+                <View key={item.id.toString()} style={styles.cartItem}>
+                  <View style={{ flex: 3 }}>
+                    <Text style={{ fontSize: 19, fontWeight: "bold" }}>
+                      {item.title}
+                    </Text>
+                    <Text>{item.description}</Text>
+                  </View>
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      flex: 1,
                     }}
                   >
-                    <Ionicons
-                      name="ios-trash-bin-outline"
-                      style={{ fontSize: 25, marginLeft: "auto" }}
-                      color="gray"
-                    />
-                  </TouchableOpacity>
+                    <Text style={{ fontSize: 20, fontWeight: "300" }}>
+                      {"+ ₹" + item.price}
+                    </Text>
+                    <TouchableOpacity
+                      style={{ padding: 5 }}
+                      onPress={() => {
+                        removeFromCart(item.id);
+                      }}
+                    >
+                      <Ionicons
+                        name="remove-circle-outline"
+                        style={{ fontSize: 25, marginLeft: "auto" }}
+                        color="red"
+                      />
+                    </TouchableOpacity>
+                  </View>
                 </View>
-              </View>
-            ))}
-          </View>
+              ))}
+            </View>
 
-          <View>
-            <Text
-              style={{ fontSize: 20, textAlign: "right", paddingRight: 20 }}
-            >
-              To Pay ₹{getTotal()}
-            </Text>
-          </View>
-          {/* cart button  */}
-          <View style={styles.cartFoot}>
-            <View style={{ flexGrow: 1, margin: 2 }}>
-              <Button
-                type="outline"
-                title="Close"
-                titleStyle={{ color: "gray" }}
-                buttonStyle={{ borderColor: "gray" }}
-                onPress={() => {
-                  setIsCartOpen(false);
+            <View>
+              <Text
+                style={{
+                  fontSize: 20,
+                  textAlign: "right",
+                  paddingRight: 20,
+                  marginTop: 10,
                 }}
-              />
+              >
+                To Pay
+                <Text
+                  style={{
+                    color: "#f36614",
+                  }}
+                >
+                  {" "}
+                  ₹{getTotal()}{" "}
+                </Text>
+              </Text>
             </View>
-            <View style={{ flexGrow: 1, margin: 2 }}>
-              <Button
-                style={{ flexGrow: 1 }}
-                title="Order"
-                titleStyle={{ color: "white", fontWeight: "500" }}
-                buttonStyle={{ borderColor: "green", backgroundColor: "green" }}
-              />
+            {/* cart button  */}
+            <View style={styles.cartFoot}>
+              <View style={{ flexGrow: 1, margin: 2 }}>
+                <Button
+                  type="outline"
+                  title="Close"
+                  titleStyle={{ color: "gray" }}
+                  buttonStyle={{ borderColor: "gray" }}
+                  onPress={() => {
+                    setIsCartOpen(false);
+                  }}
+                />
+              </View>
+              <View style={{ flexGrow: 1, margin: 2 }}>
+                <Button
+                  style={{ flexGrow: 1 }}
+                  title="Order"
+                  titleStyle={{ color: "white", fontWeight: "500" }}
+                  buttonStyle={{ borderColor: "red", backgroundColor: "red" }}
+                />
+              </View>
             </View>
-          </View>
-        </BottomSheet>
+          </BottomSheet>
+        )}
       </SafeAreaView>
 
       {/* floating cart  indicator */}
@@ -440,10 +475,17 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    borderBottomWidth: 1,
-    paddingBottom: 10,
+
+    padding: 13,
+    paddingTop: 15,
+    paddingBottom: 15,
     marginBottom: 15,
-    borderBottomColor: "#ccc",
+
+    shadowColor: "#ccc",
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity: 0.7,
+    shadowRadius: 20,
+    borderRadius: 15,
   },
   cartFoot: { display: "flex", flexDirection: "row", padding: 15 },
 });

@@ -1,22 +1,19 @@
+import { useNavigation } from "@react-navigation/native";
 import * as React from "react";
 import {
+  ActivityIndicator,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
   StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  ScrollView,
 } from "react-native";
-import { Input, Icon, Text } from "react-native-elements";
-import { useNavigation } from "@react-navigation/native";
-
-import { AppContext } from "../contexts/contexts";
+import { Icon, Input, Text } from "react-native-elements";
 import apiClient from "../api/client";
 
 export default function LoginScreen({}) {
-  const { appState, setAppState } = React.useContext(AppContext);
-
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [name, setName] = React.useState("");
@@ -24,12 +21,15 @@ export default function LoginScreen({}) {
   const [address, setAddress] = React.useState("");
 
   const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState(false);
+  const [error, setError] = React.useState(null);
 
   const navigation = useNavigation();
 
   const signupUser = () => {
     if (!email || !password || !name || !phone || !address) return;
+
+    setError(null);
+    setLoading(true);
 
     apiClient
       .post("/signup", {
@@ -41,14 +41,14 @@ export default function LoginScreen({}) {
       })
       .then((res) => {
         setLoading(false);
-        setError(false);
+        setError(null);
         console.log("Success");
         navigation.navigate("Login");
       })
       .catch((err) => {
         setLoading(false);
-        setError(true);
-        console.log(err);
+        setError(err.response.data.message);
+        console.log(err.response.data.message);
       });
   };
   return (
@@ -80,6 +80,7 @@ export default function LoginScreen({}) {
               placeholder="Email"
               autoCompleteType="email"
               onChangeText={setEmail}
+              errorMessage={error ?? undefined}
               value={email}
               keyboardType="email-address"
               leftIcon={<Icon style={styles.inputIcon} name="email" />}
@@ -116,7 +117,11 @@ export default function LoginScreen({}) {
               disabled={loading}
               onPress={signupUser}
             >
-              <Text style={styles.btnText}>Signup</Text>
+              {loading ? (
+                <ActivityIndicator size="small" color="#fff" />
+              ) : (
+                <Text style={styles.btnText}>Signup</Text>
+              )}
             </TouchableOpacity>
             <TouchableOpacity
               activeOpacity={0.5}
@@ -143,7 +148,6 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   inputText: {
-    // color: "#fff",
     marginLeft: 6,
   },
   inputIcon: {
