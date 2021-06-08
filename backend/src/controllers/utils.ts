@@ -45,6 +45,12 @@ const signUpUser = async (
     }
     return { savedUser: returningUser, error: null };
   } catch (err) {
+    if (err?.code === "23505") {
+      return {
+        loggedInUser: null,
+        error: "Email already registered",
+      };
+    }
     return { savedUser: null, error: err };
   }
 };
