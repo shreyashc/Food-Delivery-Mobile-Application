@@ -65,7 +65,7 @@ const signUp = async (req: Request, res: Response) => {
     res.status(201).json({ user: savedUser });
   } catch (err) {
     console.log(err);
-    res.send(400).json({ err });
+    res.status(400).json({ err });
   }
 };
 
