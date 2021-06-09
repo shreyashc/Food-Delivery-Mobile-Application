@@ -41,7 +41,7 @@ export class Restaurant extends BaseEntity {
   @Column({ nullable: true })
   isVeg!: boolean;
 
-  @OneToOne(() => User, (user) => user.restaurant)
+  @OneToOne(() => User, (user) => user.restaurant, {onDelete : "CASCADE"})
   @JoinColumn()
   user: User;
 

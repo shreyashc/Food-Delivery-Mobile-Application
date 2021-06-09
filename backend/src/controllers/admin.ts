@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
-import { Restaurant } from "../models/entities";
+import { Restaurant, User } from "../models/entities";
 
 const allRestaurants = async (_req: Request, res: Response) => {
   const restaurant = await Restaurant.find();
-  console.log(restaurant);
   if (!restaurant) {
     return res.send("Not Found!");
   }
@@ -12,4 +11,22 @@ const allRestaurants = async (_req: Request, res: Response) => {
   });
 };
 
-export { allRestaurants };
+const deleteRestaurant = async (_req: Request, res: Response) => {
+    try{
+        const userId = parseInt(_req.params.id)
+        const user = await User.findOne( userId );
+        if(!user){
+            return res.send("Something Went Wrong")
+        }
+        
+        await User.delete({
+            id : user.id
+        })
+        return res.redirect("/auth/admin.pug")
+    }catch (err){
+        res.send("err")
+    }
+
+}
+
+export { allRestaurants , deleteRestaurant };
