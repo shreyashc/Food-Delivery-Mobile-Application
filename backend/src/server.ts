@@ -78,7 +78,7 @@ const main = async () => {
   app.use("/admin", AdminRoutes);
 
   app.use((_req: Request, _res: Response, next: NextFunction) => {
-    next(httpErrors(404, "Not Found"));
+    next(new httpErrors.NotFound());
   });
 
   app.use(
@@ -88,7 +88,7 @@ const main = async () => {
         status: err.status || 500,
         message: err.message,
       });
-      console.log(err.message);
+      console.log("last->>>>", err.message);
     }
   );
 

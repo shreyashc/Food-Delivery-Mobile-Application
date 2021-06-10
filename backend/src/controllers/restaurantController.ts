@@ -15,6 +15,7 @@ const allDishes = async (_req: Request, res: Response, _next: NextFunction) => {
   const restaurant = await Restaurant.findOne({
     where: { userId: res.locals.user.id },
     relations: ["items"],
+    order: { id: "ASC" },
   });
 
   if (!restaurant) {
@@ -75,11 +76,13 @@ const addDish_post = async (
       price,
       category,
     } = req.body;
+    console.log(isVegStr);
+
     const restaurant = await Restaurant.findOne({ userId });
 
     if (!restaurant) return res.send("Something Went Wrong");
 
-    const isVeg = isVegStr === "true" ? true : false;
+    const isVeg = isVegStr === "on" ? true : false;
 
     await Item.create({
       title,
@@ -116,7 +119,7 @@ const editDish_post = async (
 
     if (!restaurant) return res.send("Something Went Wrong");
 
-    const isVeg = isVegStr === "true" ? true : false;
+    const isVeg = isVegStr === "on" ? true : false;
 
     await Item.update(
       {
@@ -178,7 +181,17 @@ const editDetails_post = async (
   res: Response,
   _next: NextFunction
 ) => {
-  const { displayName, phone, imgUrl, address, city } = req.body;
+  const {
+    displayName,
+    phone,
+    imgUrl,
+    address,
+    city,
+    category,
+    isVeg: isVegStr,
+  } = req.body;
+
+  const isVeg = isVegStr === "on" ? true : false;
 
   await Restaurant.update(
     {
@@ -189,6 +202,8 @@ const editDetails_post = async (
       phone,
       imgUrl,
       address,
+      category,
+      isVeg,
       city,
     }
   );

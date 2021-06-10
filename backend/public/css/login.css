@@ -9,9 +9,9 @@ body {
   background-color: #fdfafa;
   color: #0f0f0f;
 }
-h1 {
+h1.page-heading {
   font-family: "Lobster", cursive;
-  padding: 5% 0 7% 0;
+  padding: 1% 0 3rem 0;
   text-align: center;
 }
 
@@ -30,7 +30,12 @@ h1 {
 .form-group {
   position: relative;
   height: 50px;
-  margin-bottom: 15px;
+  margin-bottom: 2.5rem;
+}
+.form-group-last {
+  position: relative;
+  height: 50px;
+  margin-bottom: 8px;
 }
 .form-control {
   font-size: 100%;
@@ -50,6 +55,7 @@ h1 {
   pointer-events: none;
   top: 3px;
   font-size: 110%;
+  font-weight: 500;
   transition: 0.2s ease all;
   -moz-transition: 0.2s ease all;
   -webkit-transition: 0.2s ease all;
@@ -58,12 +64,19 @@ h1 {
 .form-input:valid ~ .form-label {
   top: -17px;
   font-size: 95%;
+  font-weight: 600;
 }
 
 .loginForm {
-  max-width: 400px;
+  max-width: 450px;
   margin: 5vh auto 0;
 }
+
+.update-form {
+  max-width: 600px;
+  margin: 5vh auto 0;
+}
+
 .loginForm .form-control {
   background-color: transparent;
   border-bottom: 2px solid #9c9e9f;
@@ -75,19 +88,20 @@ h1 {
   border-bottom: 2px solid #ff361c;
 }
 .submit {
-  margin-top: 4%;
+  margin-top: 5px;
   margin-bottom: 1%;
   width: 100%;
   font-size: 100%;
   letter-spacing: 0.1em;
   color: #fff;
-  background-color: #ff8f80;
+  background-color: #f52b2b;
 }
 .btn-default.focus,
 .btn-default.submit:focus,
 .btn-default.submit:hover {
   color: #fff;
-  background-color: #f52b2b;
+  background-color: #ff8f80;
+
   border-color: transparent;
 }
 

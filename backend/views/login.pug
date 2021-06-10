@@ -9,14 +9,14 @@ html
         include includes/navbar.pug
         div(class="container loginForm")
             div
-                h1 Login
+                h1.page-heading Login
                 form(action="/auth/login" method="POST")
                     div(class="form-group has-feedback")
-                        input(type="email" name="email" class="form-control form-input"  placeholder="" required)
-                        label(class="form-label" for="") Email
+                        input(type="email" name="email" class="form-control form-input"  required)
+                        label(class="form-label") Email
 
-                    div(class="form-group has-feedback")
-                        input(type="password" name="password" class="form-control form-input"  placeholder="" required)
-                        label(class="form-label" for="") Password
-            
+                    div(class="form-group has-feedback form-group-last")
+                        input(type="password" name="password" class="form-control form-input"  required)
+                        label(class="form-label") Password
+
                     button(id="submit" type="submit" class="btn btn-default submit" value="Login") Login

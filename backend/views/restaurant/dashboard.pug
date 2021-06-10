@@ -3,26 +3,35 @@ html
     head
         include ../includes/head.pug
         title Dashboard
+        link(rel="stylesheet" type="text/css" href='/css/common.css')
         link(rel="stylesheet" type="text/css" href='/css/restaurant/dashboard.css')
 
 
     body
         include ../includes/navbar.pug
-        
 
-        .info-container
-            .det
+        h1.page-heading Dashboard
+        .container.d-flex.justify-content-between.bg-white.p-4.rounded.shadow.mb-4.flex-wrap
+            .det.flex-grow-1
                 h2= restaurant.displayName
                 p= restaurant.address
                 p= restaurant.city
-            .img
-                img(src=restaurant.imgUrl, alt="restaurant image", class="r-img")
+            div
+                img(src=restaurant.imgUrl, alt="restaurant image" style="width: auto; height: 195px;" class="img-thumbnail ")
 
-        div(class="container")
-            div.item
-                a(href="add_dish") Add New Dish 
-            div.item
-                a(href="dishes") All Dishes 
-            div.item
-                a(href="edit_details") Edit Restaurant details
-
+        div.container
+            div.list-group.my-5
+                a.list-group-item.list-group-item-action(href="add_dish") 
+                    div
+                        h4 Add New Dish
+                        p.text-muted add a new dish to your menu
+                        
+                a.list-group-item.list-group-item-action(href="dishes") 
+                    div
+                        h4 All Dishes (Menu)
+                        p.text-muted view all Dishes edit/delete them.
+                        
+                a.list-group-item.list-group-item-action(href="edit_details") 
+                    div
+                        h4 Edit Restaurant details
+                        p.text-muted edit Restaurant details (address, description, title)

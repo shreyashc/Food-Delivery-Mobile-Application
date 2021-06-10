@@ -2,30 +2,44 @@ doctype html
 html
     head
         include ../includes/head.pug
+        link(rel="stylesheet" type="text/css" href='/css/login.css')
+
         title Update Details
 
     body
         include ../includes/navbar.pug
-        if !restaurant
-            div Not Found
-        else
+        h1.page-heading Edit Restaurnat Details
+        div(class="container loginForm update-form ")
             form(action=`/restaurant/edit_details/`, method="post")
-                div
-                    label Restaurant Name 
-                    input(type="text" name="displayName" value=restaurant.displayName)
-                div
-                    label Phone 
-                    input(type="text" name="phone" value=restaurant.phone)
+                
+                div.form-group.has-feedback
+                    input(type="text" name="displayName" class="form-control form-input" value=restaurant.displayName required)
+                    label(class="form-label" required) Restaurant Name
+
+                div.form-group.has-feedback
+                    input(type="text" name="phone" class="form-control form-input" value=restaurant.phone required)
+                    label(class="form-label") Phone 
+
+                div.form-check.form-switch.form-inline
+                    input(type="checkbox" class="form-check-input" id="vegswitch" checked=restaurant.isVeg name="isVeg")
+                    label(class="form-check-label" for="vegswitch") Veg
+                br 
                     
-                div
-                    label Image URL
-                    input(type="text" name="imgUrl" value=restaurant.imgUrl)
-                div
-                    label Address 
-                    input(type="text" name="address" value=restaurant.address)
-                div
-                    label City 
-                    input(type="text" name="city" value=restaurant.city)
+                div.form-group.has-feedback
+                    input(type="text" name="imgUrl" class="form-control form-input" value=restaurant.imgUrl required)
+                    label(class="form-label" ) Image URL
+                
+                div.form-group.has-feedback
+                    input(type="text" name="category" class="form-control form-input" value=restaurant.category required)
+                    label(class="form-label" ) Category 
+
+                div.form-group.has-feedback
+                    input(type="text" name="address" class="form-control form-input" value=restaurant.address required)
+                    label(class="form-label" ) Address 
+
+                div.form-group.has-feedback.form-group-last
+                    input(type="text" name="city" class="form-control form-input" value=restaurant.city required)
+                    label(class="form-label" ) City 
 
                 div
-                    button Submit
+                    button(id="submit" type="submit" class="btn btn-default submit") Submit

@@ -17,7 +17,7 @@ a:focus,
 a:active {
   text-decoration: underline;
 }
-.container {
+.details-container {
   max-width: 80%;
   margin: 1rem auto;
   padding: 2%;
@@ -32,6 +32,11 @@ a:active {
   padding: 2%;
 }
 
+.item a {
+  font-weight: 700;
+  font-size: 1.4rem;
+}
+
 .info-container {
   max-width: 80%;
   margin: 20px auto;
@@ -40,6 +45,11 @@ a:active {
   flex-wrap: wrap;
 }
 
+.info-container p {
+  margin-top: 0;
+  margin-bottom: 0.2rem;
+  font-style: italic;
+}
 .r-img {
   width: 150px;
   border-radius: 8px;

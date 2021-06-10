@@ -9,7 +9,7 @@ html
         include includes/navbar.pug
         div(class="container loginForm")
             div
-                h1 Sign Up
+                h1.page-heading Sign Up
                 form(action="/auth/signup" method="POST")
                     div(class="form-group has-feedback")
                         input(type="email" name="email" class="form-control form-input"  required)
@@ -57,7 +57,7 @@ html
                     .spacer
 
                     div(class="form-group has-feedback")
-                        input(name="imgUrl" class="form-control form-input"  required)
+                        input(name="imgUrl" class="form-control form-input form-group-last"  required)
                         label(class="form-label") Image URI/URL
 
                     button(id="submit" type="submit" class="btn btn-default submit" value="Signup") Sign Up

@@ -35,3 +35,15 @@ nav a:active {
   color: #fff;
   text-transform: uppercase;
 }
+
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;900&family=Patua+One&display=swap");
+
+body {
+  font-family: "Montserrat", sans-serif;
+  letter-spacing: 0.1em;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #fdfafa;
+  color: #0f0f0f;
+}

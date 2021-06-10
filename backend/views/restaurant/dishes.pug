@@ -2,31 +2,33 @@ doctype html
 html
     head
         include ../includes/head.pug
+        link(rel="stylesheet" type="text/css" href='/css/common.css')
         title All Dishes
 
     body
         include ../includes/navbar.pug
         .all-dishes
        
-        for item in items
-            .dish
-                .dish-name
-                    h2 #{item.title}
-                .dish-des
-                    div Des: #{item.description}
-                .dish-price
-                    h4 Price #{item.price}
-                .dish-price
-                    h3 Category #{item.category}
-                .dish-is-veg
-                    h3 veg #{item.isVeg}
-                .dish-is-veg
-                    img(src=item.imgUrl)
-                .edit
-                    h3 
-                        a(href=`edit_dish/${item.id}`) Edit
-                .delete
-                    h3 
-                        a(href= `delete_dish/${item.id}`) Delete
-                hr 
-        
+        h1.page-heading Restaurnat menu
+        div.container.p-3
+            div.row.gap-2.justify-content-center
+                for item in items
+                    div.card.col-md-3.align-items-stretch.shadow-md.p-2
+                        img(src=item.imgUrl class="card-img-top" alt=item.title)
+                        div.card-body.d-flex.flex-column
+                            h5.card-title #{item.title}
+                                span.d-inline-block.m-1.text-sm
+                                    if item.isVeg
+                                        span.badge.rounded-pill.bg-success.text-sm Veg
+                                    else 
+                                        span.badge.rounded-pill.bg-danger.text-sm Non Veg
+                            .h6.text-muted In #{item.category}
+
+                            .card-text
+                                h5 ₹ #{item.price}
+
+                            p.card-text #{item.description}
+                        
+                            .mt-auto.d-flex.justify-content-end.gap-2
+                                a.d-inline-block(href=`delete_dish/${item.id}` class="btn btn-danger") Delete
+                                a.d-inline-block(href=`edit_dish/${item.id}` class="btn btn-primary") Edit
