@@ -33,6 +33,8 @@ export class Item extends BaseEntity {
   @Column()
   restaurantId!: number;
 
-  @ManyToOne(() => Restaurant, (restaurant) => restaurant.items , {onDelete : "CASCADE"})
+  @ManyToOne(() => Restaurant, (restaurant) => restaurant.items, {
+    onDelete: "CASCADE",
+  })
   restaurant: Restaurant;
 }

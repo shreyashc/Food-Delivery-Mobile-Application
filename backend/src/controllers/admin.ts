@@ -1,32 +1,33 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { Restaurant, User } from "../models/entities";
 
 const allRestaurants = async (_req: Request, res: Response) => {
-  const restaurant = await Restaurant.find();
-  if (!restaurant) {
-    return res.send("Not Found!");
-  }
+  const restaurants = await Restaurant.find();
   return res.render("admin.pug", {
-    restaurants: restaurant,
+    restaurants: restaurants,
   });
 };
 
-const deleteRestaurant = async (_req: Request, res: Response) => {
-    try{
-        const userId = parseInt(_req.params.id)
-        const user = await User.findOne( userId );
-        if(!user){
-            return res.send("Something Went Wrong")
-        }
-        
-        await User.delete({
-            id : user.id
-        })
-        return res.redirect("/auth/admin.pug")
-    }catch (err){
-        res.send("err")
+const deleteRestaurant = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userId = parseInt(req.params.id);
+    const user = await User.findOne({ id: userId });
+
+    if (!user) {
+      return res.send("User Not Found");
     }
 
-}
+    await user.remove();
 
-export { allRestaurants , deleteRestaurant };
+    return res.redirect("/admin");
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+};
+
+export { allRestaurants, deleteRestaurant };

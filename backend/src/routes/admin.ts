@@ -1,11 +1,10 @@
 import Router from "express";
 
-import * as admin from "../controllers/admin";
+import * as AdminController from "../controllers/admin";
 
 const router = Router();
 
+router.get("/", AdminController.allRestaurants);
+router.get("/delete/:id", AdminController.deleteRestaurant);
 
-
-router.get("/admin",admin.allRestaurants);
-router.get("admin/delete/:id",admin.deleteRestaurant)
 export default router;

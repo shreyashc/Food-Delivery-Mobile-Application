@@ -9,6 +9,7 @@ import AuthRoutes from "./routes/auth";
 import HomeRoutes from "./routes/home";
 import RestaurantRoutes from "./routes/restaurant";
 import ApiRoutes from "./routes/api";
+import AdminRoutes from "./routes/admin";
 import httpErrors, { HttpError } from "http-errors";
 
 const main = async () => {
@@ -74,6 +75,7 @@ const main = async () => {
   app.use("/auth", AuthRoutes);
   app.use("/restaurant", RestaurantRoutes);
   app.use("/api/v1", ApiRoutes);
+  app.use("/admin", AdminRoutes);
 
   app.use((_req: Request, _res: Response, next: NextFunction) => {
     next(httpErrors(404, "Not Found"));
