@@ -1,16 +1,24 @@
-import express, { NextFunction, Request, Response } from "express";
-import * as path from "path";
 import cookieParser from "cookie-parser";
+import cors from "cors";
+import express, { NextFunction, Request, Response } from "express";
+import httpErrors, { HttpError } from "http-errors";
+import * as path from "path";
 import { createConnection } from "typeorm";
 import { env } from "./env";
-import { User, Customer, Restaurant, Item } from "./models/entities/";
-import cors from "cors";
+import {
+  Customer,
+  Item,
+  Restaurant,
+  User,
+  Order,
+  OrderItem,
+} from "./models/entities/";
+
+import AdminRoutes from "./routes/admin";
+import ApiRoutes from "./routes/api";
 import AuthRoutes from "./routes/auth";
 import HomeRoutes from "./routes/home";
 import RestaurantRoutes from "./routes/restaurant";
-import ApiRoutes from "./routes/api";
-import AdminRoutes from "./routes/admin";
-import httpErrors, { HttpError } from "http-errors";
 
 const main = async () => {
   const app = express();
@@ -63,7 +71,7 @@ const main = async () => {
     password: env.db.password,
     logging: env.db.logging,
     synchronize: env.db.synchronize,
-    entities: [User, Customer, Restaurant, Item],
+    entities: [User, Customer, Restaurant, Item, Order, OrderItem],
     ssl: {
       rejectUnauthorized: false,
     },

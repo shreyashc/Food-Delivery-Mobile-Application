@@ -6,7 +6,7 @@ import {
   normalizePort,
   toBool,
   toNumber,
-} from "./lib/env/";
+} from "./lib/env";
 
 /**
  * Load .env file or for tests the .env.test file.

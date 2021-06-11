@@ -7,8 +7,10 @@ import {
   UpdateDateColumn,
   JoinColumn,
   BaseEntity,
+  OneToMany,
 } from "typeorm";
 import { User } from ".";
+import { Order } from "./Order";
 
 @Entity()
 export class Customer extends BaseEntity {
@@ -27,6 +29,9 @@ export class Customer extends BaseEntity {
   @OneToOne(() => User, (user) => user.customer)
   @JoinColumn()
   user: User;
+
+  @OneToMany(() => Order, (order) => order.restaurant)
+  orders: Order[];
 
   @Column()
   userId!: number;

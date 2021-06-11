@@ -1,5 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import { Restaurant } from "../models/entities";
+import {
+  Customer,
+  Item,
+  Order,
+  OrderItem,
+  Restaurant,
+} from "../models/entities";
 import { generateToken, loginUser, signUpUser } from "./utils";
 import httpErrors from "http-errors";
 
@@ -19,19 +25,24 @@ const getNearestRestaurants = async (
 const getRestaurantsDetailsAndDishes = async (
   req: Request,
   res: Response,
-  _next: NextFunction
+  next: NextFunction
 ) => {
-  const id = parseInt(req.params.id);
+  try {
+    const id = parseInt(req.params.id);
 
-  if (!id) {
-    return res.status(400).json({ error: "restaurant not found" });
+    if (!id) {
+      throw new httpErrors.NotFound(`No restaurant matching ${id}`);
+    }
+
+    const restaurant = await Restaurant.findOne({
+      where: { id },
+      relations: ["items"],
+    });
+
+    res.status(200).json(restaurant);
+  } catch (error) {
+    next(error);
   }
-  const restaurant = await Restaurant.findOne({
-    where: { id },
-    relations: ["items"],
-  });
-
-  return res.status(200).json(restaurant);
 };
 
 // TODO: api login signup
@@ -87,4 +98,45 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
     next(error);
   }
 };
-export { getNearestRestaurants, getRestaurantsDetailsAndDishes, signUp, login };
+
+const createOrder = async (
+  req: Request,
+  res: Response,
+  _next: NextFunction
+) => {
+  const { restaurantId, items, deliveryAddress } = req.body;
+
+  const customer = await Customer.findOne({
+    userId: res.locals.user.id,
+  });
+
+  let totalAmount = 0;
+  const ordered_items = await Item.findByIds(items);
+
+  ordered_items.forEach((itm) => {
+    totalAmount += itm.price;
+  });
+
+  const order = await Order.create({
+    customerId: customer?.id,
+    restaurantId,
+    totalAmount,
+    deliveryAddress,
+  }).save();
+
+  await OrderItem.insert(
+    ordered_items.map((itm) => {
+      return { orderId: order.id, itemId: itm.id, itemName: itm.title };
+    })
+  );
+
+  res.status(201).send();
+};
+
+export {
+  getNearestRestaurants,
+  getRestaurantsDetailsAndDishes,
+  signUp,
+  login,
+  createOrder,
+};

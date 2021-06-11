@@ -11,6 +11,7 @@ import {
 } from "typeorm";
 import { User } from ".";
 import { Item } from "./Item";
+import { Order } from "./Order";
 
 @Entity()
 export class Restaurant extends BaseEntity {
@@ -41,7 +42,7 @@ export class Restaurant extends BaseEntity {
   @Column({ nullable: true })
   isVeg!: boolean;
 
-  @OneToOne(() => User, (user) => user.restaurant, {onDelete : "CASCADE"})
+  @OneToOne(() => User, (user) => user.restaurant, { onDelete: "CASCADE" })
   @JoinColumn()
   user: User;
 
@@ -50,6 +51,9 @@ export class Restaurant extends BaseEntity {
 
   @Column()
   userId!: number;
+
+  @OneToMany(() => Order, (order) => order.restaurant)
+  orders: Order[];
 
   /* time stamps */
 

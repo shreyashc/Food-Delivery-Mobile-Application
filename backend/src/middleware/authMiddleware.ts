@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 import { env } from "../env";
+import httpErrors from "http-errors";
 
 const requireAuth = (req: Request, res: Response, next: NextFunction) => {
   const token = req.cookies[env.app.cookieName];
@@ -9,11 +10,17 @@ const requireAuth = (req: Request, res: Response, next: NextFunction) => {
     jwt.verify(
       token,
       env.app.accessTokenSecret,
-      (err: any, _decodedToken: any) => {
+      (err: any, decodedToken: any) => {
         if (err) {
           console.log(err.message);
           res.redirect("/auth/login");
         } else {
+          const user = {
+            id: decodedToken.id,
+            email: decodedToken.email,
+            role: decodedToken.role,
+          };
+          res.locals.user = user;
           next();
         }
       }
@@ -23,7 +30,7 @@ const requireAuth = (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const addUserToSession = (req: Request, res: Response, next: NextFunction) => {
+const requireAuthApi = (req: Request, res: Response, next: NextFunction) => {
   const token = req.cookies[env.app.cookieName];
   if (token) {
     jwt.verify(
@@ -32,7 +39,7 @@ const addUserToSession = (req: Request, res: Response, next: NextFunction) => {
       async (err: any, decodedToken: any) => {
         if (err) {
           res.locals.user = null;
-          next();
+          throw new httpErrors.Unauthorized();
         } else {
           const user = {
             id: decodedToken.id,
@@ -50,4 +57,4 @@ const addUserToSession = (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export { requireAuth, addUserToSession };
+export { requireAuth, requireAuthApi };
