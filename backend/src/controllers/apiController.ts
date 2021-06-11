@@ -145,7 +145,10 @@ const myOrders = async (_req: Request, res: Response, next: NextFunction) => {
       throw new httpErrors.NotFound();
     }
 
-    const orders = await Order.find({ customerId: customer.id });
+    const orders = await Order.find({
+      where: { customerId: customer.id },
+      relations: ["restaurant"],
+    });
 
     res.json(orders);
   } catch (error) {
