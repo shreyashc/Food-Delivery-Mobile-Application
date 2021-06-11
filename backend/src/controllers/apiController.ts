@@ -106,6 +106,8 @@ const createOrder = async (
 ) => {
   const { restaurantId, items, deliveryAddress } = req.body;
 
+  console.log(req.body);
+
   const customer = await Customer.findOne({
     userId: res.locals.user.id,
   });
