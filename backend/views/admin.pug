@@ -1,20 +1,34 @@
 doctype html
 html
     head
+        include includes/head.pug
+        link(rel="stylesheet" type="text/css" href='/css/common.css')
+        title Administrator
        
 
     body
-        h1 ADMIN DASHBOARD
-        for restaurent in restaurants
-            div
-                p #{restaurent.imgUrl}       //TODO : img error fix
-                h3 #{restaurent.displayName}
-                h3 #{restaurent.city}
-                h3 #{restaurent.address}
-                h3 #{restaurent.phone}
-                h3 #{restaurent.category}
-                h3 #{restaurent.isVeg}
-                a(href= `/admin/delete/${restaurent.userId}`) Delete
-                h3 -----------------------------------------------------------------------
-               
+        include includes/navbar.pug
+        h1.page-heading ADMIN DASHBOARD
+        div.p-3
+            div.row.gap-2.justify-content-center
+                for restaurant in restaurants
+                    div.card.col-sm-6.col-md-4.col-lg-3.align-items-stretch.shadow-md.p-2
+                        img(src=restaurant.imgUrl class="card-img-top" alt=restaurant.displayName)
+                        div.card-body.d-flex.flex-column
+                            h5.card-title #{restaurant.displayName}
+                                span.d-inline-block.m-1.text-sm
+                                    if restaurant.isVeg
+                                        span.badge.rounded-pill.bg-success.text-sm Veg
+                                    else 
+                                        span.badge.rounded-pill.bg-danger.text-sm Non Veg
+                            .h6.text-muted In #{restaurant.category}
+
+                            p.card-text #{restaurant.address}
+                            p.card-text #{restaurant.city}
+                            p.card-text #{restaurant.phone}
+                        
+                            .mt-auto.d-flex.justify-content-end.gap-2
+                                a.d-inline-block(href= `/admin/delete/${restaurant.userId}` class="btn btn-danger") Delete
+                                a.d-inline-block(class="btn btn-primary") Manage
+
                 

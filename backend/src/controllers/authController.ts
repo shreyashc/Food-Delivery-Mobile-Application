@@ -31,7 +31,7 @@ const signup_post = async (req: Request, res: Response) => {
     isVeg: isVegStr,
   } = req.body;
 
-  const isVeg = isVegStr === "true" ? true : false;
+  const isVeg = isVegStr === "on" ? true : false;
 
   const restaurantDet = {
     displayName,
@@ -60,10 +60,12 @@ const signup_post = async (req: Request, res: Response) => {
       maxAge: MAX_AGE * 1000,
     });
     res.redirect("/auth/login");
-    // res.status(201).json({ user: savedUser, token });
   } catch (err) {
     console.log(err);
-    res.send(400).json({ err });
+    res.status(400).render("signup.pug", {
+      nav: { navbutton: "Login", link: "/auth/login" },
+      error: err,
+    });
   }
 };
 
@@ -86,8 +88,12 @@ const login_post = async (req: Request, res: Response) => {
       return res.redirect("/restaurant/dashboard");
     res.status(200).json({ user, token });
   } catch (error) {
-    res.status(400).json(error);
+    console.log(error);
+    res.status(400).render("login.pug", {
+      error,
+      nav: { navbutton: "Signup", link: "/auth/signup" },
+    });
   }
 };
 
-export { signup_web, login_web, signup_post, login_post, logout_web};
+export { signup_web, login_web, signup_post, login_post, logout_web };

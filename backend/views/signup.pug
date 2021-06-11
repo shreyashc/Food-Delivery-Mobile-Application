@@ -14,6 +14,8 @@ html
                     div(class="form-group has-feedback")
                         input(type="email" name="email" class="form-control form-input"  required)
                         label(class="form-label") Email
+                        if error && error.message
+                            p.text-sm.text-danger #{error.message}
 
                     div(class="form-group has-feedback")
                         input(type="password" name="password" class="form-control form-input"  required)
@@ -33,15 +35,14 @@ html
                         input(name="phone" type="tel" class="form-control form-input"  required)
                         label(class="form-label") Phone
             
-                    div(class="form-group has-feedback")
+                    div(class="form-group has-feedback form-group-last")
                         input(name="address" class="form-control form-input" required)
                         label(class="form-label") Address
 
-                    div
-                        label(style="font-size:20px;margin-right:8px;") Veg
-                        input(type="radio" name="isVeg" value="true" style="margin-right:12px;" checked)
-                        label(style="font-size:20px;margin-right:8px;") Nonveg 
-                        input(type="radio" name="isVeg" value="false")
+
+                    div.form-check.form-switch
+                        label(class="form-check-label" style="font-weight:600;" for="vegswitch") Veg
+                        input(type="checkbox" class="form-check-input" id="vegswitch"  name="isVeg")
                         
                     .spacer2(style="margin:12px 0 !important;")
     
@@ -50,14 +51,12 @@ html
                         br
                         select(name="city"  required)
                             option(value="hassan") Hassan, Karnataka, India
-                            option(value="hassan") Hassan, Karnataka, India
-                            option(value="hassan") Hassan, Karnataka, India
-                            option(value="hassan") Hassan, Karnataka, India
-                    
                     .spacer
-
+                    br
                     div(class="form-group has-feedback")
                         input(name="imgUrl" class="form-control form-input form-group-last"  required)
                         label(class="form-label") Image URI/URL
+                        if error && !error.message
+                            p.text-sm.text-danger Something went wrong ):
 
                     button(id="submit" type="submit" class="btn btn-default submit" value="Signup") Sign Up

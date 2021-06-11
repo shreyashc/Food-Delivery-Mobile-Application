@@ -48,7 +48,7 @@ const signUpUser = async (
     if (err?.code === "23505") {
       return {
         loggedInUser: null,
-        error: "Email already registered",
+        error: { message: "Email already registered" },
       };
     }
     return { savedUser: null, error: err };
@@ -62,24 +62,20 @@ const loginUser = async (email: string, plainPassword: string) => {
       relations: ["customer"],
     });
     if (!user) {
-      const error = [
-        {
-          field: "email",
-          message: "Email not registered",
-        },
-      ];
+      const error = {
+        field: "email",
+        message: "Email not registered",
+      };
       return { loggedInUser: null, error };
     }
 
     const valid = await argon2.verify(user.password, plainPassword);
 
     if (!valid) {
-      const error = [
-        {
-          field: "password",
-          message: "incorrect password",
-        },
-      ];
+      const error = {
+        field: "password",
+        message: "incorrect password",
+      };
       return { loggedInUser: null, error };
     }
     return {

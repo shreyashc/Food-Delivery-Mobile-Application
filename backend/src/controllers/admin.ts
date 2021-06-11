@@ -5,6 +5,7 @@ const allRestaurants = async (_req: Request, res: Response) => {
   const restaurants = await Restaurant.find();
   return res.render("admin.pug", {
     restaurants: restaurants,
+    nav: { navbutton: "Logout", link: "/auth/logout" },
   });
 };
 
