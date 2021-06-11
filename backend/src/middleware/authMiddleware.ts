@@ -31,7 +31,10 @@ const requireAuth = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const requireAuthApi = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.cookies[env.app.cookieName];
+  if (!req.headers["authorization"]) return next(new httpErrors.Unauthorized());
+  const authHeader = req.headers["authorization"];
+  const bearerToken = authHeader.split(" ");
+  const token = bearerToken[1];
   if (token) {
     jwt.verify(
       token,
@@ -53,7 +56,7 @@ const requireAuthApi = (req: Request, res: Response, next: NextFunction) => {
     );
   } else {
     res.locals.user = null;
-    next();
+    next(new httpErrors.Unauthorized());
   }
 };
 
