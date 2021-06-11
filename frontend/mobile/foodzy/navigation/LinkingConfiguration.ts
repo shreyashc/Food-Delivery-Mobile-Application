@@ -25,10 +25,9 @@ export default {
           },
         },
       },
-
+      MyOrders: "myOrders",
       Login: "Login",
       Signup: "Signup",
-
       NotFound: "*",
     },
   },

@@ -13,6 +13,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import * as React from "react";
 import { ColorSchemeName } from "react-native";
 import LoginScreen from "../screens/LoginScreen";
+import MyOrdersScreen from "../screens/MyOrdersScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import SignupScreen from "../screens/SignupScreen";
 import { RootStackParamList } from "../types";
@@ -102,6 +103,22 @@ const RootNavigator: React.FC<Props> = ({ savedRoute }) => {
           },
         }}
       />
+      <Stack.Screen
+        name="MyOrders"
+        component={MyOrdersScreen}
+        options={{
+          headerShown: true,
+          headerTitle: "My Orders",
+          headerStyle: {
+            backgroundColor: "#ff1200",
+          },
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+        }}
+      />
+
       <Stack.Screen name="Root" component={BottomTabNavigator} />
       <Stack.Screen
         name="NotFound"

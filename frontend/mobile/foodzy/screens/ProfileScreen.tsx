@@ -9,7 +9,6 @@ import { AppContext } from "../contexts/contexts";
 
 export default function ProfileScreen() {
   const { appState, dispatch } = React.useContext(AppContext);
-  console.log(appState.user);
 
   const navigation = useNavigation<StackNavigationProp<any>>();
   return (
@@ -41,7 +40,13 @@ export default function ProfileScreen() {
           />
           <Text style={styles.btnText}>Cart</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btn} activeOpacity={0.7}>
+        <TouchableOpacity
+          style={styles.btn}
+          activeOpacity={0.7}
+          onPress={() => {
+            navigation.push("MyOrders");
+          }}
+        >
           <Icon
             style={styles.profileIcon}
             reverse

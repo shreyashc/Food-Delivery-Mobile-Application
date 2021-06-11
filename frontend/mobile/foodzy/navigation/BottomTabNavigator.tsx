@@ -10,6 +10,7 @@ import * as React from "react";
 
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
+import MyOrdersScreen from "../screens/MyOrdersScreen";
 import OrderScreen from "../screens/OrderScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import RestaurantDetailsScreen from "../screens/RestaurantDetailsScreen";
@@ -69,7 +70,7 @@ function OrderNavigator() {
       <OrderStack.Screen
         name="RestaurantDetailsScreen"
         component={RestaurantDetailsScreen}
-        initialParams={{ reastaurantId: 0 }}
+        initialParams={{ restaurantId: 0 }}
         options={{ headerShown: false }}
       />
     </OrderStack.Navigator>

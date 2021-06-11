@@ -111,7 +111,7 @@ export default function OrderScreen() {
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate("RestaurantDetailsScreen", {
-                  reastaurantId: item.id,
+                  restaurantId: item.id,
                 });
               }}
             >

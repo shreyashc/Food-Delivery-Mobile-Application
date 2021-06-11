@@ -1,4 +1,4 @@
-import { RouteProp, useRoute } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import * as React from "react";
 import {
   FlatList,
@@ -14,8 +14,10 @@ import { Ionicons } from "@expo/vector-icons";
 import { Text, View } from "../components/Themed";
 import { OrderParamList } from "../types";
 
-import apiClient from "../api/client";
+import apiClient, { setClientToken } from "../api/client";
 import { VegNonVeg } from "../components/VegNonVeg";
+import { AppContext } from "../contexts/contexts";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 export default function RestaurantDetailsScreen() {
   //route
@@ -23,7 +25,12 @@ export default function RestaurantDetailsScreen() {
     RouteProp<OrderParamList, "RestaurantDetailsScreen">
   >();
 
-  const reastaurantId = route.params.reastaurantId;
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const restaurantId = route.params.restaurantId;
+
+  // user context
+  const { appState } = React.useContext(AppContext);
 
   //state
   const [cart, setCart] = React.useState<Item[]>([]);
@@ -34,11 +41,14 @@ export default function RestaurantDetailsScreen() {
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(false);
 
+  const [orderLoading, setOrderLoading] = React.useState(false);
+  const [orderError, setOrderError] = React.useState(false);
+
   React.useEffect(() => {
     setLoading(true);
     apiClient
       .get<RestaurantDetailsResponse>(
-        "/restautant_details_and_dishes/" + reastaurantId
+        "/restautant_details_and_dishes/" + restaurantId
       )
       .then((res) => {
         setLoading(false);
@@ -69,6 +79,29 @@ export default function RestaurantDetailsScreen() {
   //total in cart
   const getTotal = () => {
     return cart.reduce((prev, curr) => prev + curr.price, 0);
+  };
+
+  const orderItems = () => {
+    setClientToken(appState.token);
+    const itemIds = cart.map((item) => item.id);
+    const address = appState.user.customer.address;
+    setOrderLoading(true);
+    apiClient
+      .post("/order", {
+        restaurantId,
+        items: itemIds,
+        deliveryAddress: address,
+      })
+      .then((res) => {
+        setOrderLoading(false);
+        setIsCartOpen(false);
+        navigation.push("MyOrders");
+        console.log(res);
+      })
+      .catch((err) => {
+        setOrderLoading(false);
+        console.log(err);
+      });
   };
 
   //to fetch
@@ -208,7 +241,7 @@ export default function RestaurantDetailsScreen() {
         
         */}
 
-        {Platform.OS !== "web" && (
+        {Platform.OS && (
           <BottomSheet
             modalProps={{}}
             isVisible={cart.length > 0 && isCartOpen}
@@ -307,6 +340,8 @@ export default function RestaurantDetailsScreen() {
                   title="Order"
                   titleStyle={{ color: "white", fontWeight: "500" }}
                   buttonStyle={{ borderColor: "red", backgroundColor: "red" }}
+                  disabled={orderLoading}
+                  onPress={orderItems}
                 />
               </View>
             </View>
@@ -501,7 +536,7 @@ interface Item {
   title: string;
 }
 
-interface RestaurantDetailsResponse {
+export interface RestaurantDetailsResponse {
   address: string;
   category: string;
   city: string;
