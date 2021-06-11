@@ -17,5 +17,6 @@ router.post("/signup", ApiController.signUp);
 router.post("/login", ApiController.login);
 
 router.post("/order", requireAuthApi, ApiController.createOrder);
+router.post("/myorders", requireAuthApi, ApiController.myOrders);
 
 export default router;

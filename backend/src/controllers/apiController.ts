@@ -135,10 +135,29 @@ const createOrder = async (
   res.status(201).send();
 };
 
+const myOrders = async (_req: Request, res: Response, next: NextFunction) => {
+  try {
+    const customer = await Customer.findOne({
+      userId: res.locals.user.id,
+    });
+
+    if (!customer) {
+      throw new httpErrors.NotFound();
+    }
+
+    const orders = await Order.findOne({ customerId: customer.id });
+
+    res.json(orders);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export {
   getNearestRestaurants,
   getRestaurantsDetailsAndDishes,
   signUp,
   login,
   createOrder,
+  myOrders,
 };
