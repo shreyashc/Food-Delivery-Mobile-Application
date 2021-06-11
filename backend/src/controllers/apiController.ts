@@ -145,7 +145,7 @@ const myOrders = async (_req: Request, res: Response, next: NextFunction) => {
       throw new httpErrors.NotFound();
     }
 
-    const orders = await Order.findOne({ customerId: customer.id });
+    const orders = await Order.find({ customerId: customer.id });
 
     res.json(orders);
   } catch (error) {
