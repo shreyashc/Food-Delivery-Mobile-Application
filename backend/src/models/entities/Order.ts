@@ -5,6 +5,8 @@ import {
   BaseEntity,
   OneToMany,
   ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from "typeorm";
 import { Customer } from "./Customer";
 import { OrderItem } from "./OrderItem";
@@ -67,4 +69,10 @@ export class Order extends BaseEntity {
     onDelete: "SET NULL",
   })
   restaurant: Restaurant;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
