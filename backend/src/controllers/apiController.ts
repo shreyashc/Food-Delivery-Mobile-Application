@@ -217,8 +217,9 @@ const handleWebHook = async (
       env.app.stripeEndpointSecret
     );
 
+    console.log("un parsedReq cc>>>>>", req.body.client_secret);
     const parsedReq = JSON.parse(req.body);
-    console.log("parsedReq cc>>>>>", parsedReq.clientSecret);
+    console.log("parsedReq cc>>>>>", parsedReq.client_secret);
     console.log("parsedReq>>>>>", parsedReq);
 
     switch (event.type) {
