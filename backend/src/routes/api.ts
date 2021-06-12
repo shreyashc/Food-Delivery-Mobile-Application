@@ -19,5 +19,5 @@ router.post("/login", ApiController.login);
 router.post("/order", requireAuthApi, ApiController.createOrder);
 router.get("/myorders", requireAuthApi, ApiController.myOrders);
 
-router.post("/webhook", requireAuthApi, ApiController.handleWebHook);
+router.post("/webhook", ApiController.handleWebHook);
 export default router;
