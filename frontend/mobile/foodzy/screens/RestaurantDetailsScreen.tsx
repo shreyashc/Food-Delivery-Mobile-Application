@@ -12,7 +12,7 @@ import {
 import { BottomSheet, Button } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 import { Text, View } from "../components/Themed";
-import { OrderParamList } from "../types";
+import { OrderParamList, RootStackParamList } from "../types";
 
 import apiClient, { setClientToken } from "../api/client";
 import { VegNonVeg } from "../components/VegNonVeg";
@@ -24,10 +24,9 @@ export default function RestaurantDetailsScreen() {
   const route = useRoute<
     RouteProp<OrderParamList, "RestaurantDetailsScreen">
   >();
-
-  const navigation = useNavigation<StackNavigationProp<any>>();
-
   const restaurantId = route.params.restaurantId;
+
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   // user context
   const { appState } = React.useContext(AppContext);
@@ -95,8 +94,14 @@ export default function RestaurantDetailsScreen() {
       .then((res) => {
         setOrderLoading(false);
         setIsCartOpen(false);
-        navigation.push("MyOrders");
         console.log(res);
+        let noOfItems = cart.length;
+        let totalAmount = getTotal();
+        navigation.navigate("Payment", {
+          clientSecret: res.data.clientSecret,
+          totalAmount,
+          noOfItems,
+        });
       })
       .catch((err) => {
         setOrderLoading(false);
@@ -218,7 +223,7 @@ export default function RestaurantDetailsScreen() {
                               buttonStyle={styles.plusBtn}
                               onPress={() => {
                                 setCart((items) => {
-                                  if (item && !cart.includes(item)) {
+                                  if (!items.includes(item)) {
                                     return [...items, item];
                                   }
                                   return items;

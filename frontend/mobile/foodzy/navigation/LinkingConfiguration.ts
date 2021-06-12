@@ -26,6 +26,7 @@ export default {
         },
       },
       MyOrders: "myOrders",
+      Payment: "payment",
       Login: "Login",
       Signup: "Signup",
       NotFound: "*",

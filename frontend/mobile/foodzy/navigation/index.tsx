@@ -15,6 +15,7 @@ import { ColorSchemeName } from "react-native";
 import LoginScreen from "../screens/LoginScreen";
 import MyOrdersScreen from "../screens/MyOrdersScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
+import PaymentScreen from "../screens/PaymentScreen";
 import SignupScreen from "../screens/SignupScreen";
 import { RootStackParamList } from "../types";
 import BottomTabNavigator from "./BottomTabNavigator";
@@ -112,6 +113,7 @@ const RootNavigator: React.FC<Props> = ({ savedRoute }) => {
           headerStyle: {
             backgroundColor: "#ff1200",
           },
+          headerBackTitle: "",
           headerTintColor: "#fff",
           headerTitleStyle: {
             fontWeight: "bold",
@@ -119,6 +121,22 @@ const RootNavigator: React.FC<Props> = ({ savedRoute }) => {
         }}
       />
 
+      <Stack.Screen
+        name="Payment"
+        component={PaymentScreen}
+        options={{
+          headerShown: true,
+          headerTitle: "Make Payment",
+          headerStyle: {
+            backgroundColor: "#ff1200",
+          },
+          headerTintColor: "#fff",
+          headerBackTitleVisible: false,
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+        }}
+      />
       <Stack.Screen name="Root" component={BottomTabNavigator} />
       <Stack.Screen
         name="NotFound"
