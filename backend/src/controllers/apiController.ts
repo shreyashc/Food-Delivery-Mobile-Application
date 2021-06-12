@@ -217,11 +217,17 @@ const handleWebHook = async (
       env.app.stripeEndpointSecret
     );
 
+    const parsedReq = JSON.parse(req.body);
+    console.log("parsedReq cc>>>>>", parsedReq.clientSecret);
+    console.log("parsedReq>>>>>", parsedReq);
+
     switch (event.type) {
       case "payment_intent.succeeded": {
         const paymentIntent = event.data.object;
+
         console.log(paymentIntent);
         console.log("PaymentIntent was successful!");
+
         break;
       }
 
