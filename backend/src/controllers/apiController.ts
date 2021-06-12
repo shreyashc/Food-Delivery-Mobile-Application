@@ -197,6 +197,51 @@ const orderDetails = async (
   }
 };
 
+const handleWebHook = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const sig = req.headers["stripe-signature"];
+    if (!sig) {
+      throw new httpErrors.BadRequest();
+    }
+
+    const stripe = new Stripe(env.app.stripeSk, {
+      apiVersion: "2020-08-27",
+    });
+    const event = stripe.webhooks.constructEvent(
+      req.body,
+      sig,
+      env.app.stripeEndpointSecret
+    );
+
+    switch (event.type) {
+      case "payment_intent.succeeded": {
+        const paymentIntent = event.data.object;
+        console.log(paymentIntent);
+        console.log("PaymentIntent was successful!");
+        break;
+      }
+
+      case "payment_intent.payment_failed": {
+        const paymentIntent = event.data.object;
+        console.log(paymentIntent);
+        console.log("PaymentIntent was Failed!");
+        break;
+      }
+
+      default:
+        console.log(`Unhandled event type ${event.type}`);
+    }
+
+    res.json({ received: true });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export {
   getNearestRestaurants,
   getRestaurantsDetailsAndDishes,
@@ -205,4 +250,5 @@ export {
   createOrder,
   myOrders,
   orderDetails,
+  handleWebHook,
 };

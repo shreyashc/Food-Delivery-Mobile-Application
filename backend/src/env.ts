@@ -28,6 +28,7 @@ export const env = {
     // cookieSecret: getOsEnv("COOKIE_SECRET"),
     accessTokenSecret: getOsEnv("ACCESS_TOKEN_SECRET"),
     stripeSk: getOsEnv("STRIPE_SK"),
+    stripeEndpointSecret: getOsEnv("STRIPE_ENDPOINT_SEC"),
     dirs: {
       /*  migrations: getOsPaths("TYPEORM_MIGRATIONS"),
       migrationsDir: getOsPath("TYPEORM_MIGRATIONS_DIR"),
