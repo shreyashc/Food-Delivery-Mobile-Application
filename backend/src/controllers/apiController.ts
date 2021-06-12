@@ -238,6 +238,8 @@ const handleWebHook = async (
 
     res.json({ received: true });
   } catch (error) {
+    console.log(error);
+
     next(error);
   }
 };
