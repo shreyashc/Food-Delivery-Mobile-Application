@@ -9,7 +9,7 @@ import {
 import { generateToken, loginUser, signUpUser } from "./utils";
 import httpErrors from "http-errors";
 import Stripe from "stripe";
-import { env } from "src/env";
+import { env } from "../env";
 
 const getNearestRestaurants = async (
   req: Request,
