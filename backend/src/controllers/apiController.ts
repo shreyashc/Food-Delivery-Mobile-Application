@@ -218,13 +218,21 @@ const handleWebHook = async (
     );
 
     const parsedReq = JSON.parse(req.body);
-    console.log("parsedReq cc>>>>>", parsedReq?.data?.object?.client_secret);
-    console.log("parsedReq>>>>>", parsedReq);
+    const clientSecret = parsedReq?.data?.object?.client_secret;
 
     switch (event.type) {
       case "payment_intent.succeeded": {
         const paymentIntent = event.data.object;
-
+        if (clientSecret) {
+          await Order.update(
+            {
+              clientSecret,
+            },
+            {
+              paymentStatus: 1,
+            }
+          );
+        }
         console.log(paymentIntent);
         console.log("PaymentIntent was successful!");
 
@@ -233,6 +241,16 @@ const handleWebHook = async (
 
       case "payment_intent.payment_failed": {
         const paymentIntent = event.data.object;
+        if (clientSecret) {
+          await Order.update(
+            {
+              clientSecret,
+            },
+            {
+              paymentStatus: 2,
+            }
+          );
+        }
         console.log(paymentIntent);
         console.log("PaymentIntent was Failed!");
         break;
