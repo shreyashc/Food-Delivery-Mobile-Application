@@ -23,7 +23,14 @@ import RestaurantRoutes from "./routes/restaurant";
 const main = async () => {
   const app = express();
 
-  app.use(express.json());
+  app.use((req, res, next) => {
+    if (req.originalUrl.includes("webhook")) {
+      next();
+    } else {
+      express.json()(req, res, next);
+    }
+  });
+
   app.use(express.urlencoded({ extended: true }));
   app.use(cookieParser());
 

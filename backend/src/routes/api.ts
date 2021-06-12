@@ -1,5 +1,5 @@
 import Router from "express";
-
+import express from "express";
 import * as ApiController from "../controllers/apiController";
 import { requireAuthApi } from "../middleware/authMiddleware";
 
@@ -19,5 +19,9 @@ router.post("/login", ApiController.login);
 router.post("/order", requireAuthApi, ApiController.createOrder);
 router.get("/myorders", requireAuthApi, ApiController.myOrders);
 
-router.post("/webhook", ApiController.handleWebHook);
+router.post(
+  "/webhook",
+  express.raw({ type: "application/json" }),
+  ApiController.handleWebHook
+);
 export default router;
