@@ -8,6 +8,8 @@ import {
 } from "../models/entities";
 import { generateToken, loginUser, signUpUser } from "./utils";
 import httpErrors from "http-errors";
+import Stripe from "stripe";
+import { env } from "src/env";
 
 const getNearestRestaurants = async (
   req: Request,
@@ -119,6 +121,19 @@ const createOrder = async (
     totalAmount += itm.price;
   });
 
+  const stripe = new Stripe(env.app.stripeSk, {
+    apiVersion: "2020-08-27",
+  });
+
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: totalAmount * 100,
+    currency: "inr",
+  });
+
+  console.log(paymentIntent);
+
+  const clientSecret = paymentIntent.client_secret;
+
   const order = await Order.create({
     customerId: customer?.id,
     restaurantId,
@@ -132,7 +147,7 @@ const createOrder = async (
     })
   );
 
-  res.status(201).send();
+  res.status(201).json({ clientSecret });
 };
 
 const myOrders = async (_req: Request, res: Response, next: NextFunction) => {
