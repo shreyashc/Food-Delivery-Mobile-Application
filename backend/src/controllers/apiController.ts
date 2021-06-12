@@ -132,13 +132,14 @@ const createOrder = async (
 
   console.log(paymentIntent);
 
-  const clientSecret = paymentIntent.client_secret;
+  const clientSecret = paymentIntent.client_secret || "";
 
   const order = await Order.create({
     customerId: customer?.id,
     restaurantId,
     totalAmount,
     deliveryAddress,
+    clientSecret,
   }).save();
 
   await OrderItem.insert(
@@ -171,6 +172,31 @@ const myOrders = async (_req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const orderDetails = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const customer = await Customer.findOne({
+      userId: res.locals.user.id,
+    });
+
+    if (!customer) {
+      throw new httpErrors.NotFound();
+    }
+
+    const orders = await Order.find({
+      where: { customerId: customer.id },
+      relations: ["restaurant"],
+    });
+
+    res.json(orders);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export {
   getNearestRestaurants,
   getRestaurantsDetailsAndDishes,
@@ -178,4 +204,5 @@ export {
   login,
   createOrder,
   myOrders,
+  orderDetails,
 };

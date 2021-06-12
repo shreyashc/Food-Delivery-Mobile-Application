@@ -43,6 +43,9 @@ export class Order extends BaseEntity {
   @Column()
   deliveryAddress: string;
 
+  @Column()
+  clientSecret: string;
+
   /**
    * customer order
    */

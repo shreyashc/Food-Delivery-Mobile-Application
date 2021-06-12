@@ -4,6 +4,8 @@ import {
   Column,
   OneToOne,
   BaseEntity,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from "typeorm";
 import { Customer } from "./Customer";
 import { Restaurant } from "./Restaurant";
@@ -27,4 +29,10 @@ export class User extends BaseEntity {
 
   @OneToOne(() => Restaurant, (restaurant) => restaurant.user)
   restaurant: Restaurant;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
