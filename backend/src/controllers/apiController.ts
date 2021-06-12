@@ -242,7 +242,7 @@ const handleWebHook = async (
       case "payment_intent.payment_failed": {
         const paymentIntent = event.data.object;
         if (clientSecret) {
-          await Order.update(
+          const newOrder = await Order.update(
             {
               clientSecret,
             },
@@ -250,6 +250,7 @@ const handleWebHook = async (
               paymentStatus: 2,
             }
           );
+          console.log("updating", newOrder, clientSecret, "....");
         }
         console.log(paymentIntent);
         console.log("PaymentIntent was Failed!");
