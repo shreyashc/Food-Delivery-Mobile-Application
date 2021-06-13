@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import apiClient, { setClientToken } from "../api/client";
 import { View, Text } from "../components/Themed";
-import { orderStatus, orderStatusColors } from "../constants/Status";
+import { paymentStatusColors, paymentStatus } from "../constants/Status";
 import { AppContext } from "../contexts/contexts";
 import { RootStackParamList } from "../types";
 import { RestaurantDetailsResponse } from "./RestaurantDetailsScreen";
@@ -103,10 +103,10 @@ export default function MyOrdersScreen() {
                     <Text style={styles.itemDes}>
                       <Ionicons
                         name="swap-horizontal-outline"
-                        color={orderStatusColors[item.paymentStatus]}
+                        color={paymentStatusColors[item.paymentStatus]}
                         size={18}
                       />{" "}
-                      {orderStatus[item.paymentStatus]}
+                      {paymentStatus[item.paymentStatus]}
                     </Text>
                     <Text style={styles.itemPrice}> ₹ {item.totalAmount}</Text>
                     <Text style={styles.itemDet}>

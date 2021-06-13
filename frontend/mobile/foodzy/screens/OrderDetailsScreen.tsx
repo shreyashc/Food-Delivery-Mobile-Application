@@ -2,16 +2,19 @@ import { Ionicons } from "@expo/vector-icons";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import * as React from "react";
 import {
-  FlatList,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  RefreshControl,
   ActivityIndicator,
+  FlatList,
+  RefreshControl,
+  StyleSheet,
 } from "react-native";
 import apiClient, { setClientToken } from "../api/client";
-import { View, Text } from "../components/Themed";
-import { orderStatus, orderStatusColors } from "../constants/Status";
+import { Text, View } from "../components/Themed";
+import {
+  orderStatus,
+  orderStatusColors,
+  paymentStatus,
+  paymentStatusColors,
+} from "../constants/Status";
 import { AppContext } from "../contexts/contexts";
 import { RootStackParamList } from "../types";
 import { RestaurantDetailsResponse } from "./RestaurantDetailsScreen";
@@ -29,7 +32,7 @@ export default function OrdersDetailsScreen() {
   //context
   const { appState } = React.useContext(AppContext);
 
-  const fetchMyOrders = () => {
+  const fetchMyOrder = () => {
     setClientToken(appState.token);
     console.log("fetching");
 
@@ -49,11 +52,53 @@ export default function OrdersDetailsScreen() {
   };
 
   React.useEffect(() => {
-    fetchMyOrders();
+    fetchMyOrder();
   }, []);
 
+  const Header = ({ order }: HeaderProp) => (
+    <View style={styles.itemInfoContainer}>
+      <Text style={styles.title}>{order.restaurant.displayName}</Text>
+      <Text style={styles.itemDet}>{order.restaurant.address}</Text>
+      <View>
+        <View>
+          <Text style={{ ...styles.itemPrice, marginVertical: 5 }}>
+            Total Amount:{" "}
+            <Text style={{ color: "coral" }}>{"₹" + order.totalAmount}</Text>
+          </Text>
+          <View style={{ marginVertical: 5 }}>
+            <Text style={styles.statusText}>
+              <Ionicons
+                name="swap-horizontal-outline"
+                color={paymentStatusColors[order.paymentStatus]}
+                size={18}
+              />{" "}
+              {paymentStatus[order.paymentStatus]}
+            </Text>
+            <Text style={styles.statusText}>
+              <Ionicons
+                name="fast-food-outline"
+                color={orderStatusColors[order.orderStatus]}
+                size={18}
+              />{" "}
+              {orderStatus[order.orderStatus]}
+            </Text>
+            <Text style={styles.statusText}>
+              <Ionicons name="earth-outline" color="#777777" size={18} />{" "}
+              Delivering to <Text>{order.deliveryAddress}</Text>
+            </Text>
+          </View>
+        </View>
+      </View>
+      <Text
+        style={{ ...styles.itemPrice, textAlign: "center", marginVertical: 8 }}
+      >
+        Ordered Items
+      </Text>
+    </View>
+  );
+
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       {!loading && error && (
         <View style={styles.info}>
           <Text style={{ textAlign: "center", fontSize: 16, color: "#fb3877" }}>
@@ -71,6 +116,49 @@ export default function OrdersDetailsScreen() {
           />
         </View>
       )}
+
+      {!error && order && (
+        <View>
+          <View>
+            <FlatList
+              data={order.items}
+              keyExtractor={(item) => item.id.toString()}
+              style={styles.listContainer}
+              ListHeaderComponent={<Header order={order} />}
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={fetchMyOrder}
+                />
+              }
+              ListFooterComponent={<View style={{ height: 50 }} />}
+              renderItem={({ item }) => (
+                <View key={item.id.toString()} style={styles.cartItem}>
+                  <View style={{ flex: 3 }}>
+                    <Text style={{ fontSize: 19, fontWeight: "bold" }}>
+                      {item.itemName}
+                    </Text>
+                    <Text>{item.itemDescription}</Text>
+                  </View>
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "flex-end",
+                      flex: 1,
+                    }}
+                  >
+                    <Text style={{ fontSize: 20, fontWeight: "300" }}>
+                      {"₹" + item.itemPrice}
+                    </Text>
+                  </View>
+                </View>
+              )}
+            />
+          </View>
+        </View>
+      )}
     </View>
   );
 }
@@ -83,12 +171,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#00000000",
   },
   container: {
-    height: "100%",
-    backgroundColor: "#fff",
-  },
-  wrapper: {
-    padding: 10,
     flex: 1,
+    backgroundColor: "#fff",
+    padding: 10,
+  },
+  listContainer: {
+    paddingHorizontal: 8,
   },
   resDetails: {
     marginTop: 8,
@@ -98,14 +186,11 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "500",
   },
-  description: {
-    marginTop: 8,
-    fontSize: 15,
-    marginLeft: 5,
-  },
 
   itemInfoContainer: {
-    flex: 3,
+    padding: 2,
+    marginBottom: 10,
+    marginTop: 10,
   },
   itemDet: {
     marginTop: 8,
@@ -133,6 +218,10 @@ const styles = StyleSheet.create({
     padding: 2,
   },
 
+  statusText: {
+    fontSize: 16,
+    padding: 2,
+  },
   cartItem: {
     display: "flex",
     flexDirection: "row",
@@ -143,10 +232,32 @@ const styles = StyleSheet.create({
     marginBottom: 15,
 
     shadowColor: "#ccc",
-    shadowOffset: { width: 1, height: 1 },
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.7,
-    shadowRadius: 20,
+    shadowRadius: 7,
     borderRadius: 15,
+  },
+  separator: {
+    height: 1,
+    backgroundColor: "gray",
+  },
+  header: {
+    flex: 1,
+    backgroundColor: "green",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  backButton: {
+    height: 84,
+    width: 84,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  arrow: {
+    fontWeight: "bold",
+    fontSize: 20,
+    color: "white",
   },
 });
 
@@ -161,6 +272,7 @@ interface Order {
   totalAmount: number;
   restaurant: RestaurantDetailsResponse;
   createdAt: string;
+  items: OrderItem[];
 }
 
 interface OrderItem {
@@ -168,4 +280,11 @@ interface OrderItem {
   itemId: number;
   orderId: number;
   quantity: number;
+  itemName: string;
+  itemPrice: number;
+  itemDescription: string;
+}
+
+interface HeaderProp {
+  order: Order;
 }
