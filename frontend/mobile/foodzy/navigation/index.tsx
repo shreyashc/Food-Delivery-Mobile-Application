@@ -15,6 +15,7 @@ import { ColorSchemeName } from "react-native";
 import LoginScreen from "../screens/LoginScreen";
 import MyOrdersScreen from "../screens/MyOrdersScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
+import OrdersDetailsScreen from "../screens/OrderDetailsScreen";
 import PaymentScreen from "../screens/PaymentScreen";
 import SignupScreen from "../screens/SignupScreen";
 import { RootStackParamList } from "../types";
@@ -113,7 +114,24 @@ const RootNavigator: React.FC<Props> = ({ savedRoute }) => {
           headerStyle: {
             backgroundColor: "#ff1200",
           },
-          headerBackTitle: "",
+          headerBackTitleVisible: false,
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+        }}
+      />
+
+      <Stack.Screen
+        name="OrderDetails"
+        component={OrdersDetailsScreen}
+        options={{
+          headerShown: true,
+          headerTitle: "Order Details",
+          headerStyle: {
+            backgroundColor: "#ff1200",
+          },
+          headerBackTitleVisible: false,
           headerTintColor: "#fff",
           headerTitleStyle: {
             fontWeight: "bold",

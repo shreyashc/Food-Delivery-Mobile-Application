@@ -13,6 +13,10 @@ import apiClient from "../api/client";
 import { VegNonVeg } from "../components/VegNonVeg";
 
 export default function OrderScreen() {
+  const navigation = useNavigation<
+    StackNavigationProp<OrderParamList, "OrderScreen">
+  >();
+
   const [searchQuery, setSearchQuery] = React.useState("");
   const [restaurants, setRestaurants] = React.useState<RestaurnatResponse[]>(
     []
@@ -56,10 +60,6 @@ export default function OrderScreen() {
         console.log(err);
       });
   }, []);
-
-  const navigation = useNavigation<
-    StackNavigationProp<OrderParamList, "OrderScreen">
-  >();
 
   return (
     <SafeAreaView style={styles.container}>

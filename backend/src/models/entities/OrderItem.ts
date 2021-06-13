@@ -20,6 +20,7 @@ export class OrderItem extends BaseEntity {
   @OneToOne(() => Item, { onDelete: "SET NULL" })
   item: Item;
 
+  @Column()
   itemName: string;
 
   @Column({ default: 1 })

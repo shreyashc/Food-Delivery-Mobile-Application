@@ -1,6 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { RouteProp, useRoute } from "@react-navigation/native";
 import * as React from "react";
 import {
   FlatList,
@@ -17,13 +16,13 @@ import { AppContext } from "../contexts/contexts";
 import { RootStackParamList } from "../types";
 import { RestaurantDetailsResponse } from "./RestaurantDetailsScreen";
 
-export default function MyOrdersScreen() {
-  const navigation = useNavigation<
-    StackNavigationProp<RootStackParamList, "OrderDetails">
-  >();
+export default function OrdersDetailsScreen() {
+  //route
+  const route = useRoute<RouteProp<RootStackParamList, "OrderDetails">>();
+  const orderId = route.params.orderid;
 
   //state
-  const [orders, setOrders] = React.useState<Order[]>([]);
+  const [order, setOrder] = React.useState<Order>();
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
@@ -35,10 +34,10 @@ export default function MyOrdersScreen() {
     console.log("fetching");
 
     apiClient
-      .get<Order[]>("/myorders")
+      .get<Order>(`/orderdetails/${orderId}`)
       .then((res) => {
         console.log(res.data);
-        setOrders(res.data);
+        setOrder(res.data);
         setLoading(false);
         setError(false);
       })
@@ -52,11 +51,6 @@ export default function MyOrdersScreen() {
   React.useEffect(() => {
     fetchMyOrders();
   }, []);
-
-  const getFormattedDate = (dateStr: string) => {
-    let date = new Date(dateStr);
-    return date.getDate() + "-" + date.getMonth() + "-" + date.getFullYear();
-  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -75,57 +69,7 @@ export default function MyOrdersScreen() {
             size="large"
             color="#fd3d3d"
           />
-          <Text style={{ textAlign: "center", fontSize: 16, color: "#fb3877" }}>
-            {"Spinning the wheel of fortune..."}
-          </Text>
         </View>
-      )}
-      {!error && (
-        <FlatList
-          data={orders}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={fetchMyOrders} />
-          }
-          style={{ padding: 10, marginTop: 5 }}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              onPress={() => {
-                navigation.push("OrderDetails", { orderid: item.id });
-              }}
-            >
-              <View style={styles.cartItem}>
-                <View style={styles.itemInfoContainer}>
-                  <Text style={styles.itemTitle}>
-                    {item.restaurant.displayName}
-                  </Text>
-                  <View style={{}}>
-                    <Text style={styles.itemDes}>
-                      <Ionicons
-                        name="swap-horizontal-outline"
-                        color={orderStatusColors[item.paymentStatus]}
-                        size={18}
-                      />{" "}
-                      {orderStatus[item.paymentStatus]}
-                    </Text>
-                    <Text style={styles.itemPrice}> ₹ {item.totalAmount}</Text>
-                    <Text style={styles.itemDet}>
-                      On {getFormattedDate(item.createdAt)}
-                    </Text>
-                  </View>
-                </View>
-                <Image
-                  style={styles.itemImage}
-                  source={
-                    item.restaurant.imgUrl
-                      ? { uri: item.restaurant.imgUrl }
-                      : require("../assets/images/restaurant-wall.jpg")
-                  }
-                />
-              </View>
-            </TouchableOpacity>
-          )}
-        />
       )}
     </View>
   );
@@ -217,4 +161,11 @@ interface Order {
   totalAmount: number;
   restaurant: RestaurantDetailsResponse;
   createdAt: string;
+}
+
+interface OrderItem {
+  id: number;
+  itemId: number;
+  orderId: number;
+  quantity: number;
 }

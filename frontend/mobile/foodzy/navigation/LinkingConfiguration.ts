@@ -26,6 +26,7 @@ export default {
         },
       },
       MyOrders: "myOrders",
+      OrderDetails: "orderdetails",
       Payment: "payment",
       Login: "Login",
       Signup: "Signup",
