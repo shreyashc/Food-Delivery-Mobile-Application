@@ -101,60 +101,60 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const createOrder = async (
-  req: Request,
-  res: Response,
-  _next: NextFunction
-) => {
-  const { restaurantId, items, deliveryAddress } = req.body;
+const createOrder = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { restaurantId, items, deliveryAddress } = req.body;
 
-  console.log(req.body);
+    console.log(req.body);
 
-  const customer = await Customer.findOne({
-    userId: res.locals.user.id,
-  });
+    const customer = await Customer.findOne({
+      userId: res.locals.user.id,
+    });
 
-  let totalAmount = 0;
-  const ordered_items = await Item.findByIds(items);
+    let totalAmount = 0;
+    const ordered_items = await Item.findByIds(items);
 
-  ordered_items.forEach((itm) => {
-    totalAmount += itm.price;
-  });
+    ordered_items.forEach((itm) => {
+      totalAmount += itm.price;
+    });
 
-  const stripe = new Stripe(env.app.stripeSk, {
-    apiVersion: "2020-08-27",
-  });
+    const stripe = new Stripe(env.app.stripeSk, {
+      apiVersion: "2020-08-27",
+    });
 
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: totalAmount * 100,
-    currency: "inr",
-  });
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: totalAmount * 100,
+      currency: "inr",
+    });
 
-  console.log(paymentIntent);
+    console.log(paymentIntent);
 
-  const clientSecret = paymentIntent.client_secret || "";
+    const clientSecret = paymentIntent.client_secret || "";
 
-  const order = await Order.create({
-    customerId: customer?.id,
-    restaurantId,
-    totalAmount,
-    deliveryAddress,
-    clientSecret,
-  }).save();
+    const order = await Order.create({
+      customerId: customer?.id,
+      restaurantId,
+      totalAmount,
+      deliveryAddress,
+      clientSecret,
+    }).save();
 
-  await OrderItem.insert(
-    ordered_items.map((itm) => {
-      return {
-        orderId: order.id,
-        itemId: itm.id,
-        itemName: itm.title,
-        itemDescription: itm.description,
-        itemPrice: itm.price,
-      };
-    })
-  );
+    await OrderItem.insert(
+      ordered_items.map((itm) => {
+        return {
+          orderId: order.id,
+          itemId: itm.id,
+          itemName: itm.title,
+          itemDescription: itm.description,
+          itemPrice: itm.price,
+        };
+      })
+    );
 
-  res.status(201).json({ clientSecret });
+    res.status(201).json({ clientSecret });
+  } catch (error) {
+    next(error);
+  }
 };
 
 const myOrders = async (_req: Request, res: Response, next: NextFunction) => {
@@ -170,6 +170,7 @@ const myOrders = async (_req: Request, res: Response, next: NextFunction) => {
     const orders = await Order.find({
       where: { customerId: customer.id },
       relations: ["restaurant"],
+      order: { createdAt: "DESC" },
     });
 
     res.json(orders);
