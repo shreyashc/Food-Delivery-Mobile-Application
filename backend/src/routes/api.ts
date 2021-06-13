@@ -18,6 +18,11 @@ router.post("/login", ApiController.login);
 
 router.post("/order", requireAuthApi, ApiController.createOrder);
 router.get("/myorders", requireAuthApi, ApiController.myOrders);
+router.get(
+  "/orderdetails/:orderid",
+  requireAuthApi,
+  ApiController.orderDetails
+);
 
 router.post(
   "/webhook",

@@ -173,11 +173,13 @@ const myOrders = async (_req: Request, res: Response, next: NextFunction) => {
 };
 
 const orderDetails = async (
-  _req: Request,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
+    const orderId = parseInt(req.params.orderid);
+
     const customer = await Customer.findOne({
       userId: res.locals.user.id,
     });
@@ -186,12 +188,16 @@ const orderDetails = async (
       throw new httpErrors.NotFound();
     }
 
-    const orders = await Order.find({
-      where: { customerId: customer.id },
-      relations: ["restaurant"],
+    const order = await Order.findOne({
+      where: { customerId: customer.id, id: orderId },
+      relations: ["restaurant", "items"],
     });
 
-    res.json(orders);
+    if (!order) {
+      throw new httpErrors.NotFound();
+    }
+
+    res.json(order);
   } catch (error) {
     next(error);
   }
