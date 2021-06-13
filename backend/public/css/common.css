@@ -5,3 +5,7 @@ h1.page-heading {
   padding: 1% 0 3% 0;
   text-align: center;
 }
+
+.text-orange {
+  color: #ff500d;
+}

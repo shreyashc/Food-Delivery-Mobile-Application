@@ -19,6 +19,20 @@ router.get("/delete_dish/:id", requireAuth, RestaurantController.deleteDish);
 
 router.get("/edit_details/", requireAuth, RestaurantController.editDetails_get);
 
+router.get("/all_orders/", requireAuth, RestaurantController.getAllOrders);
+
+router.post(
+  "/update_order_status/",
+  requireAuth,
+  RestaurantController.updateOrderStatus
+);
+
+router.get(
+  "/order_details/:orderid",
+  requireAuth,
+  RestaurantController.getOrderDetails
+);
+
 router.post(
   "/edit_details/",
   requireAuth,

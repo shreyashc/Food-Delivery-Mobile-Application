@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { Item, Restaurant } from "../models/entities";
+import httpErrors from "http-errors";
+import { Item, Order, Restaurant } from "../models/entities";
 
 const dashboard = async (_req: Request, res: Response, _next: NextFunction) => {
   const restaurant = await Restaurant.findOne({
@@ -211,6 +212,103 @@ const editDetails_post = async (
   res.redirect("/restaurant/dashboard");
 };
 
+const getAllOrders = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const restaurant = await Restaurant.findOne({
+      userId: res.locals.user.id,
+    });
+
+    if (!restaurant) {
+      throw new httpErrors.NotFound();
+    }
+
+    const orders = await Order.find({
+      where: { restaurantId: restaurant.id, paymentStatus: 1 },
+      relations: ["customer"],
+      order: { createdAt: "DESC" },
+    });
+
+    res.render("restaurant/all_orders.pug", {
+      nav: { navbutton: "Logout", link: "/auth/logout" },
+      orders,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getOrderDetails = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const orderId = req.params.orderid;
+
+    const restaurant = await Restaurant.findOne({
+      userId: res.locals.user.id,
+    });
+
+    if (!restaurant) {
+      throw new httpErrors.NotFound();
+    }
+
+    const order = await Order.findOne({
+      where: { restaurantId: restaurant.id, id: orderId, paymentStatus: 1 },
+      relations: ["customer", "items"],
+    });
+
+    res.render("restaurant/order_details.pug", {
+      nav: { navbutton: "Logout", link: "/auth/logout" },
+      order: order,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updateOrderStatus = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const orderId = parseInt(req.body.orderid);
+    const newStatus = parseInt(req.body.status);
+    const allowedStatus = [0, 1, 2];
+    if (!orderId || !allowedStatus.includes(newStatus)) {
+      throw new httpErrors.BadRequest();
+    }
+
+    const restaurant = await Restaurant.findOne({
+      userId: res.locals.user.id,
+    });
+
+    if (!restaurant) {
+      throw new httpErrors.NotFound();
+    }
+
+    await Order.update(
+      {
+        restaurantId: restaurant.id,
+        id: orderId,
+      },
+      {
+        orderStatus: newStatus,
+      }
+    );
+
+    res.redirect(`/restaurant/order_details/${orderId}`);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
 export {
   dashboard,
   addDish_get,
@@ -221,4 +319,7 @@ export {
   deleteDish,
   editDetails_get,
   editDetails_post,
+  getAllOrders,
+  getOrderDetails,
+  updateOrderStatus,
 };

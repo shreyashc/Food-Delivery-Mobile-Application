@@ -1,0 +1,58 @@
+doctype html
+html
+    head
+        include ../includes/head.pug
+        link(rel="stylesheet" type="text/css" href='/css/common.css')
+        title Order Details
+
+    body
+        include ../includes/navbar.pug
+
+        h1.page-heading Order Details
+        div.container.p-3.bg-white.rounded.shadow.pb-5.mb-5
+            .h1= order.customer.displayName
+            p
+                | Customer Phone:  
+                span.fw-bold #{order.customer.phone}
+            p 
+                | Delivery Address: 
+                span.fw-bold #{order.deliveryAddress}
+
+            p 
+                | Date And Time: 
+                span.fw-bold #{order.createdAt}
+            
+            .h4.text-center.mt-4 Ordrerd Items
+            
+            ol.list-group.list-group-numbered
+                for item in order.items
+                    li.list-group-item.d-flex.justify-content-between.align-items-start.my-1
+                        .ms-2.me-auto
+                            .fw-bold.text-orange #{item.itemName}
+                            p.mb-0.text-muted #{item.itemDescription} 
+                        span.badge.bg-primary.rounded-pill ₹ #{item.itemPrice}
+
+            .h5.text-end.mt-4 
+                | Total Amount 
+                span.text-orange ₹#{order.totalAmount}
+            
+            p 
+                | Customer Payment Status: 
+                span.fw-bold Payment Successfull
+
+            p 
+                | Foodzy Payment Status:
+                if order.paidToRestaurant
+                    span.fw-bold Payment has been transferred to your account.
+                else
+                    span.fw-bold Payment will be transferred to your account shortly.
+
+            .h5.fw-bold.my-4.text-center Update Order Status
+
+            form(class="clearfix" action="/restaurant/update_order_status" method="POST")
+                select(class="form-select form-select-lg mb-3" name="status")
+                    option(value="0" selected=order.orderStatus == 0) Order is Being Prepared
+                    option(value="1" selected=order.orderStatus == 1) Order out for delivery
+                    option(value="2" selected=order.orderStatus == 2) Order fulfilled
+                input(type="hidden" name="orderid" value = order.id)
+                button.btn.btn-primary.float-end.px-3 Update

@@ -23,7 +23,7 @@ export class Order extends BaseEntity {
    * 2 - fulfilled
    */
   @Column({ default: 0 })
-  orderStatus!: 0 | 1 | 2;
+  orderStatus!: number;
 
   /**
    * 0 - pending

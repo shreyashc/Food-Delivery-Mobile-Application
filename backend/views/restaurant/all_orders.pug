@@ -1,0 +1,48 @@
+doctype html
+html
+    head
+        include ../includes/head.pug
+        link(rel="stylesheet" type="text/css" href='/css/common.css')
+        title All Orders
+
+    body
+        include ../includes/navbar.pug
+        
+        h1.page-heading All Orders
+        div.container.p-3
+            .form-check.form-switch
+                .d-flex.justify-content-end
+                    .text-md.me-5 Show Pending Orders Only
+                    div
+                        input(class="form-check-input" type="checkbox" id="pendingFilter")
+            .list-group.my-2
+                for order in orders
+                    a.list-group-item.list-group-item-action.order-item(href=`order_details/${order.id}` data-status=order.orderStatus) 
+                        div
+                            h4.fw-bold #{order.customer.displayName} - ₹#{order.totalAmount}
+                            p.text-sm.my-0 Deliver to #{order.deliveryAddress} on #{order.createdAt}
+                                if order.orderStatus == 0
+                                    span.badge.rounded-pill.bg-primary.text-sm Pending
+                                else if order.orderStatus == 2
+                                    span.badge.rounded-pill.bg-dark.text-sm Fulfiled
+                                else
+                                    span.badge.rounded-pill.bg-warning.text-sm Out of delivery
+
+        script.
+            const filterSwitch = document.getElementById("pendingFilter");
+            const orderDivs = document.querySelectorAll(".order-item");
+            const order_list = Array.from(orderDivs);
+            filterSwitch.addEventListener('change',(e)=>{
+                if(e.target.checked){
+                    order_list.forEach(order => {
+                        if(order.dataset.status !== "0"){
+                            order.classList.add("d-none")
+                        }
+                    })
+                }else{
+                    order_list.forEach(order => {
+                        order.classList.remove("d-none");
+                    })
+                }
+                });
+            
