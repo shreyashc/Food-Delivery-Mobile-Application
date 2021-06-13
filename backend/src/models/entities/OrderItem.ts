@@ -20,8 +20,16 @@ export class OrderItem extends BaseEntity {
   @OneToOne(() => Item, { onDelete: "SET NULL" })
   item: Item;
 
+  //in case item gets deleted
   @Column()
   itemName: string;
+
+  @Column()
+  itemDescription: string;
+
+  //incase item price ...
+  @Column()
+  itemPrice: number;
 
   @Column({ default: 1 })
   quantity!: number;

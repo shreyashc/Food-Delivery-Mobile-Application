@@ -144,7 +144,13 @@ const createOrder = async (
 
   await OrderItem.insert(
     ordered_items.map((itm) => {
-      return { orderId: order.id, itemId: itm.id, itemName: itm.title };
+      return {
+        orderId: order.id,
+        itemId: itm.id,
+        itemName: itm.title,
+        itemDescription: itm.description,
+        itemPrice: itm.price,
+      };
     })
   );
 
