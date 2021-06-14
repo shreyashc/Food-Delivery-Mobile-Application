@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import * as React from "react";
@@ -6,6 +7,7 @@ import { Button, Icon } from "react-native-elements";
 
 import { Text, View } from "../components/Themed";
 import { AppContext } from "../contexts/contexts";
+import { ProfileParamList } from "../types";
 
 export default function ProfileScreen() {
   const { appState, dispatch } = React.useContext(AppContext);
@@ -13,33 +15,50 @@ export default function ProfileScreen() {
   const navigation = useNavigation<StackNavigationProp<any>>();
   return (
     <View style={{ flex: 1 }}>
-      <View style={styles.profileContainer}>
-        <Icon
-          style={styles.profileIcon}
-          reverse
-          name="person-outline"
-          type="ionicon"
-          color="#ff1200"
-          size={30}
-        />
-        <View style={styles.userDetails}>
-          <Text style={styles.userName}>
-            {appState?.user?.customer?.displayName}
-          </Text>
-          <Text style={styles.userEmail}>{appState?.user?.email}</Text>
-        </View>
-      </View>
-      <View style={{ padding: 15 }}>
-        <TouchableOpacity style={styles.btn} activeOpacity={0.7}>
+      <View style={styles.profileWrapper}>
+        <View style={styles.profileContainer}>
           <Icon
             style={styles.profileIcon}
             reverse
-            name="cart"
+            name="person-outline"
             type="ionicon"
-            size={15}
+            color="#ff1200"
+            size={30}
           />
-          <Text style={styles.btnText}>Cart</Text>
-        </TouchableOpacity>
+          <View style={styles.userDetails}>
+            <Text style={styles.userName}>
+              {appState?.user?.customer?.displayName}
+            </Text>
+            <Text style={styles.userEmail}>{appState?.user?.email}</Text>
+          </View>
+          <View style={{ flex: 1, alignItems: "flex-end" }}>
+            <Ionicons
+              name="ios-pencil"
+              style={styles.profileIcon}
+              size={25}
+              color="#4630eb"
+              onPress={() => {
+                navigation.push("EditProfileScreen");
+              }}
+            />
+          </View>
+        </View>
+        <View style={styles.moreDetails}>
+          <Text style={styles.detailsHead}>
+            Phone:
+            <Text style={styles.detailsTxt}>
+              {"  +91 " + appState?.user?.customer?.phone}
+            </Text>
+          </Text>
+          <Text style={styles.detailsHead}>
+            Address:
+            <Text style={styles.detailsTxt}>
+              {"  " + appState?.user?.customer?.address}
+            </Text>
+          </Text>
+        </View>
+      </View>
+      <View style={{ padding: 15 }}>
         <TouchableOpacity
           style={styles.btn}
           activeOpacity={0.7}
@@ -66,16 +85,25 @@ export default function ProfileScreen() {
           />
           <Text style={styles.btnText}>About</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.btn}
+          activeOpacity={0.7}
+          onPress={() => {
+            dispatch({ type: "LOGOUT" });
+            navigation.replace("Login");
+          }}
+        >
+          <Icon
+            style={styles.profileIcon}
+            reverse
+            name="power"
+            type="feather"
+            size={15}
+            color="#ff1200"
+          />
+          <Text style={styles.btnText}>Logout</Text>
+        </TouchableOpacity>
       </View>
-      <Button
-        title="Logout"
-        style={{ width: "100%" }}
-        buttonStyle={{ backgroundColor: "#777777", margin: 10 }}
-        onPress={() => {
-          dispatch({ type: "LOGOUT" });
-          navigation.replace("Login");
-        }}
-      />
     </View>
   );
 }
@@ -95,6 +123,8 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+  },
+  profileWrapper: {
     padding: 10,
     margin: 5,
     marginTop: 10,
@@ -102,6 +132,18 @@ const styles = StyleSheet.create({
     shadowOffset: { height: 2, width: 1 },
     shadowColor: "#ccc",
     shadowOpacity: 0.9,
+  },
+  moreDetails: {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+  },
+  detailsHead: {
+    fontWeight: "600",
+    fontSize: 15,
+    marginBottom: 5,
+  },
+  detailsTxt: {
+    fontWeight: "300",
   },
   profileIcon: {
     marginRight: 15,
@@ -117,5 +159,6 @@ const styles = StyleSheet.create({
   },
   btnText: {
     fontSize: 17,
+    marginLeft: 10,
   },
 });

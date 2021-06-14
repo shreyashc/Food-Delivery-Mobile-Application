@@ -25,4 +25,5 @@ export type OrderParamList = {
 
 export type ProfileParamList = {
   ProfileScreen: undefined;
+  EditProfileScreen: undefined;
 };

@@ -10,6 +10,7 @@ import * as React from "react";
 
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
+import EditProfileScreen from "../screens/EditProfileScreen";
 import MyOrdersScreen from "../screens/MyOrdersScreen";
 import OrderScreen from "../screens/OrderScreen";
 import ProfileScreen from "../screens/ProfileScreen";
@@ -87,6 +88,20 @@ function ProfileNavigator() {
         component={ProfileScreen}
         options={{
           headerTitle: "Profile",
+          headerStyle: {
+            backgroundColor: "#ff1200",
+          },
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+        }}
+      />
+      <ProfileStack.Screen
+        name="EditProfileScreen"
+        component={EditProfileScreen}
+        options={{
+          headerTitle: "Edit Profile",
           headerStyle: {
             backgroundColor: "#ff1200",
           },

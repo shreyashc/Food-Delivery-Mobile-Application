@@ -21,6 +21,7 @@ export default {
           Profile: {
             screens: {
               ProfileScreen: "profile",
+              EditProfileScreen: "edit-profile",
             },
           },
         },
