@@ -18,29 +18,32 @@ export class Restaurant extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: true })
+  @Column()
   displayName!: string;
 
-  @Column({ type: "text", nullable: true })
+  @Column({ type: "text" })
   phone!: string;
 
-  @Column({ type: "text", nullable: true })
+  @Column({ type: "text" })
   address!: string;
 
   @Column({ type: "text", nullable: true })
   imgUrl!: string;
 
-  @Column({ nullable: true })
+  @Column()
   city!: string;
 
-  @Column({ type: "decimal", nullable: true })
+  @Column({ type: "decimal" })
   rating!: number;
 
-  @Column({ nullable: true })
+  @Column()
   category!: string;
 
-  @Column({ nullable: true })
+  @Column()
   isVeg!: boolean;
+
+  @Column({ default: false })
+  activated!: boolean;
 
   @OneToOne(() => User, (user) => user.restaurant, { onDelete: "CASCADE" })
   @JoinColumn()
@@ -53,6 +56,7 @@ export class Restaurant extends BaseEntity {
   userId!: number;
 
   @OneToMany(() => Order, (order) => order.restaurant)
+  @JoinColumn()
   orders: Order[];
 
   /* time stamps */

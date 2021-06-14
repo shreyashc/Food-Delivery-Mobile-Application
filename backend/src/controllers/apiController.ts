@@ -19,6 +19,7 @@ const getNearestRestaurants = async (
   const city: string = (req.query.city as string) || "hassan";
   const restaurants = await Restaurant.find({
     city,
+    activated: true,
   });
 
   res.status(200).json(restaurants);

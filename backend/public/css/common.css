@@ -9,3 +9,7 @@ h1.page-heading {
 .text-orange {
   color: #ff500d;
 }
+
+.disabled-img {
+  filter: grayscale(100%);
+}

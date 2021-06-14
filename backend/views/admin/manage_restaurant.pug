@@ -1,0 +1,130 @@
+doctype html
+html
+    head
+        include ../includes/head.pug
+        title Manage Restaurant
+        link(rel="stylesheet" type="text/css" href='/css/common.css')
+        link(rel="stylesheet" type="text/css" href='/css/restaurant/dashboard.css')
+
+    
+
+    body
+        include ../includes/navbar.pug
+
+        h1.page-heading Restaurant Overview
+        .container.d-flex.justify-content-between.bg-white.p-4.rounded.shadow.mb-4.flex-wrap
+            .det.flex-grow-1
+                h2.mb-0= restaurant.displayName
+                p.mb-0= restaurant.address
+                p= restaurant.city
+                p Rating: #{restaurant.rating}
+
+                h5.mb-1 Manager:
+                .p-1
+                    p.mb-0 Email: #{restaurant.user.email}
+                    p.mb-0 Phone: #{restaurant.phone}
+
+            div
+                img(src=restaurant.imgUrl, alt="restaurant image" style="width: auto; height: 195px;" class="img-thumbnail ")
+
+        .container.bg-white.p-4.rounded.shadow.mb-5
+            ul(class="nav nav-tabs" id="myTab" role="tablist")
+                li(class="nav-item" role="presentation")
+                    button(class="nav-link active" id="orders-tab" data-bs-toggle="tab" data-bs-target="#orders" type="button" role="tab") Orders
+                li(class="nav-item" role="presentation")
+                    button(class="nav-link" id="menu-tab" data-bs-toggle="tab" data-bs-target="#menu" type="button" role="tab" ) Menu
+                li(class="nav-item" role="presentation")
+                    button(class="nav-link" id="menu-tab" data-bs-toggle="tab" data-bs-target="#manage" type="button" role="tab" ) Manage
+
+            
+            div(class="tab-content p-2" id="myTabContent")
+                div(class="tab-pane fade show active" id="orders" role="tabpanel" )
+                    
+                    .list-group.my-2
+                        for order in restaurant.orders
+                            a.list-group-item.list-group-item-action.order-item 
+                                div
+                                    .d-flex
+                                        if !order.paidToRestaurant
+                                            input(class="form-check-input p-2 me-2" type="checkbox" onchange="handleCheckbox(event)" data-orderid=order.id)
+                                        h6.fw-bold #{order.customer.displayName} ordered from #{restaurant.displayName} (₹#{order.totalAmount})
+                                    .px-3
+                                        if order.orderStatus == 0
+                                            span.badge.rounded-pill.bg-primary.text-sm.mx-2 Pending
+                                        else if order.orderStatus == 2
+                                            span.badge.rounded-pill.bg-dark.text-sm.mx-2 Fulfiled
+                                        else
+                                            span.badge.rounded-pill.bg-warning.text-sm.mx-2 Out of delivery
+                                        
+                                        if !order.paidToRestaurant
+                                            span.badge.rounded-pill.bg-info.text-sm.me-2 Amount not transferred
+                                        else
+                                            span.badge.rounded-pill.bg-success.text-sm.me-2 Amount transferred
+                                        span.text-muted from Foodzy
+                    .p-1.d-flex.justify-content-end
+                        button(type="button" id="markbtn" class="btn btn-primary" disabled) Mark selected as paid 
+                    p.text-muted.text-end  (Foodzy to restaurant)
+
+                div(class="tab-pane fade" id="menu" role="tabpanel")
+                        .list-group
+                            for item in restaurant.items
+                                a.list-group-item.list-group-item-action.order-item
+                                    h6.fw-bold #{item.title} (₹#{item.price})
+                                    p.mb-0 #{item.description}
+        
+                div(class="tab-pane fade" id="manage" role="tabpanel")
+                    if !restaurant.activated
+                        .p-2.clearfix
+                            h5.text-primary Activate this Restaurant
+                            p after activation  this restaurant will be listed in available restaurants
+                            a.float-end(href=`/admin/activate/${restaurant.id}` class="btn btn-primary") Activate
+                    .p-2.clearfix
+                        h5.text-danger Delete restaurant permanently
+                        p This is one time action after deleting restaurant will be completely removed form the platform
+                        a.float-end(href=`/admin/delete/${restaurant.user.id}` class="btn btn-danger") Delete
+
+        script.
+            let selectedOrders = [];
+            const markBtn = document.getElementById("markbtn");
+            const url = 'http://localhost:4000/admin/mark-as-paid';
+            const handleCheckbox = (e) =>{
+                const orderid = e.target.dataset.orderid;
+                if(!selectedOrders.includes(orderid)){
+                    selectedOrders = [...selectedOrders,orderid];
+                }else{
+                    selectedOrders = selectedOrders.filter(oid => oid !== orderid );
+                }
+
+                if(selectedOrders.length){
+                    markBtn.disabled = false;
+                }else{
+                    markBtn.disabled = true;
+                }
+
+            }
+            
+            const submitChanges = async() => {
+                const data = {
+                    orderids: selectedOrders,
+                    restaurantid:#{restaurant.id}
+                }
+                const res = await fetch(url, {
+                        method: 'POST',
+                        mode: 'cors',
+                        cache: 'no-cache',
+                        credentials: 'include',
+                        headers: {
+                        'Content-Type': 'application/json'
+                        },
+                        redirect: 'follow',
+                        referrerPolicy: 'no-referrer',
+                        body: JSON.stringify(data)
+                    });
+                if (res.redirected) {
+                    window.location.href = res.url;
+                    }
+                console.log(res);
+            }
+
+            markBtn.addEventListener('click',submitChanges);
+            

@@ -11,6 +11,8 @@ html
         include ../includes/navbar.pug
 
         h1.page-heading Dashboard
+        if !restaurant.activated
+            .h5.text-danger.text-center  Restaurnant not activated, Your Restaurant will not be listed on our platform untill admin verifies it.
         .container.d-flex.justify-content-between.bg-white.p-4.rounded.shadow.mb-4.flex-wrap
             .det.flex-grow-1
                 h2= restaurant.displayName

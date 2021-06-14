@@ -1,0 +1,27 @@
+doctype html
+html
+    head
+        include ../includes/head.pug
+        title Admin Dashboard
+        link(rel="stylesheet" type="text/css" href='/css/common.css')
+        link(rel="stylesheet" type="text/css" href='/css/restaurant/dashboard.css')
+
+
+    body
+        include ../includes/navbar.pug
+
+        h1.page-heading Admin Dashboard
+        
+        div.container
+            div.list-group.my-5
+                a.list-group-item.list-group-item-action(href="all_restaurants") 
+                    div
+                        h4 All Restaurants
+                        p.text-muted View All Restaurnats
+                        
+                a.list-group-item.list-group-item-action(href="dishes") 
+                    div
+                        h4 All Orders
+                        p.text-muted view all Dishes edit/delete them.
+                        
+                
