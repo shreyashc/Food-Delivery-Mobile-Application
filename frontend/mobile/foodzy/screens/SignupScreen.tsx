@@ -1,7 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import * as React from "react";
 import {
-  ActivityIndicator,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -10,7 +9,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native";
-import { Icon, Input, Text } from "react-native-elements";
+import { Button, Icon, Input, Text } from "react-native-elements";
 import apiClient from "../api/client";
 
 export default function LoginScreen({}) {
@@ -47,8 +46,8 @@ export default function LoginScreen({}) {
       })
       .catch((err) => {
         setLoading(false);
-        setError(err.response.data.message);
-        console.log(err.response.data.message);
+        setError(err.response.data.message.message);
+        console.log(err.response.data.message.message);
       });
   };
   return (
@@ -111,18 +110,15 @@ export default function LoginScreen({}) {
               value={address}
               leftIcon={<Icon style={styles.inputIcon} name="home" />}
             />
-            <TouchableOpacity
+            <Button
               activeOpacity={0.7}
-              style={styles.button}
+              buttonStyle={styles.button}
               disabled={loading}
+              loading={loading}
               onPress={signupUser}
-            >
-              {loading ? (
-                <ActivityIndicator size="small" color="#fff" />
-              ) : (
-                <Text style={styles.btnText}>Signup</Text>
-              )}
-            </TouchableOpacity>
+              title="Signup"
+            />
+
             <TouchableOpacity
               activeOpacity={0.5}
               onPress={() => {

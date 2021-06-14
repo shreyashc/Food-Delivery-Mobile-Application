@@ -46,8 +46,9 @@ export default function PaymentScreen() {
 
     if (error) {
       Alert.alert("Error", error.message);
+    } else {
+      navigation.navigate("MyOrders");
     }
-    navigation.navigate("MyOrders");
   };
   return (
     <PaymentWrapper>

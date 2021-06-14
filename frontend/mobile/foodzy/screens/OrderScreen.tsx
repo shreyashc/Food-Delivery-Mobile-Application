@@ -2,15 +2,16 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import * as React from "react";
-import { ActivityIndicator, FlatList, Image, StyleSheet } from "react-native";
+import { FlatList, Image, RefreshControl, StyleSheet } from "react-native";
 import { SearchBar } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Text, View } from "../components/Themed";
-import { OrderParamList } from "../types";
-
 import apiClient from "../api/client";
+import Error from "../components/Error";
+import Spinner from "../components/Spinner";
+import { Text, View } from "../components/Themed";
 import { VegNonVeg } from "../components/VegNonVeg";
+import { OrderParamList } from "../types";
 
 export default function OrderScreen() {
   const navigation = useNavigation<
@@ -21,8 +22,9 @@ export default function OrderScreen() {
   const [restaurants, setRestaurants] = React.useState<RestaurnatResponse[]>(
     []
   );
+  const [refreshing, setRefreshing] = React.useState(false);
 
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(false);
 
   const [filteredRestaurants, setfilteredRestaurants] = React.useState<
@@ -44,8 +46,7 @@ export default function OrderScreen() {
     );
   };
 
-  React.useEffect(() => {
-    setLoading(true);
+  const getNearestRestaurants = () => {
     apiClient
       .get<RestaurnatResponse[]>("/nearest_restautants")
       .then((res) => {
@@ -59,6 +60,10 @@ export default function OrderScreen() {
         setError(true);
         console.log(err);
       });
+  };
+
+  React.useEffect(() => {
+    getNearestRestaurants();
   }, []);
 
   return (
@@ -82,30 +87,20 @@ export default function OrderScreen() {
         value={searchQuery}
       />
 
-      {!loading && error && (
-        <View style={styles.info}>
-          <Text style={{ textAlign: "center", fontSize: 16, color: "#fb3877" }}>
-            Oops Something Went Wrong!
-          </Text>
-        </View>
-      )}
+      {!loading && error && <Error />}
 
-      {loading && !error && (
-        <View style={styles.info}>
-          <ActivityIndicator
-            style={{ marginTop: 20, marginBottom: 8 }}
-            size="large"
-            color="#fd3d3d"
-          />
-          <Text style={{ textAlign: "center", fontSize: 16, color: "#fb3877" }}>
-            Spinning the wheel of fortune...
-          </Text>
-        </View>
-      )}
+      {loading && !error && <Spinner />}
+
       {!error && !loading && (
         <FlatList
           data={filteredRestaurants}
           style={{ padding: 10, marginTop: 5 }}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={getNearestRestaurants}
+            />
+          }
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
             <TouchableOpacity

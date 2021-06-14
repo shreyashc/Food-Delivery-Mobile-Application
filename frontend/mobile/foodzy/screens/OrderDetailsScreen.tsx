@@ -8,6 +8,8 @@ import {
   StyleSheet,
 } from "react-native";
 import apiClient, { setClientToken } from "../api/client";
+import Error from "../components/Error";
+import Spinner from "../components/Spinner";
 import { Text, View } from "../components/Themed";
 import {
   orderStatus,
@@ -34,12 +36,10 @@ export default function OrdersDetailsScreen() {
 
   const fetchMyOrder = () => {
     setClientToken(appState.token);
-    console.log("fetching");
 
     apiClient
       .get<Order>(`/orderdetails/${orderId}`)
       .then((res) => {
-        console.log(res.data);
         setOrder(res.data);
         setLoading(false);
         setError(false);
@@ -74,14 +74,16 @@ export default function OrdersDetailsScreen() {
               />{" "}
               {paymentStatus[order.paymentStatus]}
             </Text>
-            <Text style={styles.statusText}>
-              <Ionicons
-                name="fast-food-outline"
-                color={orderStatusColors[order.orderStatus]}
-                size={18}
-              />{" "}
-              {orderStatus[order.orderStatus]}
-            </Text>
+            {order.paymentStatus !== 0 && (
+              <Text style={styles.statusText}>
+                <Ionicons
+                  name="fast-food-outline"
+                  color={orderStatusColors[order.orderStatus]}
+                  size={18}
+                />{" "}
+                {orderStatus[order.orderStatus]}
+              </Text>
+            )}
             <Text style={styles.statusText}>
               <Ionicons name="earth-outline" color="#777777" size={18} />{" "}
               Delivering to <Text>{order.deliveryAddress}</Text>
@@ -99,23 +101,9 @@ export default function OrdersDetailsScreen() {
 
   return (
     <View style={styles.container}>
-      {!loading && error && (
-        <View style={styles.info}>
-          <Text style={{ textAlign: "center", fontSize: 16, color: "#fb3877" }}>
-            Oops Something Went Wrong!
-          </Text>
-        </View>
-      )}
+      {!loading && error && <Error />}
 
-      {loading && !error && (
-        <View style={styles.info}>
-          <ActivityIndicator
-            style={{ marginTop: 20, marginBottom: 8 }}
-            size="large"
-            color="#fd3d3d"
-          />
-        </View>
-      )}
+      {loading && !error && <Spinner />}
 
       {!error && order && (
         <View>

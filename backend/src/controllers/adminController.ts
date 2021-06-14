@@ -4,7 +4,7 @@ import { getConnection, getRepository } from "typeorm";
 import { Order, Restaurant, User } from "../models/entities";
 
 const allRestaurants = async (_req: Request, res: Response) => {
-  const restaurants = await Restaurant.find();
+  const restaurants = await Restaurant.find({ order: { createdAt: "DESC" } });
   return res.render("admin/all_restaurants.pug", {
     restaurants: restaurants,
     nav: { navbutton: "Logout", link: "/auth/logout" },

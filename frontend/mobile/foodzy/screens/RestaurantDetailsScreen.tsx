@@ -1,23 +1,23 @@
+import { Ionicons } from "@expo/vector-icons";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import * as React from "react";
 import {
   FlatList,
+  Image,
+  Platform,
   SafeAreaView,
   StyleSheet,
-  Image,
   TouchableOpacity,
-  ActivityIndicator,
-  Platform,
 } from "react-native";
 import { BottomSheet, Button } from "react-native-elements";
-import { Ionicons } from "@expo/vector-icons";
-import { Text, View } from "../components/Themed";
-import { OrderParamList, RootStackParamList } from "../types";
-
 import apiClient, { setClientToken } from "../api/client";
+import Error from "../components/Error";
+import Spinner from "../components/Spinner";
+import { Text, View } from "../components/Themed";
 import { VegNonVeg } from "../components/VegNonVeg";
 import { AppContext } from "../contexts/contexts";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { OrderParamList, RootStackParamList } from "../types";
 
 export default function RestaurantDetailsScreen() {
   //route
@@ -41,7 +41,6 @@ export default function RestaurantDetailsScreen() {
   const [error, setError] = React.useState(false);
 
   const [orderLoading, setOrderLoading] = React.useState(false);
-  const [orderError, setOrderError] = React.useState(false);
 
   React.useEffect(() => {
     setLoading(true);
@@ -109,74 +108,52 @@ export default function RestaurantDetailsScreen() {
       });
   };
 
+  const Header = ({ resDet }: HeaderProp) => (
+    <>
+      <View style={styles.resDetails}>
+        <Text style={styles.title}>{resDet?.displayName}</Text>
+        <Text style={styles.description}>{resDet?.category}</Text>
+        <Text style={styles.address}>{resDet?.address}</Text>
+        <Text style={styles.rating}>Rating: {resDet?.rating}</Text>
+        {/* saftey Images */}
+        <View style={styles.safWrap}>
+          <Image
+            source={require("../assets/images/saf.jpg")}
+            resizeMode="contain"
+            style={styles.safImg}
+          />
+          <Image
+            source={require("../assets/images/saf2.jpg")}
+            resizeMode="contain"
+            style={styles.safImg}
+          />
+        </View>
+      </View>
+      <View style={styles.menu}>
+        <Ionicons name="fast-food-outline" size={24} />
+        <Text style={styles.menuHead}>Menu</Text>
+      </View>
+    </>
+  );
+
   //to fetch
 
   return (
     <>
       <SafeAreaView style={styles.container}>
-        {/* restaurant details  */}
+        {!loading && error && <Error />}
 
-        {!loading && error && (
-          <View style={styles.info}>
-            <Text
-              style={{ textAlign: "center", fontSize: 16, color: "#fb3877" }}
-            >
-              Oops Something Went Wrong!
-            </Text>
-          </View>
-        )}
+        {loading && !error && <Spinner />}
 
-        {loading && !error && (
-          <View style={styles.info}>
-            <ActivityIndicator
-              style={{ marginTop: 20, marginBottom: 8 }}
-              size="large"
-              color="#fd3d3d"
-            />
-            <Text
-              style={{ textAlign: "center", fontSize: 16, color: "#fb3877" }}
-            >
-              {"Spinning the wheel of fortune..."}
-            </Text>
-          </View>
-        )}
-
-        {!loading && !error && (
+        {!loading && !error && resDet && (
           <View style={styles.wrapper}>
-            <View style={styles.resDetails}>
-              <Text style={styles.title}>{resDet?.displayName}</Text>
-              <Text style={styles.description}>{resDet?.category}</Text>
-              <Text style={styles.address}>{resDet?.address}</Text>
-              <Text style={styles.rating}>Rating: {resDet?.rating}</Text>
-
-              {/* saftey Images */}
-              <View style={styles.safWrap}>
-                <Image
-                  source={require("../assets/images/saf.jpg")}
-                  resizeMode="contain"
-                  style={styles.safImg}
-                />
-                <Image
-                  source={require("../assets/images/saf2.jpg")}
-                  resizeMode="contain"
-                  style={styles.safImg}
-                />
-              </View>
-            </View>
-
-            {/* restaurant details end  */}
-
-            <View style={styles.menu}>
-              <Ionicons name="fast-food-outline" size={24} />
-              <Text style={styles.menuHead}>Menu</Text>
-            </View>
-
             {/* menu list  */}
             <View style={{ flex: 1 }}>
               <FlatList
                 data={items}
                 keyExtractor={(item) => item.id.toString()}
-                style={{ padding: 5, marginTop: 8 }}
+                style={{ padding: 5, marginTop: 2 }}
+                ListHeaderComponent={<Header resDet={resDet} />}
                 ListFooterComponent={<View style={{ height: 50 }} />}
                 renderItem={({ item }) => (
                   <View style={{ flex: 1 }}>
@@ -399,6 +376,7 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     padding: 10,
+    paddingTop: 1,
     flex: 1,
   },
   resDetails: {
@@ -555,4 +533,8 @@ export interface RestaurantDetailsResponse {
   rating: string | number;
   updatedAt: string;
   userId: number;
+}
+
+interface HeaderProp {
+  resDet: RestaurantDetailsResponse;
 }

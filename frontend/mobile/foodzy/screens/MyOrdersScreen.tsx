@@ -4,17 +4,19 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import * as React from "react";
 import {
   FlatList,
-  StyleSheet,
-  TouchableOpacity,
   Image,
   RefreshControl,
-  ActivityIndicator,
+  StyleSheet,
+  TouchableOpacity,
 } from "react-native";
 import apiClient, { setClientToken } from "../api/client";
-import { View, Text } from "../components/Themed";
-import { paymentStatusColors, paymentStatus } from "../constants/Status";
+import Error from "../components/Error";
+import Spinner from "../components/Spinner";
+import { Text, View } from "../components/Themed";
+import { paymentStatus, paymentStatusColors } from "../constants/Status";
 import { AppContext } from "../contexts/contexts";
 import { RootStackParamList } from "../types";
+import { getFormattedDate } from "../utils/dateUtils";
 import { RestaurantDetailsResponse } from "./RestaurantDetailsScreen";
 
 export default function MyOrdersScreen() {
@@ -32,12 +34,10 @@ export default function MyOrdersScreen() {
 
   const fetchMyOrders = () => {
     setClientToken(appState.token);
-    console.log("fetching");
 
     apiClient
       .get<Order[]>("/myorders")
       .then((res) => {
-        console.log(res.data);
         setOrders(res.data);
         setLoading(false);
         setError(false);
@@ -53,33 +53,12 @@ export default function MyOrdersScreen() {
     fetchMyOrders();
   }, []);
 
-  const getFormattedDate = (dateStr: string) => {
-    let date = new Date(dateStr);
-    return date.getDate() + "-" + date.getMonth() + "-" + date.getFullYear();
-  };
-
   return (
     <View style={{ flex: 1 }}>
-      {!loading && error && (
-        <View style={styles.info}>
-          <Text style={{ textAlign: "center", fontSize: 16, color: "#fb3877" }}>
-            Oops Something Went Wrong!
-          </Text>
-        </View>
-      )}
+      {!loading && error && <Error />}
 
-      {loading && !error && (
-        <View style={styles.info}>
-          <ActivityIndicator
-            style={{ marginTop: 20, marginBottom: 8 }}
-            size="large"
-            color="#fd3d3d"
-          />
-          <Text style={{ textAlign: "center", fontSize: 16, color: "#fb3877" }}>
-            {"Spinning the wheel of fortune..."}
-          </Text>
-        </View>
-      )}
+      {loading && !error && <Spinner />}
+
       {!error && (
         <FlatList
           data={orders}

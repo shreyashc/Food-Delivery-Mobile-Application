@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native";
-import { Icon, Input, Text } from "react-native-elements";
+import { Button, Icon, Input, Text } from "react-native-elements";
 import apiClient from "../api/client";
 import { AppContext } from "../contexts/contexts";
 
@@ -21,7 +21,7 @@ export default function LoginScreen({}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { _, dispatch } = React.useContext(AppContext);
+  const { dispatch } = React.useContext(AppContext);
 
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
@@ -72,6 +72,8 @@ export default function LoginScreen({}) {
               placeholder="Email"
               onChangeText={setEmail}
               value={email}
+              keyboardType="email-address"
+              autoCompleteType="email"
               leftIcon={<Icon style={styles.inputIcon} name="email" />}
             />
             <Input
@@ -89,17 +91,15 @@ export default function LoginScreen({}) {
                 Invalid Username password
               </Text>
             )}
-            <TouchableOpacity
+            <Button
               activeOpacity={0.7}
-              style={styles.button}
+              buttonStyle={styles.button}
               onPress={loginUser}
-            >
-              {loading ? (
-                <ActivityIndicator size="small" color="#fff" />
-              ) : (
-                <Text style={styles.btnText}>Login</Text>
-              )}
-            </TouchableOpacity>
+              title="Login"
+              loading={loading}
+              disabled={loading}
+            />
+
             <TouchableOpacity
               activeOpacity={0.5}
               disabled={loading}
