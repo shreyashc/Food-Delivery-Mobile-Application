@@ -84,9 +84,13 @@ const login_post = async (req: Request, res: Response) => {
       httpOnly: true,
       maxAge: MAX_AGE * 1000,
     });
-    if (user.role === "restaurant")
+
+    if (user.role === "restaurant") {
       return res.redirect("/restaurant/dashboard");
-    res.status(200).json({ user, token });
+    }
+    if (user.role === "admin") {
+      return res.redirect("/admin/dashboard");
+    }
   } catch (error) {
     console.log(error);
     res.status(400).render("login.pug", {

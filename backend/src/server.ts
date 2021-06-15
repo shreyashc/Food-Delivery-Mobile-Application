@@ -6,6 +6,11 @@ import * as path from "path";
 import { createConnection } from "typeorm";
 import { env } from "./env";
 import {
+  requireAdmin,
+  requireAuth,
+  requireRestaurant,
+} from "./middleware/authMiddleware";
+import {
   Customer,
   Item,
   Restaurant,
@@ -23,6 +28,7 @@ import RestaurantRoutes from "./routes/restaurant";
 const main = async () => {
   const app = express();
 
+  //don't parse body for webhook
   app.use((req, res, next) => {
     if (req.originalUrl.includes("webhook")) {
       next();
@@ -34,9 +40,13 @@ const main = async () => {
   app.use(express.urlencoded({ extended: true }));
   app.use(cookieParser());
 
+  //Pug View Engine
   app.set("views", path.join(__dirname, "../views"));
   app.set("view engine", "pug");
 
+  /**
+   * cors
+   */
   app.use(
     cors({
       origin: function (origin, callback) {
@@ -64,12 +74,12 @@ const main = async () => {
   );
 
   app.set("trust proxy", true);
-
   app.use(express.static(path.join(__dirname, "../public")));
 
-  console.log(env.db.synchronize);
-
-  const conn = await createConnection({
+  /**
+   * typeORM connection
+   */
+  await createConnection({
     type: "postgres",
     host: env.db.host,
     port: env.db.port,
@@ -84,14 +94,16 @@ const main = async () => {
     },
   });
 
-  console.log("db connection = " + conn.isConnected);
-
+  /**
+   * Routes
+   */
   app.use("/", HomeRoutes);
   app.use("/auth", AuthRoutes);
-  app.use("/restaurant", RestaurantRoutes);
+  app.use("/restaurant", requireAuth, requireRestaurant, RestaurantRoutes);
+  app.use("/admin", requireAuth, requireAdmin, AdminRoutes);
   app.use("/api/v1", ApiRoutes);
-  app.use("/admin", AdminRoutes);
 
+  //not found route
   app.use((_req: Request, _res: Response, next: NextFunction) => {
     next(new httpErrors.NotFound());
   });
@@ -103,7 +115,7 @@ const main = async () => {
         status: err.status || 500,
         message: err.message,
       });
-      console.log("last->>>>", err.message);
+      console.log(err.message);
     }
   );
 

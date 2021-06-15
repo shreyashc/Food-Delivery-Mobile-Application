@@ -11,12 +11,11 @@ router.get("/dashboard", (_req, res, _next) =>
 );
 
 router.get("/all_restaurants", AdminController.allRestaurants);
-
 router.get("/manage_restaurant/:id", AdminController.completeRestaurantDetails);
-
 router.get("/delete/:id", AdminController.deleteRestaurant);
 router.get("/activate/:id", AdminController.activateRestaurant);
 
+//payment
 router.post("/mark-as-paid/", AdminController.markAsPaid);
 
 export default router;

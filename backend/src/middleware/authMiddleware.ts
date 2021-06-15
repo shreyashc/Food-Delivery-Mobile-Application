@@ -60,4 +60,24 @@ const requireAuthApi = (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export { requireAuth, requireAuthApi };
+const requireAdmin = (_req: Request, res: Response, next: NextFunction) => {
+  if (res.locals.user.role === "admin") {
+    next();
+  } else {
+    next(new httpErrors.Unauthorized());
+  }
+};
+
+const requireRestaurant = (
+  _req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (res.locals.user.role === "restaurant") {
+    next();
+  } else {
+    next(new httpErrors.Unauthorized());
+  }
+};
+
+export { requireAuth, requireAuthApi, requireAdmin, requireRestaurant };

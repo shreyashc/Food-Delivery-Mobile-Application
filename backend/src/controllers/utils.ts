@@ -4,12 +4,24 @@ import argon2 from "argon2";
 import { Customer, Restaurant, User } from "../models/entities";
 
 const MAX_AGE = 21 * 12 * 30 * 24 * 60 * 60;
+
+/**
+ * @param  {number} id
+ * @param  {string} role
+ * @param  {string} email
+ */
 const generateToken = (id: number, role: string, email: string) => {
   return jwt.sign({ id, role, email }, env.app.accessTokenSecret, {
     expiresIn: MAX_AGE,
   });
 };
 
+/**
+ * @param  {string} email
+ * @param  {string} plainPassword
+ * @param  {"customer"|"restaurant"} role
+ * @param  {{restaurantDet?:restaurantDetIntf;customerDet?:customerDetInt;}} options
+ */
 const signUpUser = async (
   email: string,
   plainPassword: string,
@@ -55,6 +67,10 @@ const signUpUser = async (
   }
 };
 
+/**
+ * @param  {string} email
+ * @param  {string} plainPassword
+ */
 const loginUser = async (email: string, plainPassword: string) => {
   try {
     const user = await User.findOne({
