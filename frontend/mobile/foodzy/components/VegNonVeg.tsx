@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Text, Image, View } from "react-native";
 
-export const VegNonVeg: React.FC<Props> = ({ isVeg }) => {
+export const VegNonVeg: React.FC<Props> = ({ isVeg, showTxt = true }) => {
   return (
     <View style={{ padding: 5, flexDirection: "row" }}>
       {isVeg ? (
@@ -12,10 +12,11 @@ export const VegNonVeg: React.FC<Props> = ({ isVeg }) => {
             style={{
               height: 18,
               width: 18,
-              marginRight: 10,
             }}
           />
-          <Text style={{ marginRight: 8 }}>Veg</Text>
+          {showTxt && (
+            <Text style={{ marginRight: 8, marginLeft: 8 }}>Veg</Text>
+          )}
         </>
       ) : (
         <>
@@ -25,10 +26,11 @@ export const VegNonVeg: React.FC<Props> = ({ isVeg }) => {
             style={{
               height: 18,
               width: 18,
-              marginRight: 10,
             }}
           />
-          <Text style={{ marginRight: 8 }}>Non-Veg</Text>
+          {showTxt && (
+            <Text style={{ marginRight: 8, marginLeft: 8 }}>Non-Veg</Text>
+          )}
         </>
       )}
     </View>
@@ -37,4 +39,5 @@ export const VegNonVeg: React.FC<Props> = ({ isVeg }) => {
 
 interface Props {
   isVeg: boolean;
+  showTxt?: boolean;
 }

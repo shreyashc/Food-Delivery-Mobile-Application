@@ -27,3 +27,14 @@ export type ProfileParamList = {
   ProfileScreen: undefined;
   EditProfileScreen: undefined;
 };
+
+export interface Item {
+  category: string;
+  description: string;
+  id: number;
+  imgUrl: string;
+  isVeg: boolean;
+  price: number;
+  restaurantId: number;
+  title: string;
+}

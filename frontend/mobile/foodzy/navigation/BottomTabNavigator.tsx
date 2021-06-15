@@ -89,7 +89,7 @@ function ProfileNavigator() {
         options={{
           headerTitle: "Profile",
           headerStyle: {
-            backgroundColor: "#ff1200",
+            backgroundColor: "#ff3c58",
           },
           headerTintColor: "#fff",
           headerTitleStyle: {
@@ -103,7 +103,7 @@ function ProfileNavigator() {
         options={{
           headerTitle: "Edit Profile",
           headerStyle: {
-            backgroundColor: "#ff1200",
+            backgroundColor: "#ff3c58",
           },
           headerTintColor: "#fff",
           headerTitleStyle: {

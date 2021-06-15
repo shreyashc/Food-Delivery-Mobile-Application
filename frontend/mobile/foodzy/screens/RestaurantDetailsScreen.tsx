@@ -7,17 +7,19 @@ import {
   Image,
   Platform,
   SafeAreaView,
+  StatusBar,
   StyleSheet,
-  TouchableOpacity,
 } from "react-native";
-import { BottomSheet, Button } from "react-native-elements";
 import apiClient, { setClientToken } from "../api/client";
+import Cart from "../components/Cart";
 import Error from "../components/Error";
+import FloatingCartIndicator from "../components/FloatingCartIndicator";
+import MenuItem from "../components/MenuItem";
 import Spinner from "../components/Spinner";
 import { Text, View } from "../components/Themed";
-import { VegNonVeg } from "../components/VegNonVeg";
+
 import { AppContext } from "../contexts/contexts";
-import { OrderParamList, RootStackParamList } from "../types";
+import { Item, OrderParamList, RootStackParamList } from "../types";
 
 export default function RestaurantDetailsScreen() {
   //route
@@ -156,206 +158,28 @@ export default function RestaurantDetailsScreen() {
                 ListHeaderComponent={<Header resDet={resDet} />}
                 ListFooterComponent={<View style={{ height: 50 }} />}
                 renderItem={({ item }) => (
-                  <View style={{ flex: 1 }}>
-                    <View style={styles.itemContainer}>
-                      <View style={styles.itemDet}>
-                        <Text style={styles.itemTitle}>{item.title}</Text>
-                        <Text style={styles.itemCat}>
-                          {"In " + item.category}
-                        </Text>
-                        <Text style={styles.itemPrice}>
-                          {"₹ " + item.price}
-                        </Text>
-                        <VegNonVeg isVeg={item.isVeg} />
-                        <Text style={styles.itemDes}>{item.description}</Text>
-                      </View>
-                      <View>
-                        <View style={styles.imgWrap}>
-                          <Image
-                            style={styles.itemImage}
-                            source={
-                              item.imgUrl
-                                ? { uri: item.imgUrl }
-                                : require("../assets/images/restaurant-wall.jpg")
-                            }
-                          />
-                          <View style={styles.addBtnCont}>
-                            <Button
-                              icon={
-                                <Ionicons
-                                  name="add-sharp"
-                                  color="#ea2635"
-                                  size={15}
-                                  style={{
-                                    position: "absolute",
-                                    right: 0,
-                                    top: 0,
-                                  }}
-                                />
-                              }
-                              title="ADD"
-                              titleStyle={{
-                                color: "#ea2635",
-                              }}
-                              buttonStyle={styles.plusBtn}
-                              onPress={() => {
-                                setCart((items) => {
-                                  if (!items.includes(item)) {
-                                    return [...items, item];
-                                  }
-                                  return items;
-                                });
-                              }}
-                            />
-                          </View>
-                        </View>
-                      </View>
-                    </View>
-                  </View>
+                  <MenuItem setCart={setCart} item={item} />
                 )}
               />
             </View>
           </View>
         )}
-        {/* cart 
-          .
-          . 
-        
-        */}
 
-        {Platform.OS && (
-          <BottomSheet
-            modalProps={{}}
-            isVisible={cart.length > 0 && isCartOpen}
-            containerStyle={{ backgroundColor: "rgba(0.5, 0.25, 0, 0.2)" }}
-          >
-            <View
-              style={{
-                padding: 10,
-                borderTopLeftRadius: 15,
-                borderTopRightRadius: 15,
-              }}
-            >
-              <Text
-                style={{
-                  ...styles.itemTitle,
-                  textAlign: "center",
-                  margin: 10,
-                  fontWeight: "300",
-                  fontSize: 26,
-                }}
-              >
-                Cart
-              </Text>
-              {cart.map((item) => (
-                <View key={item.id.toString()} style={styles.cartItem}>
-                  <View style={{ flex: 3 }}>
-                    <Text style={{ fontSize: 19, fontWeight: "bold" }}>
-                      {item.title}
-                    </Text>
-                    <Text>{item.description}</Text>
-                  </View>
-                  <View
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      flex: 1,
-                    }}
-                  >
-                    <Text style={{ fontSize: 20, fontWeight: "300" }}>
-                      {"+ ₹" + item.price}
-                    </Text>
-                    <TouchableOpacity
-                      style={{ padding: 5 }}
-                      onPress={() => {
-                        removeFromCart(item.id);
-                      }}
-                    >
-                      <Ionicons
-                        name="remove-circle-outline"
-                        style={{ fontSize: 25, marginLeft: "auto" }}
-                        color="red"
-                      />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              ))}
-            </View>
-
-            <View>
-              <Text
-                style={{
-                  fontSize: 20,
-                  textAlign: "right",
-                  paddingRight: 20,
-                  marginTop: 10,
-                }}
-              >
-                To Pay
-                <Text
-                  style={{
-                    color: "#f36614",
-                  }}
-                >
-                  {" "}
-                  ₹{getTotal()}{" "}
-                </Text>
-              </Text>
-            </View>
-            {/* cart button  */}
-            <View style={styles.cartFoot}>
-              <View style={{ flexGrow: 1, margin: 2 }}>
-                <Button
-                  type="outline"
-                  title="Close"
-                  titleStyle={{ color: "gray" }}
-                  buttonStyle={{ borderColor: "gray" }}
-                  onPress={() => {
-                    setIsCartOpen(false);
-                  }}
-                />
-              </View>
-              <View style={{ flexGrow: 1, margin: 2 }}>
-                <Button
-                  style={{ flexGrow: 1 }}
-                  title="Order"
-                  titleStyle={{ color: "white", fontWeight: "500" }}
-                  buttonStyle={{ borderColor: "red", backgroundColor: "red" }}
-                  disabled={orderLoading}
-                  onPress={orderItems}
-                />
-              </View>
-            </View>
-          </BottomSheet>
+        {Platform.OS !== "web" && (
+          <Cart
+            cart={cart}
+            orderItems={orderItems}
+            setIsCartOpen={setIsCartOpen}
+            removeFromCart={removeFromCart}
+            state={{ isCartOpen, orderLoading }}
+          />
         )}
       </SafeAreaView>
 
       {/* floating cart  indicator */}
 
       {cart.length !== 0 && (
-        <View style={styles.floatingCart}>
-          <Text style={{ flex: 3, fontSize: 15 }}>
-            {" "}
-            {cart.length} {cart.length < 2 ? "item" : "items"} in Cart
-          </Text>
-          <Button
-            title="View Cart "
-            type="outline"
-            titleStyle={{ fontSize: 15, color: "green", fontWeight: "500" }}
-            icon={
-              <Ionicons
-                name="cart-outline"
-                style={{ fontSize: 15, color: "green" }}
-              />
-            }
-            iconRight
-            buttonStyle={{ marginEnd: 8, borderColor: "green" }}
-            onPress={() => {
-              setIsCartOpen(true);
-            }}
-          />
-        </View>
+        <FloatingCartIndicator cart={cart} setIsCartOpen={setIsCartOpen} />
       )}
     </>
   );
@@ -382,6 +206,7 @@ const styles = StyleSheet.create({
   resDetails: {
     marginTop: 8,
     marginBottom: 8,
+    paddingTop: 15,
   },
   title: {
     fontSize: 30,
@@ -462,22 +287,7 @@ const styles = StyleSheet.create({
   },
   safWrap: { padding: 5, display: "flex", flexDirection: "row" },
   safImg: { width: 50, height: 25, marginRight: 5, marginTop: 5 },
-  floatingCart: {
-    position: "absolute",
-    bottom: 0,
-    backgroundColor: "#e9ffed",
-    padding: 13,
-    width: "95%",
-    margin: "2.5%",
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    shadowColor: "#ccc",
-    shadowOffset: { width: 1, height: 1 },
-    shadowOpacity: 0.9,
-    shadowRadius: 20,
-    borderRadius: 15,
-  },
+
   line: {
     height: 2,
     borderBottomWidth: 1,
@@ -489,35 +299,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff6f6",
     borderColor: "#ea2635",
   },
-  cartItem: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-
-    padding: 13,
-    paddingTop: 15,
-    paddingBottom: 15,
-    marginBottom: 15,
-
-    shadowColor: "#ccc",
-    shadowOffset: { width: 1, height: 1 },
-    shadowOpacity: 0.7,
-    shadowRadius: 20,
-    borderRadius: 15,
-  },
-  cartFoot: { display: "flex", flexDirection: "row", padding: 15 },
 });
-
-interface Item {
-  category: string;
-  description: string;
-  id: number;
-  imgUrl: string;
-  isVeg: boolean;
-  price: number;
-  restaurantId: number;
-  title: string;
-}
 
 export interface RestaurantDetailsResponse {
   address: string;

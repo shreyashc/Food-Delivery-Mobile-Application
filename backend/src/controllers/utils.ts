@@ -79,7 +79,7 @@ const loginUser = async (email: string, plainPassword: string) => {
     });
     if (!user) {
       const error = {
-        field: "email",
+        field: "Email",
         message: "Email not registered",
       };
       return { loggedInUser: null, error };
@@ -89,7 +89,7 @@ const loginUser = async (email: string, plainPassword: string) => {
 
     if (!valid) {
       const error = {
-        field: "password",
+        field: "Password",
         message: "incorrect password",
       };
       return { loggedInUser: null, error };

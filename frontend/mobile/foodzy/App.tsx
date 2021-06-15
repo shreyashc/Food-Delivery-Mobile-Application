@@ -19,7 +19,7 @@ export default function App() {
       <AppStateProvider>
         <SafeAreaProvider>
           <Navigation colorScheme={colorScheme} />
-          <StatusBar />
+          <StatusBar backgroundColor="#ef354f" />
         </SafeAreaProvider>
       </AppStateProvider>
     );

@@ -112,7 +112,7 @@ const RootNavigator: React.FC<Props> = ({ savedRoute }) => {
           headerShown: true,
           headerTitle: "My Orders",
           headerStyle: {
-            backgroundColor: "#ff1200",
+            backgroundColor: "#ff3c58",
           },
           headerBackTitleVisible: false,
           headerTintColor: "#fff",
@@ -129,7 +129,7 @@ const RootNavigator: React.FC<Props> = ({ savedRoute }) => {
           headerShown: true,
           headerTitle: "Order Details",
           headerStyle: {
-            backgroundColor: "#ff1200",
+            backgroundColor: "#ff3c58",
           },
           headerBackTitleVisible: false,
           headerTintColor: "#fff",
@@ -146,7 +146,7 @@ const RootNavigator: React.FC<Props> = ({ savedRoute }) => {
           headerShown: true,
           headerTitle: "Make Payment",
           headerStyle: {
-            backgroundColor: "#ff1200",
+            backgroundColor: "#ff3c58",
           },
           headerTintColor: "#fff",
           headerBackTitleVisible: false,

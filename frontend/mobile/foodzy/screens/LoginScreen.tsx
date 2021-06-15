@@ -4,6 +4,7 @@ import { useState } from "react";
 import { StackNavigationProp } from "@react-navigation/stack";
 import {
   ActivityIndicator,
+  Alert,
   Dimensions,
   Keyboard,
   KeyboardAvoidingView,
@@ -20,18 +21,19 @@ import { AppContext } from "../contexts/contexts";
 export default function LoginScreen({}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = React.useState(false);
 
   const { dispatch } = React.useContext(AppContext);
-
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState(null);
 
   const navigation = useNavigation<StackNavigationProp<any>>();
 
   const loginUser = () => {
-    if (!email || !password) return;
+    if (!email || !password) {
+      Alert.alert("All fields are required!");
+      return;
+    }
     setLoading(true);
-    setError(null);
+
     apiClient
       .post("/login", {
         email,
@@ -39,15 +41,14 @@ export default function LoginScreen({}) {
       })
       .then((res) => {
         setLoading(false);
-        setError(null);
         console.log("Success", res.data);
         dispatch({ type: "LOGIN", payload: res.data });
         navigation.replace("Root");
       })
       .catch((err) => {
         setLoading(false);
-        setError(err.response.data.message);
-        console.log(err.response.data.message);
+        const errObj = err.response.data.message;
+        Alert.alert(errObj.field, errObj.message);
       });
   };
 
@@ -84,13 +85,6 @@ export default function LoginScreen({}) {
               secureTextEntry={true}
               leftIcon={<Icon style={styles.inputIcon} name="lock" />}
             />
-            {error && (
-              <Text
-                style={{ margin: 5, textAlign: "center", color: "#777777" }}
-              >
-                Invalid Username password
-              </Text>
-            )}
             <Button
               activeOpacity={0.7}
               buttonStyle={styles.button}

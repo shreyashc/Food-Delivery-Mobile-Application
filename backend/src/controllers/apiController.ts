@@ -48,8 +48,6 @@ const getRestaurantsDetailsAndDishes = async (
   }
 };
 
-// TODO: api login signup
-
 const signUp = async (req: Request, res: Response, next: NextFunction) => {
   const {
     email,

@@ -1,6 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import * as React from "react";
 import {
+  Alert,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -20,14 +21,15 @@ export default function LoginScreen({}) {
   const [address, setAddress] = React.useState("");
 
   const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState(null);
 
   const navigation = useNavigation();
 
   const signupUser = () => {
-    if (!email || !password || !name || !phone || !address) return;
+    if (!email || !password || !name || !phone || !address) {
+      Alert.alert("All fields are required!");
+      return;
+    }
 
-    setError(null);
     setLoading(true);
 
     apiClient
@@ -38,16 +40,18 @@ export default function LoginScreen({}) {
         phone,
         address,
       })
-      .then((res) => {
+      .then(() => {
         setLoading(false);
-        setError(null);
         console.log("Success");
         navigation.navigate("Login");
       })
       .catch((err) => {
         setLoading(false);
-        setError(err.response.data.message.message);
-        console.log(err.response.data.message.message);
+        if (err.response.data.message.message) {
+          Alert.alert("Email", err.response.data.message.message);
+        } else {
+          Alert.alert("Error", "Something went Wrong");
+        }
       });
   };
   return (
@@ -79,7 +83,6 @@ export default function LoginScreen({}) {
               placeholder="Email"
               autoCompleteType="email"
               onChangeText={setEmail}
-              errorMessage={error ?? undefined}
               value={email}
               keyboardType="email-address"
               leftIcon={<Icon style={styles.inputIcon} name="email" />}

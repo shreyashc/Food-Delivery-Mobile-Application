@@ -3,11 +3,9 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import * as React from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
-import { Button, Icon } from "react-native-elements";
-
+import { Icon } from "react-native-elements";
 import { Text, View } from "../components/Themed";
 import { AppContext } from "../contexts/contexts";
-import { ProfileParamList } from "../types";
 
 export default function ProfileScreen() {
   const { appState, dispatch } = React.useContext(AppContext);
