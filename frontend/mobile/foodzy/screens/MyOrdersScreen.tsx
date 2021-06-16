@@ -39,13 +39,15 @@ export default function MyOrdersScreen() {
       .get<Order[]>("/myorders")
       .then((res) => {
         setOrders(res.data);
-        setLoading(false);
         setError(false);
       })
       .catch((err) => {
-        setLoading(false);
         setError(true);
         console.log(err);
+      })
+      .finally(() => {
+        setRefreshing(false);
+        setLoading(false);
       });
   };
 
@@ -63,7 +65,13 @@ export default function MyOrdersScreen() {
         <FlatList
           data={orders}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={fetchMyOrders} />
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={() => {
+                setRefreshing(true);
+                fetchMyOrders();
+              }}
+            />
           }
           style={{ padding: 10, marginTop: 5 }}
           keyExtractor={(item) => item.id.toString()}

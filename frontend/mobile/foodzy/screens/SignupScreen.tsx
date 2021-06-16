@@ -41,17 +41,17 @@ export default function LoginScreen({}) {
         address,
       })
       .then(() => {
-        setLoading(false);
-        console.log("Success");
         navigation.navigate("Login");
       })
       .catch((err) => {
-        setLoading(false);
         if (err.response.data.message.message) {
           Alert.alert("Email", err.response.data.message.message);
         } else {
           Alert.alert("Error", "Something went Wrong");
         }
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
   return (

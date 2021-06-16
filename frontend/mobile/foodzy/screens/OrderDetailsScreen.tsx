@@ -1,12 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import * as React from "react";
-import {
-  ActivityIndicator,
-  FlatList,
-  RefreshControl,
-  StyleSheet,
-} from "react-native";
+import { FlatList, RefreshControl, StyleSheet } from "react-native";
 import apiClient, { setClientToken } from "../api/client";
 import Error from "../components/Error";
 import Spinner from "../components/Spinner";
@@ -41,13 +36,15 @@ export default function OrdersDetailsScreen() {
       .get<Order>(`/orderdetails/${orderId}`)
       .then((res) => {
         setOrder(res.data);
-        setLoading(false);
         setError(false);
       })
       .catch((err) => {
-        setLoading(false);
         setError(true);
         console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
+        setRefreshing(false);
       });
   };
 
@@ -116,7 +113,10 @@ export default function OrdersDetailsScreen() {
               refreshControl={
                 <RefreshControl
                   refreshing={refreshing}
-                  onRefresh={fetchMyOrder}
+                  onRefresh={() => {
+                    setRefreshing(true);
+                    fetchMyOrder();
+                  }}
                 />
               }
               ListFooterComponent={<View style={{ height: 50 }} />}

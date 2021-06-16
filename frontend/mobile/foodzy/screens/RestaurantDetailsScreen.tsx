@@ -7,7 +7,6 @@ import {
   Image,
   Platform,
   SafeAreaView,
-  StatusBar,
   StyleSheet,
 } from "react-native";
 import apiClient, { setClientToken } from "../api/client";
@@ -17,7 +16,6 @@ import FloatingCartIndicator from "../components/FloatingCartIndicator";
 import MenuItem from "../components/MenuItem";
 import Spinner from "../components/Spinner";
 import { Text, View } from "../components/Themed";
-
 import { AppContext } from "../contexts/contexts";
 import { Item, OrderParamList, RootStackParamList } from "../types";
 
@@ -37,7 +35,6 @@ export default function RestaurantDetailsScreen() {
   const [cart, setCart] = React.useState<Item[]>([]);
   const [isCartOpen, setIsCartOpen] = React.useState(false);
   const [resDet, setResDet] = React.useState<RestaurantDetailsResponse>();
-  const [items, setItems] = React.useState<Item[]>([]);
 
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(false);
@@ -51,15 +48,15 @@ export default function RestaurantDetailsScreen() {
         "/restautant_details_and_dishes/" + restaurantId
       )
       .then((res) => {
-        setLoading(false);
         setError(false);
         setResDet(res.data);
-        setItems(res.data.items);
       })
       .catch((err) => {
-        setLoading(false);
         setError(true);
         console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
 
@@ -141,47 +138,46 @@ export default function RestaurantDetailsScreen() {
   //to fetch
 
   return (
-    <>
-      <SafeAreaView style={styles.container}>
-        {!loading && error && <Error />}
+    <SafeAreaView style={styles.container}>
+      {!loading && error && <Error />}
 
-        {loading && !error && <Spinner />}
+      {loading && !error && <Spinner />}
 
-        {!loading && !error && resDet && (
-          <View style={styles.wrapper}>
-            {/* menu list  */}
-            <View style={{ flex: 1 }}>
-              <FlatList
-                data={items}
-                keyExtractor={(item) => item.id.toString()}
-                style={{ padding: 5, marginTop: 2 }}
-                ListHeaderComponent={<Header resDet={resDet} />}
-                ListFooterComponent={<View style={{ height: 50 }} />}
-                renderItem={({ item }) => (
-                  <MenuItem setCart={setCart} item={item} />
-                )}
-              />
-            </View>
+      {!loading && !error && resDet && (
+        <View style={styles.wrapper}>
+          {/* menu list  */}
+          <View style={{ flex: 1 }}>
+            <FlatList
+              data={resDet.items}
+              keyExtractor={(item) => item.id.toString()}
+              style={{ padding: 5, marginTop: 2 }}
+              ListHeaderComponent={<Header resDet={resDet} />}
+              ListFooterComponent={<View style={{ height: 50 }} />}
+              renderItem={({ item }) => (
+                <MenuItem setCart={setCart} item={item} />
+              )}
+            />
           </View>
-        )}
-
-        {Platform.OS !== "web" && (
-          <Cart
-            cart={cart}
-            orderItems={orderItems}
-            setIsCartOpen={setIsCartOpen}
-            removeFromCart={removeFromCart}
-            state={{ isCartOpen, orderLoading }}
-          />
-        )}
-      </SafeAreaView>
+        </View>
+      )}
 
       {/* floating cart  indicator */}
 
       {cart.length !== 0 && (
         <FloatingCartIndicator cart={cart} setIsCartOpen={setIsCartOpen} />
       )}
-    </>
+
+      {/* the cart */}
+      {Platform.OS !== "web" && (
+        <Cart
+          cart={cart}
+          orderItems={orderItems}
+          setIsCartOpen={setIsCartOpen}
+          removeFromCart={removeFromCart}
+          state={{ isCartOpen, orderLoading }}
+        />
+      )}
+    </SafeAreaView>
   );
 }
 

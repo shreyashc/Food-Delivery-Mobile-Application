@@ -1,9 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import * as React from "react";
 import { useState } from "react";
-import { StackNavigationProp } from "@react-navigation/stack";
 import {
-  ActivityIndicator,
   Alert,
   Dimensions,
   Keyboard,
@@ -40,15 +39,16 @@ export default function LoginScreen({}) {
         password,
       })
       .then((res) => {
-        setLoading(false);
         console.log("Success", res.data);
         dispatch({ type: "LOGIN", payload: res.data });
         navigation.replace("Root");
       })
       .catch((err) => {
-        setLoading(false);
         const errObj = err.response.data.message;
         Alert.alert(errObj.field, errObj.message);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 

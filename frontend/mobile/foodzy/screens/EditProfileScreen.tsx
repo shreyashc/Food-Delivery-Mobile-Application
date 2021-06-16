@@ -1,4 +1,3 @@
-import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import * as React from "react";
@@ -11,9 +10,8 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native";
-import { Button, Icon, Input } from "react-native-elements";
-
-import { Text, View } from "../components/Themed";
+import { Icon, Input } from "react-native-elements";
+import { Text } from "../components/Themed";
 import { AppContext } from "../contexts/contexts";
 
 export default function EditProfileScreen() {

@@ -50,15 +50,17 @@ export default function OrderScreen() {
     apiClient
       .get<RestaurnatResponse[]>("/nearest_restautants")
       .then((res) => {
-        setLoading(false);
         setError(false);
         setRestaurants(res.data);
         setfilteredRestaurants(res.data);
       })
       .catch((err) => {
-        setLoading(false);
         setError(true);
         console.log(err);
+      })
+      .finally(() => {
+        setRefreshing(false);
+        setLoading(false);
       });
   };
 
@@ -98,7 +100,10 @@ export default function OrderScreen() {
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
-              onRefresh={getNearestRestaurants}
+              onRefresh={() => {
+                setRefreshing(true);
+                getNearestRestaurants();
+              }}
             />
           }
           keyExtractor={(item) => item.id.toString()}
