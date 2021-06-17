@@ -1,4 +1,5 @@
 import Router from "express";
+import { multer } from "../multer";
 import * as RestaurantController from "../controllers/restaurantController";
 
 const router = Router();
@@ -15,7 +16,11 @@ router.post("/edit_details/", RestaurantController.editDetails_post);
  */
 router.get("/dishes", RestaurantController.allDishes);
 router.get("/add_dish", RestaurantController.addDish_get);
-router.post("/add_dish", RestaurantController.addDish_post);
+router.post(
+  "/add_dish",
+  multer.single("image"),
+  RestaurantController.addDish_post
+);
 router.get("/edit_dish/:id", RestaurantController.editDish_get);
 router.post("/edit_dish/:id", RestaurantController.editDish_post);
 router.get("/delete_dish/:id", RestaurantController.deleteDish);

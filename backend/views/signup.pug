@@ -10,7 +10,7 @@ html
         div(class="container loginForm")
             div
                 h1.page-heading Sign Up
-                form(action="/auth/signup" method="POST")
+                form(action="/auth/signup" method="POST" enctype="multipart/form-data" )
                     div(class="form-group has-feedback")
                         input(type="email" name="email" class="form-control form-input"  required)
                         label(class="form-label") Email
@@ -39,24 +39,18 @@ html
                         input(name="address" class="form-control form-input" required)
                         label(class="form-label") Address
 
-
-                    div.form-check.form-switch
-                        label(class="form-check-label" style="font-weight:600;" for="vegswitch") Veg
-                        input(type="checkbox" class="form-check-input" id="vegswitch"  name="isVeg")
-                        
-                    .spacer2(style="margin:12px 0 !important;")
-    
                     div(class="form-group has-feedback")
-                        label(style="font-size:20px;") City
-                        br
+                        p.m-0(style="font-weight: 500;") City
                         select(name="city"  required)
                             option(value="hassan") Hassan, Karnataka, India
-                    .spacer
-                    br
+
                     div(class="form-group has-feedback")
-                        input(name="imgUrl" class="form-control form-input form-group-last"  required)
-                        label(class="form-label") Image URI/URL
-                        if error && !error.message
-                            p.text-sm.text-danger Something went wrong ):
+                        select(name="isVeg"  required)
+                            option(value="true") Veg
+                            option(value="false") Non Veg
+                            
+                    div.form-group
+                        p.m-0(style="font-weight: 500;") Image
+                        input(type="file" class="form-control" name="image" required )
 
                     button(id="submit" type="submit" class="btn btn-default submit" value="Signup") Sign Up

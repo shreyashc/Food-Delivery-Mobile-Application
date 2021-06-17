@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import httpErrors from "http-errors";
 import { Item, Order, Restaurant } from "../models/entities";
+import { getImageURL } from "./utils";
 
 const dashboard = async (_req: Request, res: Response, _next: NextFunction) => {
   const restaurant = await Restaurant.findOne({
@@ -69,21 +70,16 @@ const addDish_post = async (
 ) => {
   try {
     const userId = res.locals.user.id;
-    const {
-      title,
-      description,
-      isVeg: isVegStr,
-      imgUrl,
-      price,
-      category,
-    } = req.body;
-    console.log(isVegStr);
+
+    const { title, description, isVeg: isVegStr, price, category } = req.body;
+
+    const imgUrl = await getImageURL(req.file);
 
     const restaurant = await Restaurant.findOne({ userId });
 
     if (!restaurant) return res.send("Something Went Wrong");
 
-    const isVeg = isVegStr === "on" ? true : false;
+    const isVeg = isVegStr === "true" ? true : false;
 
     await Item.create({
       title,
@@ -120,7 +116,7 @@ const editDish_post = async (
 
     if (!restaurant) return res.send("Something Went Wrong");
 
-    const isVeg = isVegStr === "on" ? true : false;
+    const isVeg = isVegStr === "true" ? true : false;
 
     await Item.update(
       {
@@ -192,7 +188,11 @@ const editDetails_post = async (
     isVeg: isVegStr,
   } = req.body;
 
-  const isVeg = isVegStr === "on" ? true : false;
+  console.log(isVegStr);
+
+  const isVeg = isVegStr === "true" ? true : false;
+
+  console.log(isVeg);
 
   await Restaurant.update(
     {

@@ -1,6 +1,12 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { env } from "../env";
-import { generateToken, loginUser, MAX_AGE, signUpUser } from "./utils";
+import {
+  generateToken,
+  getImageURL,
+  loginUser,
+  MAX_AGE,
+  signUpUser,
+} from "./utils";
 
 const signup_web = (_req: Request, res: Response) => {
   res.render("signup.pug", {
@@ -18,32 +24,37 @@ const logout_web = (_req: Request, res: Response) => {
   res.redirect("/auth/login");
 };
 
-const signup_post = async (req: Request, res: Response) => {
-  const {
-    email,
-    password: plainPassword,
-    displayName,
-    phone,
-    address,
-    imgUrl,
-    city,
-    category,
-    isVeg: isVegStr,
-  } = req.body;
-
-  const isVeg = isVegStr === "on" ? true : false;
-
-  const restaurantDet = {
-    displayName,
-    phone,
-    address,
-    imgUrl,
-    city,
-    category,
-    isVeg,
-  };
-
+const signup_post = async (
+  req: Request,
+  res: Response,
+  _next: NextFunction
+) => {
   try {
+    const {
+      email,
+      password: plainPassword,
+      displayName,
+      phone,
+      address,
+      city,
+      category,
+      isVeg: isVegStr,
+    } = req.body;
+
+    const isVeg = isVegStr === "true" ? true : false;
+
+    const imgUrl = await getImageURL(req.file);
+
+    const restaurantDet = {
+      displayName,
+      phone,
+      address,
+      city,
+      imgUrl,
+      category,
+      isVeg,
+    };
+
     const { savedUser, error } = await signUpUser(
       email,
       plainPassword,
@@ -59,10 +70,10 @@ const signup_post = async (req: Request, res: Response) => {
       httpOnly: true,
       maxAge: MAX_AGE * 1000,
     });
-    res.redirect("/auth/login");
+    return res.redirect("/auth/login");
   } catch (err) {
     console.log(err);
-    res.status(400).render("signup.pug", {
+    return res.status(400).render("signup.pug", {
       nav: { navbutton: "Login", link: "/auth/login" },
       error: err,
     });

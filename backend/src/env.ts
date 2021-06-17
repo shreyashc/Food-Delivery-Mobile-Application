@@ -29,6 +29,7 @@ export const env = {
     accessTokenSecret: getOsEnv("ACCESS_TOKEN_SECRET"),
     stripeSk: getOsEnv("STRIPE_SK"),
     stripeEndpointSecret: getOsEnv("STRIPE_ENDPOINT_SEC"),
+    googleService: getOsEnv("GOOGLE_CRED"),
     dirs: {
       /*  migrations: getOsPaths("TYPEORM_MIGRATIONS"),
       migrationsDir: getOsPath("TYPEORM_MIGRATIONS_DIR"),

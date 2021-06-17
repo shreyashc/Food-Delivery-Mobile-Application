@@ -9,7 +9,7 @@ html
         include ../includes/navbar.pug
         div(class="container loginForm")
             h1.page-heading Add New Dish
-            form(action="/restaurant/add_dish", method="post")
+            form(action="/restaurant/add_dish", method="post" enctype="multipart/form-data")
                 div.form-group.has-feedback
                     input(type="text" name="title" class="form-control form-input" required)
                     label(class="form-label" for="") Title
@@ -17,18 +17,26 @@ html
                     input(type="text" class="form-control form-input" name="description" required)
                     label.form-label Description 
              
-                div.form-check.form-switch.form-inline
-                    label(class="form-check-label" for="vegswitch") Veg
-                    input(type="checkbox" class="form-check-input" id="vegswitch" checked name="isVeg")
-                br 
-                div.form-group.has-feedback
-                    input(type="text" class="form-control form-input" name="imgUrl" required)
-                    label.form-label Image URL 
+
+                
                 div.form-group.has-feedback
                     input(type="text" class="form-control form-input" name="price" required)
                     label.form-label Price 
+
                 div.form-group.has-feedback.form-group-last
                     input(type="text" class="form-control form-input" name="category" required)
                     label.form-label Category 
+
+
+                div(class="form-group has-feedback")
+                        select(name="isVeg"  required)
+                            option(value="true") Veg
+                            option(value="false") Non Veg
+
+                div.form-group
+                    p.m-0(style="font-weight: 500;") Image
+                    input(type="file" class="form-control" name="image" required )
+
+                
                 div
                     button(id="submit" type="submit" class="btn btn-default submit") Submit
