@@ -234,7 +234,7 @@ const postAReview = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const customerId = res.locals.customerId;
     if (!customerId) {
-      throw new httpErrors.BadRequest();
+      throw new httpErrors.BadRequest("Customer not found");
     }
 
     const {
@@ -255,7 +255,7 @@ const postAReview = async (req: Request, res: Response, next: NextFunction) => {
       foodDelivery < 0 ||
       foodDelivery > 5
     ) {
-      throw new httpErrors.BadRequest();
+      throw new httpErrors.BadRequest("Invalid args");
     }
 
     const restaurant = await Restaurant.findOne({
@@ -264,7 +264,7 @@ const postAReview = async (req: Request, res: Response, next: NextFunction) => {
     });
 
     if (!restaurant) {
-      throw new httpErrors.BadRequest();
+      throw new httpErrors.BadRequest("No such restaurant");
     }
 
     await Review.create({
