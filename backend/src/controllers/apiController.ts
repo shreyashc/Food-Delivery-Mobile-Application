@@ -257,10 +257,10 @@ const canIPostReview = async (
     const orderd = await Order.find({ restaurantId, customerId });
 
     if (orderd.length > 0) {
-      return res.json({ canIReview: false });
+      return res.json({ canIReview: true });
     }
 
-    return res.json({ canIReview: true });
+    return res.json({ canIReview: false });
   } catch (error) {
     return next(error);
   }
