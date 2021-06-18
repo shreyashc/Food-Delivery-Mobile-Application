@@ -44,6 +44,8 @@ const requireAuthApi = (req: Request, res: Response, next: NextFunction) => {
           res.locals.user = null;
           throw new httpErrors.Unauthorized();
         } else {
+          console.log(decodedToken);
+
           const user = {
             id: decodedToken.id,
             email: decodedToken.email,
