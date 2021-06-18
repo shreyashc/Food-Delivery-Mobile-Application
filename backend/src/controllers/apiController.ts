@@ -5,12 +5,12 @@ import {
   Order,
   OrderItem,
   Restaurant,
+  Review,
 } from "../models/entities";
 import { generateToken, loginUser, signUpUser } from "./utils";
 import httpErrors from "http-errors";
 import Stripe from "stripe";
 import { env } from "../env";
-import { Review } from "src/models/entities/Review";
 
 const getNearestRestaurants = async (
   req: Request,
@@ -348,4 +348,5 @@ export {
   myOrders,
   orderDetails,
   handleWebHook,
+  postAReview,
 };

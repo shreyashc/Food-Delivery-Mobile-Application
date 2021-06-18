@@ -17,6 +17,7 @@ import {
   User,
   Order,
   OrderItem,
+  Review,
 } from "./models/entities/";
 
 import AdminRoutes from "./routes/admin";
@@ -88,7 +89,7 @@ const main = async () => {
     password: env.db.password,
     logging: env.db.logging,
     synchronize: env.db.synchronize,
-    entities: [User, Customer, Restaurant, Item, Order, OrderItem],
+    entities: [User, Customer, Restaurant, Item, Order, OrderItem, Review],
     ssl: {
       rejectUnauthorized: false,
     },
