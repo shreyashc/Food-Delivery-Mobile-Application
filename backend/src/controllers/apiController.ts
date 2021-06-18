@@ -276,6 +276,7 @@ const postAReview = async (req: Request, res: Response, next: NextFunction) => {
       foodQuality,
       foodQuantity,
       foodDelivery,
+      description,
     }).save();
 
     const custRating = (foodQuality + foodQuantity + foodDelivery) / 3;

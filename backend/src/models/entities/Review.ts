@@ -15,13 +15,13 @@ export class Review extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: "decimal" })
   foodQuality!: number;
 
-  @Column()
+  @Column({ type: "decimal" })
   foodQuantity!: number;
 
-  @Column()
+  @Column({ type: "decimal" })
   foodDelivery!: number;
 
   @Column()
