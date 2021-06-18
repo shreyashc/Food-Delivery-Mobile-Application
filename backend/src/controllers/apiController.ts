@@ -332,8 +332,15 @@ const postAReview = async (req: Request, res: Response, next: NextFunction) => {
 
     const newRating =
       (restaurant.rating + custRating) / (restaurant.reviews.length + 1);
-    restaurant.rating = newRating;
-    restaurant.save();
+
+    await Restaurant.update(
+      {
+        id: restaurant.id,
+      },
+      {
+        rating: newRating,
+      }
+    );
     res.status(201).send();
   } catch (error) {
     next(error);
