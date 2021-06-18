@@ -331,6 +331,12 @@ const postAReview = async (req: Request, res: Response, next: NextFunction) => {
     const custRating = (foodQuality + foodQuantity + foodDelivery) / 3;
 
     console.log("custRating", custRating);
+    console.log(
+      "restaurant.rating",
+      restaurant.rating,
+      "type",
+      typeof restaurant.rating
+    );
 
     console.log(
       "(restaurant.rating + custRating)",
