@@ -255,6 +255,7 @@ const canIPostReview = async (
     }
 
     const orderd = await Order.find({ restaurantId, customerId });
+    console.log("orderd", orderd);
 
     if (!orderd) {
       return res.json({ canIReview: false });
