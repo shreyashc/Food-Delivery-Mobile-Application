@@ -93,7 +93,9 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
       throw new httpErrors.BadRequest(error);
     }
 
-    const token = generateToken(user.id, user.role, user.email);
+    const token = generateToken(user.id, user.role, user.email, {
+      customerId: user.customer.id,
+    });
 
     res.status(200).json({ user, token });
   } catch (error) {
