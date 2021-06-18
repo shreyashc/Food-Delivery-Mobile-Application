@@ -10,13 +10,13 @@ router.post("/signup", ApiController.signUp);
 router.post("/login", ApiController.login);
 
 //restaurants
-router.get("/nearest_restautants", ApiController.getNearestRestaurants);
+router.get("/nearest_resaurants", ApiController.getNearestRestaurants);
 router.get(
   "/restautant_details_and_dishes/:id",
   ApiController.getRestaurantsDetailsAndDishes
 );
 
-router.get("/restautant_reviews/:id", ApiController.getRestaurantsReviews);
+router.get("/restaurant_reviews/:id", ApiController.getRestaurantsReviews);
 
 /**
  * Orders
