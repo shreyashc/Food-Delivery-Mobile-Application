@@ -331,7 +331,7 @@ const postAReview = async (req: Request, res: Response, next: NextFunction) => {
     const custRating = (foodQuality + foodQuantity + foodDelivery) / 3;
 
     const newRating =
-      (restaurant.rating + custRating) / (restaurant.reviews.length + 1);
+      (restaurant.rating + custRating) / (restaurant.reviews.length + 1 + 1);
 
     await Restaurant.update(
       {
