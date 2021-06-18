@@ -12,6 +12,7 @@ import {
 import { User } from ".";
 import { Item } from "./Item";
 import { Order } from "./Order";
+import { Review } from "./Review";
 
 @Entity()
 export class Restaurant extends BaseEntity {
@@ -58,6 +59,10 @@ export class Restaurant extends BaseEntity {
   @OneToMany(() => Order, (order) => order.restaurant)
   @JoinColumn()
   orders: Order[];
+
+  @OneToMany(() => Review, (review) => review.restaurant)
+  @JoinColumn()
+  reviews: Review[];
 
   /* time stamps */
 

@@ -10,6 +10,7 @@ import { generateToken, loginUser, signUpUser } from "./utils";
 import httpErrors from "http-errors";
 import Stripe from "stripe";
 import { env } from "../env";
+import { Review } from "src/models/entities/Review";
 
 const getNearestRestaurants = async (
   req: Request,
@@ -39,7 +40,7 @@ const getRestaurantsDetailsAndDishes = async (
 
     const restaurant = await Restaurant.findOne({
       where: { id },
-      relations: ["items"],
+      relations: ["items", "reviews"],
     });
 
     res.status(200).json(restaurant);
@@ -204,6 +205,63 @@ const orderDetails = async (
     }
 
     res.json(order);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const postAReview = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const customerId = res.locals.customerId;
+    if (!customerId) {
+      throw new httpErrors.BadRequest();
+    }
+
+    const {
+      restaurantId,
+      foodQuality,
+      foodQuantity,
+      foodDelivery,
+      description,
+    } = req.body;
+
+    if (
+      !restaurantId ||
+      !description ||
+      foodQuality < 0 ||
+      foodQuality > 5 ||
+      foodQuantity < 0 ||
+      foodQuantity > 5 ||
+      foodDelivery < 0 ||
+      foodDelivery > 5
+    ) {
+      throw new httpErrors.BadRequest();
+    }
+
+    const restaurant = await Restaurant.findOne({
+      where: { id: restaurantId },
+      relations: ["reviews"],
+    });
+
+    if (!restaurant) {
+      throw new httpErrors.BadRequest();
+    }
+
+    await Review.create({
+      customerId,
+      restaurantId,
+      foodQuality,
+      foodQuantity,
+      foodDelivery,
+    }).save();
+
+    const custRating = (foodQuality + foodQuantity + foodDelivery) / 3;
+
+    const newRating =
+      (restaurant.rating + custRating) / (restaurant.reviews.length + 1);
+    restaurant.rating = newRating;
+    restaurant.save();
+    res.status(201).send();
   } catch (error) {
     next(error);
   }

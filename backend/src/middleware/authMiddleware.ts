@@ -48,6 +48,7 @@ const requireAuthApi = (req: Request, res: Response, next: NextFunction) => {
             id: decodedToken.id,
             email: decodedToken.email,
             role: decodedToken.role,
+            customerId: decodedToken?.customerId,
           };
           res.locals.user = user;
           next();

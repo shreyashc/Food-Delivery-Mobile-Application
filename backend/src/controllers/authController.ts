@@ -90,7 +90,10 @@ const login_post = async (req: Request, res: Response) => {
       throw error;
     }
 
-    const token = generateToken(user.id, user.role, user.email);
+    const token = generateToken(user.id, user.role, user.email, {
+      customerId: user.customer.id,
+    });
+
     res.cookie(env.app.cookieName, token, {
       httpOnly: true,
       maxAge: MAX_AGE * 1000,

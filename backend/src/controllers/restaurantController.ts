@@ -188,11 +188,7 @@ const editDetails_post = async (
     isVeg: isVegStr,
   } = req.body;
 
-  console.log(isVegStr);
-
   const isVeg = isVegStr === "true" ? true : false;
-
-  console.log(isVeg);
 
   await Restaurant.update(
     {

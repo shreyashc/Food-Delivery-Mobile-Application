@@ -14,8 +14,23 @@ const MAX_AGE = 21 * 12 * 30 * 24 * 60 * 60;
  * @param  {string} role
  * @param  {string} email
  */
-const generateToken = (id: number, role: string, email: string) => {
-  return jwt.sign({ id, role, email }, env.app.accessTokenSecret, {
+const generateToken = (
+  id: number,
+  role: string,
+  email: string,
+  options?: {
+    customerId?: number;
+    restaurantId?: number;
+  }
+) => {
+  let tokenBody: any = { id, role, email };
+  if (options?.customerId) {
+    tokenBody["cutomerId"] = options.customerId;
+  }
+  if (options?.restaurantId) {
+    tokenBody["restaurantId"] = options.restaurantId;
+  }
+  return jwt.sign(tokenBody, env.app.accessTokenSecret, {
     expiresIn: MAX_AGE,
   });
 };
@@ -81,6 +96,7 @@ const loginUser = async (email: string, plainPassword: string) => {
       where: { email: email },
       relations: ["customer"],
     });
+
     if (!user) {
       const error = {
         field: "Email",
