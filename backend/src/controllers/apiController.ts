@@ -233,6 +233,7 @@ const orderDetails = async (
 const postAReview = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const customerId = res.locals.customerId;
+
     if (!customerId) {
       throw new httpErrors.BadRequest("Customer not found");
     }
