@@ -60,7 +60,11 @@ const getRestaurantsReviews = async (
     if (!id) {
       throw new httpErrors.NotFound(`No restaurant matching ${id}`);
     }
-    const reviews = await Review.find({ restaurantId: id });
+    const reviews = await Review.find({
+      where: { restaurantId: id },
+      relations: ["customer"],
+    });
+
     res.status(200).json(reviews);
   } catch (error) {
     next(error);
