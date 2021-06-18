@@ -234,7 +234,7 @@ const postAReview = async (req: Request, res: Response, next: NextFunction) => {
   try {
     console.log(res.locals);
 
-    const customerId = res.locals.customerId;
+    const customerId = res.locals.user.customerId;
 
     if (!customerId) {
       throw new httpErrors.BadRequest("Customer not found");
