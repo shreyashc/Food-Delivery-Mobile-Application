@@ -18,6 +18,7 @@ router.get(
 
 router.get("/restaurant_reviews/:id", ApiController.getRestaurantsReviews);
 router.post("/post_review/", requireAuthApi, ApiController.postAReview);
+router.get("/can_i_review/", requireAuthApi, ApiController.canIPostReview);
 
 /**
  * Orders

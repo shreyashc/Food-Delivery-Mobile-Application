@@ -234,6 +234,38 @@ const orderDetails = async (
   }
 };
 
+const canIPostReview = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    console.log(res.locals);
+    const customerId = res.locals.user.customerId;
+    const restaurantId = parseInt(req.query.restaurantId as string);
+
+    if (!customerId) {
+      throw new httpErrors.BadRequest("Customer not found");
+    }
+
+    const reviewPresent = await Review.findOne({ restaurantId, customerId });
+
+    if (reviewPresent) {
+      return res.json({ canIReview: false });
+    }
+
+    const orderd = await Order.find({ restaurantId, customerId });
+
+    if (!orderd) {
+      return res.json({ canIReview: false });
+    }
+
+    return res.json({ canIReview: true });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 const postAReview = async (req: Request, res: Response, next: NextFunction) => {
   try {
     console.log(res.locals);
@@ -251,6 +283,18 @@ const postAReview = async (req: Request, res: Response, next: NextFunction) => {
       foodDelivery,
       description,
     } = req.body;
+
+    const reviewPresent = await Review.findOne({ restaurantId, customerId });
+
+    if (reviewPresent) {
+      throw new httpErrors.BadRequest("Review already exists");
+    }
+
+    const orderd = await Order.find({ restaurantId, customerId });
+
+    if (!orderd) {
+      throw new httpErrors.BadRequest("You should order first");
+    }
 
     if (
       !restaurantId ||
@@ -378,4 +422,5 @@ export {
   handleWebHook,
   postAReview,
   getRestaurantsReviews,
+  canIPostReview,
 };
