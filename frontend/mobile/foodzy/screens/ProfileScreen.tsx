@@ -4,6 +4,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import * as React from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { Icon } from "react-native-elements";
+import { removeClientTokenInterceptor } from "../api/client";
 import { Text, View } from "../components/Themed";
 import { AppContext } from "../contexts/contexts";
 
@@ -87,6 +88,7 @@ export default function ProfileScreen() {
           style={styles.btn}
           activeOpacity={0.7}
           onPress={() => {
+            removeClientTokenInterceptor();
             dispatch({ type: "LOGOUT" });
             navigation.replace("Login");
           }}

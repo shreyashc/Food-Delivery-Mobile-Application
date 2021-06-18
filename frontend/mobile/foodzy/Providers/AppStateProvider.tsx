@@ -18,10 +18,14 @@ const AppStateProvider: React.FC = ({ children }) => {
   }, []);
 
   React.useEffect(() => {
+    console.log("running");
     const storeData = async () => {
       try {
         if (appState) {
+          console.log("storing", appState);
+
           const jsonValue = JSON.stringify(appState);
+
           await AsyncStorage.setItem("@app_state", jsonValue);
         }
       } catch (e) {

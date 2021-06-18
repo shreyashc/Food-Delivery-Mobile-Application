@@ -4,13 +4,8 @@ import { ActivityIndicator, View, Text, StyleSheet } from "react-native";
 export default function Error() {
   return (
     <View style={styles.info}>
-      <ActivityIndicator
-        style={{ marginTop: 20, marginBottom: 8 }}
-        size="large"
-        color="#fd3d3d"
-      />
       <Text style={{ textAlign: "center", fontSize: 16, color: "#fb3877" }}>
-        {"Spinning the wheel of fortune..."}
+        Something Went Wrong 😔
       </Text>
     </View>
   );

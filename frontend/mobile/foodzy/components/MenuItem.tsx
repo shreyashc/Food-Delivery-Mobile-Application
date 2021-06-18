@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import * as React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, Platform } from "react-native";
 import { Button } from "react-native-elements";
 import { Item } from "../types";
 import { VegNonVeg } from "./VegNonVeg";
@@ -82,12 +82,19 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   imgWrap: {
-    shadowColor: "#ccc",
-    shadowOffset: { width: 2, height: 0 },
-    shadowOpacity: 0.8,
-    shadowRadius: 5,
     borderRadius: 12,
     backgroundColor: "#fff",
+    ...Platform.select({
+      android: {
+        elevation: 3,
+      },
+      default: {
+        shadowColor: "#ccc",
+        shadowOffset: { width: 2, height: 0 },
+        shadowOpacity: 0.8,
+        shadowRadius: 5,
+      },
+    }),
   },
   itemTitle: {
     fontSize: 20,

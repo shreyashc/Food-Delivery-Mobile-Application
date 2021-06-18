@@ -10,11 +10,13 @@ import * as React from "react";
 
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
+import AddReviewScreen from "../screens/AddReviewScreen";
 import EditProfileScreen from "../screens/EditProfileScreen";
 import MyOrdersScreen from "../screens/MyOrdersScreen";
 import OrderScreen from "../screens/OrderScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import RestaurantDetailsScreen from "../screens/RestaurantDetailsScreen";
+import ReviewsScreen from "../screens/ReviewsScreen";
 import { BottomTabParamList, OrderParamList, ProfileParamList } from "../types";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
@@ -73,6 +75,38 @@ function OrderNavigator() {
         component={RestaurantDetailsScreen}
         initialParams={{ restaurantId: 0 }}
         options={{ headerShown: false }}
+      />
+      <OrderStack.Screen
+        name="Reviews"
+        component={ReviewsScreen}
+        options={{
+          headerShown: true,
+          headerTitle: "Reviews",
+          headerStyle: {
+            backgroundColor: "#ff3c58",
+          },
+          headerTintColor: "#fff",
+          headerBackTitleVisible: false,
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+        }}
+      />
+      <OrderStack.Screen
+        name="AddReview"
+        component={AddReviewScreen}
+        options={{
+          headerShown: true,
+          headerTitle: "Add Review",
+          headerStyle: {
+            backgroundColor: "#ff3c58",
+          },
+          headerTintColor: "#fff",
+          headerBackTitleVisible: false,
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+        }}
       />
     </OrderStack.Navigator>
   );

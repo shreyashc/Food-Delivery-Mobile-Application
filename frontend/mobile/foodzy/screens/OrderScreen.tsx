@@ -3,7 +3,7 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import * as React from "react";
 import { FlatList, Image, RefreshControl, StyleSheet } from "react-native";
-import { SearchBar } from "react-native-elements";
+import { Rating, SearchBar } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import apiClient from "../api/client";
@@ -48,7 +48,7 @@ export default function OrderScreen() {
 
   const getNearestRestaurants = () => {
     apiClient
-      .get<RestaurnatResponse[]>("/nearest_restautants")
+      .get<RestaurnatResponse[]>("/nearest_restaurants")
       .then((res) => {
         setError(false);
         setRestaurants(res.data);
@@ -128,9 +128,26 @@ export default function OrderScreen() {
                   <Text style={styles.restaurantTitle}>{item.displayName}</Text>
                   <View style={styles.detWrap}>
                     <VegNonVeg isVeg={item.isVeg} />
-                    <View style={styles.restaurantRating}>
-                      <Text style={styles.samllBoldTxt}>{item.rating}</Text>
-                      <Ionicons name="ios-star" />
+
+                    <View
+                      style={{
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                        flexDirection: "row",
+                      }}
+                    >
+                      <Rating
+                        type="heart"
+                        ratingCount={5}
+                        readonly={true}
+                        startingValue={parseFloat(item.rating) || 1}
+                        imageSize={20}
+                        minValue={1}
+                        style={{ paddingVertical: 5 }}
+                      />
+                      <Text style={styles.samllBoldTxt}>
+                        {parseFloat(item.rating).toFixed(1)}
+                      </Text>
                     </View>
                   </View>
                   <Text style={styles.restaurantCat}>{item.category}</Text>
@@ -227,7 +244,7 @@ const styles = StyleSheet.create({
   },
   samllBoldTxt: {
     fontWeight: "bold",
-    marginRight: 4,
+    marginHorizontal: 4,
   },
 
   info: {
@@ -248,7 +265,7 @@ interface RestaurnatResponse {
   phone: string;
   updatedAt: string;
   userId: number;
-  rating: number | string;
+  rating: string;
   category: string;
   isVeg: boolean;
 }

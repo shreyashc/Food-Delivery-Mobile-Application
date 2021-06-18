@@ -155,6 +155,7 @@ const RootNavigator: React.FC<Props> = ({ savedRoute }) => {
           },
         }}
       />
+
       <Stack.Screen name="Root" component={BottomTabNavigator} />
       <Stack.Screen
         name="NotFound"

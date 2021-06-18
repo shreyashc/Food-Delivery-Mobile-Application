@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   StyleSheet,
 } from "react-native";
+import { Button, Rating } from "react-native-elements";
 import apiClient, { setClientToken } from "../api/client";
 import Cart from "../components/Cart";
 import Error from "../components/Error";
@@ -26,7 +27,7 @@ export default function RestaurantDetailsScreen() {
   >();
   const restaurantId = route.params.restaurantId;
 
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const navigation = useNavigation<StackNavigationProp<any>>();
 
   // user context
   const { appState } = React.useContext(AppContext);
@@ -45,7 +46,7 @@ export default function RestaurantDetailsScreen() {
     setLoading(true);
     apiClient
       .get<RestaurantDetailsResponse>(
-        "/restautant_details_and_dishes/" + restaurantId
+        "/restaurant_details_and_dishes/" + restaurantId
       )
       .then((res) => {
         setError(false);
@@ -113,7 +114,40 @@ export default function RestaurantDetailsScreen() {
         <Text style={styles.title}>{resDet?.displayName}</Text>
         <Text style={styles.description}>{resDet?.category}</Text>
         <Text style={styles.address}>{resDet?.address}</Text>
-        <Text style={styles.rating}>Rating: {resDet?.rating}</Text>
+        <View style={styles.ratingWrap}>
+          <View
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "row",
+            }}
+          >
+            <Rating
+              type="heart"
+              ratingCount={5}
+              readonly={true}
+              startingValue={parseFloat(resDet?.rating) || 1}
+              imageSize={20}
+              minValue={1}
+              style={{ paddingVertical: 5 }}
+            />
+            <Text style={{ marginHorizontal: 4 }}>
+              {parseFloat(resDet?.rating).toFixed(1)}
+            </Text>
+          </View>
+
+          <Button
+            title="All Reviews"
+            type="clear"
+            titleStyle={{ textDecorationLine: "underline" }}
+            containerStyle={{ justifyContent: "center" }}
+            icon={<Ionicons name="chevron-forward" size={18} color="#3084eb" />}
+            iconRight
+            onPress={() => {
+              navigation.navigate("Reviews", { restaurantId: resDet.id });
+            }}
+          />
+        </View>
         {/* saftey Images */}
         <View style={styles.safWrap}>
           <Image
@@ -295,6 +329,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff6f6",
     borderColor: "#ea2635",
   },
+  ratingWrap: {
+    flexDirection: "row",
+  },
 });
 
 export interface RestaurantDetailsResponse {
@@ -308,7 +345,7 @@ export interface RestaurantDetailsResponse {
   isVeg: boolean;
   items: Item[];
   phone: string;
-  rating: string | number;
+  rating: string;
   updatedAt: string;
   userId: number;
 }

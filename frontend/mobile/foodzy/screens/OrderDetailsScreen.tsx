@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import * as React from "react";
-import { FlatList, RefreshControl, StyleSheet } from "react-native";
+import { FlatList, Platform, RefreshControl, StyleSheet } from "react-native";
 import apiClient, { setClientToken } from "../api/client";
 import Error from "../components/Error";
 import Spinner from "../components/Spinner";
@@ -218,11 +218,18 @@ const styles = StyleSheet.create({
     paddingTop: 15,
     paddingBottom: 15,
     marginBottom: 15,
-
-    shadowColor: "#ccc",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.7,
-    shadowRadius: 7,
+    marginHorizontal: 2,
+    ...Platform.select({
+      android: {
+        elevation: 3,
+      },
+      default: {
+        shadowColor: "#ccc",
+        shadowOffset: { width: 1, height: 1 },
+        shadowOpacity: 0.7,
+        shadowRadius: 8,
+      },
+    }),
     borderRadius: 15,
   },
   separator: {

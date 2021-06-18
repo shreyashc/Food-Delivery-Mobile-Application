@@ -1,6 +1,12 @@
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
+import {
+  TouchableOpacity,
+  View,
+  Text,
+  StyleSheet,
+  Platform,
+} from "react-native";
 import { BottomSheet, Button } from "react-native-elements";
 import { Item } from "../types";
 
@@ -135,11 +141,19 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
     marginBottom: 15,
     backgroundColor: "#fff",
-    shadowColor: "#ccc",
-    shadowOffset: { width: 1, height: 1 },
-    shadowOpacity: 0.7,
-    shadowRadius: 20,
     borderRadius: 15,
+
+    ...Platform.select({
+      android: {
+        elevation: 2,
+      },
+      default: {
+        shadowColor: "#ccc",
+        shadowOffset: { width: 1, height: 1 },
+        shadowOpacity: 0.7,
+        shadowRadius: 20,
+      },
+    }),
   },
   cartFoot: {
     display: "flex",

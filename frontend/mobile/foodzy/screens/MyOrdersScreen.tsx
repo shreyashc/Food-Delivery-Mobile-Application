@@ -5,6 +5,7 @@ import * as React from "react";
 import {
   FlatList,
   Image,
+  Platform,
   RefreshControl,
   StyleSheet,
   TouchableOpacity,
@@ -61,7 +62,7 @@ export default function MyOrdersScreen() {
 
       {loading && !error && <Spinner />}
 
-      {!error && (
+      {!error && !loading && (
         <FlatList
           data={orders}
           refreshControl={
@@ -185,11 +186,19 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
     marginBottom: 15,
 
-    shadowColor: "#ccc",
-    shadowOffset: { width: 1, height: 1 },
-    shadowOpacity: 0.7,
-    shadowRadius: 20,
-    borderRadius: 15,
+    borderRadius: 12,
+
+    ...Platform.select({
+      android: {
+        elevation: 3,
+      },
+      default: {
+        shadowColor: "#ccc",
+        shadowOffset: { width: 1, height: 1 },
+        shadowOpacity: 0.7,
+        shadowRadius: 20,
+      },
+    }),
   },
 });
 

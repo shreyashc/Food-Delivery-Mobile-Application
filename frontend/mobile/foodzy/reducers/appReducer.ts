@@ -3,9 +3,11 @@ import { AppState, User } from "../contexts/contexts";
 export const appReducer = (state: AppState, action: Actions) => {
   switch (action.type) {
     case "LOGIN":
-      return { ...state, ...action.payload, isAuth: true };
+      const newState = { ...state, ...action.payload, isAuth: true };
+      console.log("newState", newState);
+      return newState;
     case "LOGOUT":
-      return { ...state, isAuth: false, user: null, token: null };
+      return null;
     case "SAVED_STATE":
       return { ...action.payload };
     case "UPDATE_PROFILE":

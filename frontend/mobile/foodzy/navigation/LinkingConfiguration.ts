@@ -16,6 +16,8 @@ export default {
             screens: {
               OrderScreen: "order",
               RestaurantDetailsScreen: "restaurant_details",
+              ReviewsScreen: "reviews",
+              AddReviewScreen: "add_review",
             },
           },
           Profile: {

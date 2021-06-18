@@ -21,6 +21,8 @@ export type BottomTabParamList = {
 export type OrderParamList = {
   OrderScreen: undefined;
   RestaurantDetailsScreen: { restaurantId: number | string };
+  Reviews: { restaurantId: number | string };
+  AddReview: { restaurantId: number | string };
 };
 
 export type ProfileParamList = {
