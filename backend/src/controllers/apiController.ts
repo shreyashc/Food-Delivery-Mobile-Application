@@ -232,6 +232,8 @@ const orderDetails = async (
 
 const postAReview = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    console.log(res.locals);
+
     const customerId = res.locals.customerId;
 
     if (!customerId) {
