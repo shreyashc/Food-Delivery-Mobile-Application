@@ -16,6 +16,8 @@ router.get(
   ApiController.getRestaurantsDetailsAndDishes
 );
 
+router.get("/restautant_reviews/:id", ApiController.getRestaurantsReviews);
+
 /**
  * Orders
  */

@@ -40,10 +40,28 @@ const getRestaurantsDetailsAndDishes = async (
 
     const restaurant = await Restaurant.findOne({
       where: { id },
-      relations: ["items", "reviews"],
+      relations: ["items"],
     });
 
     res.status(200).json(restaurant);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getRestaurantsReviews = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const id = parseInt(req.params.id);
+
+    if (!id) {
+      throw new httpErrors.NotFound(`No restaurant matching ${id}`);
+    }
+    const reviews = await Review.find({ restaurantId: id });
+    res.status(200).json(reviews);
   } catch (error) {
     next(error);
   }
@@ -351,4 +369,5 @@ export {
   orderDetails,
   handleWebHook,
   postAReview,
+  getRestaurantsReviews,
 };
