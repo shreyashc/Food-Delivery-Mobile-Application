@@ -25,7 +25,7 @@ const generateToken = (
 ) => {
   let tokenBody: any = { id, role, email };
   if (options?.customerId) {
-    tokenBody["cutomerId"] = options.customerId;
+    tokenBody["customerId"] = options.customerId;
   }
   if (options?.restaurantId) {
     tokenBody["restaurantId"] = options.restaurantId;
