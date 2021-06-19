@@ -16,9 +16,6 @@ export const setClientToken = (token: string) => {
 export const removeClientTokenInterceptor = () => {
   if (tokenInterceptor !== null) {
     apiClient.interceptors.request.eject(tokenInterceptor);
-    console.log("removed interceptor");
-  } else {
-    console.log("was null");
   }
 };
 

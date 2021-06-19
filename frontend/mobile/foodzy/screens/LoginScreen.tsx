@@ -39,7 +39,6 @@ export default function LoginScreen({}) {
         password,
       })
       .then((res) => {
-        console.log("Success", res.data);
         dispatch({ type: "LOGIN", payload: res.data });
         navigation.replace("Root");
       })

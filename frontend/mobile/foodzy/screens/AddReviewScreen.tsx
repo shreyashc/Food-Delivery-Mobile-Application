@@ -2,19 +2,17 @@ import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import * as React from "react";
 import {
+  Alert,
   Keyboard,
-  KeyboardAvoidingView,
   Platform,
   ScrollView,
-  TouchableWithoutFeedback,
   StyleSheet,
-  Alert,
+  TouchableWithoutFeedback,
 } from "react-native";
-import { AirbnbRating, Button, Input, Rating } from "react-native-elements";
-
+import { Button, Input, Rating } from "react-native-elements";
 import apiClient, { setClientToken } from "../api/client";
 import RatingCard from "../components/RatingCard";
-import { View, Text } from "../components/Themed";
+import { Text, View } from "../components/Themed";
 import { AppContext } from "../contexts/contexts";
 import { OrderParamList } from "../types";
 
@@ -34,14 +32,6 @@ export default function AddReviewScreen() {
   const { appState } = React.useContext(AppContext);
 
   const postReview = () => {
-    console.log({
-      restaurantId,
-      foodQuality,
-      foodQuantity,
-      foodDelivery,
-      description,
-    });
-
     if (!description) {
       Alert.alert("Description", "All fields are required");
       return;

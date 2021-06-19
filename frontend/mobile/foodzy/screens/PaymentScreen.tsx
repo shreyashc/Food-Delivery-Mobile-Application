@@ -19,12 +19,8 @@ export default function PaymentScreen() {
   const totalAmount = route.params.totalAmount;
   const noOfItems = route.params.noOfItems;
 
-  console.log(totalAmount, noOfItems);
-
   const [pageLoading, setPageLoading] = React.useState(true);
   const navigation = useNavigation();
-
-  const [error, setError] = React.useState(false);
 
   React.useEffect(() => {
     async function initialize() {

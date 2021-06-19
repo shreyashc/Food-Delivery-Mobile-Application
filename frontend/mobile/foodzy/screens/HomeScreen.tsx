@@ -13,9 +13,9 @@ import { Text, View } from "../components/Themed";
 import { VegNonVeg } from "../components/VegNonVeg";
 import { OrderParamList } from "../types";
 
-export default function OrderScreen() {
+export default function HomeScreen() {
   const navigation = useNavigation<
-    StackNavigationProp<OrderParamList, "OrderScreen">
+    StackNavigationProp<OrderParamList, "HomeScreen">
   >();
 
   const [searchQuery, setSearchQuery] = React.useState("");

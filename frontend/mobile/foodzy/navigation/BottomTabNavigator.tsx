@@ -7,13 +7,11 @@ import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import * as React from "react";
-
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import AddReviewScreen from "../screens/AddReviewScreen";
 import EditProfileScreen from "../screens/EditProfileScreen";
-import MyOrdersScreen from "../screens/MyOrdersScreen";
-import OrderScreen from "../screens/OrderScreen";
+import HomeScreen from "../screens/HomeScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import RestaurantDetailsScreen from "../screens/RestaurantDetailsScreen";
 import ReviewsScreen from "../screens/ReviewsScreen";
@@ -66,8 +64,8 @@ function OrderNavigator() {
   return (
     <OrderStack.Navigator>
       <OrderStack.Screen
-        name="OrderScreen"
-        component={OrderScreen}
+        name="HomeScreen"
+        component={HomeScreen}
         options={{ headerShown: false }}
       />
       <OrderStack.Screen
