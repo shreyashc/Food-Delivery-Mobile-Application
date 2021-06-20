@@ -10,6 +10,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
+import { Button } from "react-native-elements";
 import apiClient, { setClientToken } from "../api/client";
 import Error from "../components/Error";
 import Spinner from "../components/Spinner";
@@ -24,6 +25,23 @@ export default function MyOrdersScreen() {
   const navigation = useNavigation<
     StackNavigationProp<RootStackParamList, "OrderDetails">
   >();
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <Button
+          type="clear"
+          icon={<Ionicons name="chevron-back" color="#fff" size={20} />}
+          titleStyle={{ fontWeight: "bold", color: "#fff" }}
+          buttonStyle={{}}
+          onPress={() => {
+            navigation.navigate("Root");
+          }}
+          title="Home "
+        />
+      ),
+    });
+  }, [navigation]);
 
   //state
   const [orders, setOrders] = React.useState<Order[]>([]);

@@ -22,7 +22,6 @@ const AppStateProvider: React.FC = ({ children }) => {
       try {
         if (appState) {
           const jsonValue = JSON.stringify(appState);
-
           await AsyncStorage.setItem("@app_state", jsonValue);
         }
       } catch (e) {

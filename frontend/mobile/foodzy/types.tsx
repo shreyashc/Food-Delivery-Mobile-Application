@@ -7,7 +7,7 @@ export type RootStackParamList = {
   Root: undefined;
   Login: undefined;
   Signup: undefined;
-  MyOrders: undefined;
+  MyOrders: { back?: boolean };
   OrderDetails: { orderid: number };
   Payment: { clientSecret: string; totalAmount: number; noOfItems: number };
   NotFound: undefined;

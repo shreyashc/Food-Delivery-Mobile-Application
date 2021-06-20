@@ -5,7 +5,7 @@ export const appReducer = (state: AppState, action: Actions) => {
     case "LOGIN":
       return { ...state, ...action.payload, isAuth: true };
     case "LOGOUT":
-      return null;
+      return {};
     case "SAVED_STATE":
       return { ...action.payload };
     case "UPDATE_PROFILE":
