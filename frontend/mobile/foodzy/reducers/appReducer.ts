@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AppState, User } from "../contexts/contexts";
 
 export const appReducer = (state: AppState, action: Actions) => {
@@ -5,7 +6,8 @@ export const appReducer = (state: AppState, action: Actions) => {
     case "LOGIN":
       return { ...state, ...action.payload, isAuth: true };
     case "LOGOUT":
-      return {};
+      AsyncStorage.clear();
+      return null;
     case "SAVED_STATE":
       return { ...action.payload };
     case "UPDATE_PROFILE":

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "foodzy",
+    "name": "Foodzy",
     "slug": "foodzy",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -17,13 +17,17 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.shreyashc.foodzy",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.shreyashc.foodzy",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
