@@ -25,7 +25,7 @@ jobs:
           cd frontend/mobile/foodzy/ && yarn install
       - name: Build Android Release
         run: |
-          cd frontend/mobile/foodzy/android && ./gradlew assembleRelease
+          cd frontend/mobile/foodzy/android && chmod +x ./gradlew && ./gradlew assembleRelease
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
