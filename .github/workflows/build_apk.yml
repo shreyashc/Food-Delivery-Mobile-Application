@@ -20,14 +20,14 @@ jobs:
     runs-on: ubuntu-latest
     steps: 
       - uses: actions/checkout@v2
-      - name: Install npm dependencies
+      - name: Install dependencies
         run: |
           cd frontend/mobile/foodzy/ && yarn install
       - name: Build Android Release
         run: |
-          cd android && ./gradlew assembleRelease
+          cd frontend/mobile/foodzy/android && ./gradlew assembleRelease
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
           name: app-release.apk
-          path: android/app/build/outputs/apk/release/
+          path: frontend/mobile/foodzy/android/app/build/outputs/apk/release/
