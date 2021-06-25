@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install npm dependencies
         run: |
-          cd frontent/mobile/foodzy/ && yarn install
+          cd frontend/mobile/foodzy/ && yarn install
       - name: Build Android Release
         run: |
           cd android && ./gradlew assembleRelease
