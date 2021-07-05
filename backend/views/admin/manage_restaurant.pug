@@ -86,7 +86,7 @@ html
         script.
             let selectedOrders = [];
             const markBtn = document.getElementById("markbtn");
-            const url = 'http://localhost:4000/admin/mark-as-paid';
+            const url = '/admin/mark-as-paid';
             const handleCheckbox = (e) =>{
                 const orderid = e.target.dataset.orderid;
                 if(!selectedOrders.includes(orderid)){
