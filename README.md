@@ -1,20 +1,18 @@
 # Food-Delivery-Mobile-Application
 
-Food Delivery Mobile Application - React Navtive
+(Zomato/swiggy clone)
 
----
+Download apk/s from latest release/artifacts
 
-install dependencies
-cd to ...../backend or ..../foodzy
+[Apk - Foodzy 1.0.0](https://github.com/shreyashc/Food-Delivery-Mobile-Application/releases/download/v1.0.0/foodzy.1.0.0.apk)
 
-- yarn install
+[Resturant/admin website / api (foodzy-backend.herokuapp.com)](https://foodzy-backend.herokuapp.com/auth/login)
 
----
-
-start backend
-cd to ...../backend
-
-- yarn watch
-- yarn dev (new terminal)
-
----
+|       Frontend        |       Backend        |
+| :-------------------: | :------------------: |
+| React Native (Mobile) |        Nodejs        |
+|  expo (now ejected)   |      Expressjs       |
+|      Typescript       | PostgreSQL + TypeORM |
+|          Pug          |      Typescript      |
+|       Bootstrap       |   Stripe Payments    |
+|   Firebase storage    |        Heroku        |
