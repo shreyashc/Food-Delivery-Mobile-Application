@@ -1,6 +1,6 @@
-import axois from "axios";
+import axios from "axios";
 
-let apiClient = axois.create({
+let apiClient = axios.create({
   baseURL: "https://foodzy-backend.herokuapp.com/api/v1",
 });
 
