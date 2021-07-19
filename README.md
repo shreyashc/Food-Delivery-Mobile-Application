@@ -16,3 +16,5 @@ Download apk/s from latest release/artifacts
 |          Pug          |      Typescript      |
 |       Bootstrap       |   Stripe Payments    |
 |   Firebase storage    |        Heroku        |
+
+![screenshots](backend/public/images/screenshots/screenshot_1.png)
