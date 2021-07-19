@@ -17,4 +17,12 @@ Download apk/s from latest release/artifacts
 |       Bootstrap       |   Stripe Payments    |
 |   Firebase storage    |        Heroku        |
 
-![screenshots](backend/public/images/screenshots/screenshot_1.png)
+
+
+## screenshots
+
+<div >
+<img src="backend/public/images/screenshots/screenshot_1.png"  width="250" />
+<img src="backend/public/images/screenshots/screenshot_2.png"  width="250"/>
+<img src="backend/public/images/screenshots/screenshot_3.png"  width="250"/>
+</div>
